@@ -8,10 +8,20 @@
 import UIKit
 
 class ViewController: UIViewController {
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        addViewController(RandomColorViewController())
+    }
+        
+    private func addViewController(_ child: UIViewController) {
+        addChild(child)
+        child.view.frame = view.bounds
+        view.addSubview(child.view)
+        child.didMove(toParent: self)
     }
 }
 
+#Preview {
+    ViewController()
+}
