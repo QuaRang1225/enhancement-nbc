@@ -13,6 +13,7 @@
 2. UI가 Auto Layout으로 적절히 배치되어 다양한 화면 크기에서 정상적으로 표시됩니다.
 
 ### 구현내용
+![Feb-17-2025 18-20-12](https://github.com/user-attachments/assets/ce2ba483-b232-4a22-9d54-ab22475af309)
 
  
 
