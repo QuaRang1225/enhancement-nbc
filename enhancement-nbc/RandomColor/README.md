@@ -1,5 +1,4 @@
 ### 요구 사항
-#### UI 구성
 1. UIView: 화면 전체를 덮는 배경 영역.
 2. UILabel: 중앙에 RGB 값을 표시.
 3. UIButton: 화면 하단에 두 개의 버튼 배치.
@@ -14,6 +13,7 @@
 
 ### 구현 내용
 
+![Feb-17-2025 13-27-19](https://github.com/user-attachments/assets/3edff192-d4f8-41b1-84f3-bda199f90e22)
 
 
 - 기본 UI 구현
