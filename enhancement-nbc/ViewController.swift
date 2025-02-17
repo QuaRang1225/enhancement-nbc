@@ -11,7 +11,7 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        addViewController(RandomColorViewController())
+        addViewController(CounterViewController())
     }
         
     private func addViewController(_ child: UIViewController) {
