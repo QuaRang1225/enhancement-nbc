@@ -7,64 +7,37 @@
 
 import UIKit
 
-class CounterView:UIView{
-    let timeText:UILabel={
-        let label = UILabel()
-        label.text = "0"
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    let plusButton:UIButton={
-        let button = UIButton()
-        button.setTitle("+", for: .normal)
-        return button.counterModifier()
-    }()
-    let minusButton:UIButton={
-        let button = UIButton()
-        button.setTitle("-", for: .normal)
-        return button.counterModifier()
-    }()
-    let resetButton:UIButton={
-        let button = UIButton()
-        button.setTitle("reset", for: .normal)
-        return button.counterModifier()
-    }()
-    lazy var stackView:UIStackView = {
-        let view = UIStackView(arrangedSubviews: [minusButton,resetButton ,plusButton])
-        view.axis = .horizontal
-        view.distribution = .equalSpacing
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
+class CounterViewController: UIViewController {
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupView()
-        setupViewLayout()
-    }
+    var counter = Counter()
+    let counterView = CounterView()
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    override func loadView() {
+        view = counterView
     }
-    
-    func setupViewLayout(){
-        NSLayoutConstraint.activate([
-            timeText.centerXAnchor.constraint(equalTo: centerXAnchor),
-            timeText.centerYAnchor.constraint(equalTo: centerYAnchor),
-            
-            stackView.leftAnchor.constraint(equalTo: leftAnchor,constant: 60),
-            stackView.rightAnchor.constraint(equalTo: rightAnchor,constant: -60),
-            stackView.bottomAnchor.constraint(equalTo: bottomAnchor,constant: -30)
-        ])
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupActions()
+        update()
     }
-    func setupView(){
-        [timeText,stackView].forEach{ addSubview($0)}
+    func setupActions(){
+        counterView.plusButton.addTarget(self, action: #selector(increaseNum), for: .touchUpInside)
+        counterView.minusButton.addTarget(self, action: #selector(decreaseNum), for: .touchUpInside)
+        counterView.resetButton.addTarget(self, action: #selector(reset), for: .touchUpInside)
+    }
+    func update(){
+        counterView.timeText.text = "\(counter.num)"
+    }
+    @objc func increaseNum(){
+        counter.increase()
+        update()
+    }
+    @objc func decreaseNum(){
+        counter.decrease()
+        update()
+    }
+    @objc func reset(){
+        counter.reset()
+        update()
     }
 }
-
-
-#Preview{
-    CounterViewController()
-}
-
-
