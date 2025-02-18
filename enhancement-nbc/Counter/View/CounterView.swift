@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import SwiftUI
 
 class CounterView:UIView{
     let timeText:UILabel={
@@ -64,8 +65,9 @@ class CounterView:UIView{
 }
 
 
-#Preview{
-    CounterViewController()
+#Preview {
+    UIViewPreview(CounterView()).ignoresSafeArea()
 }
+
 
 

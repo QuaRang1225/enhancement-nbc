@@ -41,3 +41,7 @@ class CounterViewController: UIViewController {
         update()
     }
 }
+
+#Preview{
+    CounterViewController()
+}
