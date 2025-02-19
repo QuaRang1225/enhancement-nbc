@@ -6,3 +6,7 @@
 //
 
 import Foundation
+
+struct Memo:Codable{
+    var content:String
+}
