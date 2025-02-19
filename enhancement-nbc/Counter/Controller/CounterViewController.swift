@@ -9,7 +9,7 @@ import UIKit
 
 class CounterViewController: UIViewController {
     
-    var counter = Counter()
+    let vm = CounterViewModel()
     let counterView = CounterView()
     
     override func loadView() {
@@ -18,30 +18,31 @@ class CounterViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupActions()
-        update()
+        bindingViewModel()
+    }
+    
+    func bindingViewModel(){
+        vm.completion = { [weak self] num in
+            self?.counterView.timeText.text = "\(num)"
+        }
     }
     func setupActions(){
         counterView.plusButton.addTarget(self, action: #selector(increaseNum), for: .touchUpInside)
         counterView.minusButton.addTarget(self, action: #selector(decreaseNum), for: .touchUpInside)
         counterView.resetButton.addTarget(self, action: #selector(reset), for: .touchUpInside)
     }
-    func update(){
-        counterView.timeText.text = "\(counter.num)"
-    }
     @objc func increaseNum(){
-        counter.increase()
-        update()
+        vm.increase()
     }
     @objc func decreaseNum(){
-        counter.decrease()
-        update()
+        vm.decrease()
     }
     @objc func reset(){
-        counter.reset()
-        update()
+        vm.reset()
     }
 }
 
 #Preview{
     CounterViewController()
 }
+

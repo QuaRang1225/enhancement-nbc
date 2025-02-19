@@ -8,17 +8,5 @@
 import Foundation
 
 struct Counter{
-    var num = 0
-    
-    mutating func increase(){
-        guard num < 10 else {return}
-        num += 1
-    }
-    mutating func decrease(){
-        guard num > -10 else {return}
-        num -= 1
-    }
-    mutating func reset(){
-        num = 0
-    }
+    var num:Int
 }

@@ -39,17 +39,7 @@ class CounterView:UIView{
         return view
     }()
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupView()
-        setupViewLayout()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    func setupViewLayout(){
+    func configureLayout(){
         NSLayoutConstraint.activate([
             timeText.centerXAnchor.constraint(equalTo: centerXAnchor),
             timeText.centerYAnchor.constraint(equalTo: centerYAnchor),
@@ -59,8 +49,18 @@ class CounterView:UIView{
             stackView.bottomAnchor.constraint(equalTo: bottomAnchor,constant: -30)
         ])
     }
-    func setupView(){
-        [timeText,stackView].forEach{ addSubview($0)}
+    func configureView(){
+        [timeText,stackView].forEach{ addSubview($0) }
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        configureView()
+        configureLayout()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
 
