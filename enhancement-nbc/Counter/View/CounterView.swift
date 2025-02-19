@@ -7,7 +7,7 @@
 
 import Foundation
 import UIKit
-import SwiftUI
+import SwiftUI 
 
 class CounterView:UIView{
     let timeText:UILabel={

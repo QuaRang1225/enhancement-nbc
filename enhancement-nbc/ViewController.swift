@@ -11,7 +11,7 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        addViewController(CounterViewController())
+        addViewController(MemoViewController())
     }
         
     private func addViewController(_ child: UIViewController) {

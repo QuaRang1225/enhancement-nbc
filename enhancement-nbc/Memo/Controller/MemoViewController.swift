@@ -7,101 +7,75 @@
 
 import UIKit
 
-class MemoViewController: UIViewController {
+final class MemoViewController: UIViewController {
 
-    var list:[String] = []
+    var vm = MemoViewModel()
+    let memoView = MemoView()
     let defaults = UserDefaults.standard
-    //header
-    let addButton:UIButton={
-        let button = UIButton()
-        button.setImage(UIImage(systemName: "plus"), for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    let titleLabel:UILabel={
-        let label = UILabel()
-        label.text = "Memo"
-        label.font = UIFont.boldSystemFont(ofSize: 20)
-        label.textAlignment = .center
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    lazy var headerView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .white
-        view.addSubview(addButton)
-        view.addSubview(titleLabel)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
     
     
-    
+    override func loadView() {
+        view = memoView
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupView()
-        setupLayout()
-        actions()
-        guard let list = defaults.array(forKey: "memo") as? [String] else {return}
-        self.list = list
-        
+        configureTableView()
+        configureActions()
+        bindViewModel()
+    }
+    //테이블뷰 사용설정
+    private func configureTableView(){
+        memoView.tableView.dataSource = self
+        memoView.tableView.delegate = self
+        memoView.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "MemoCell")
+    }
+    //버튼 타겟설정
+    private func configureActions(){
+        memoView.headerView.rightItem.addTarget(self, action: #selector(addMemo), for: .touchUpInside)
+        memoView.headerView.leftItem.addTarget(self, action: #selector(reportError), for: .touchUpInside)
+    }
+    //특정 이벤트(추가/삭제/로드) 후 테이블뷰 reload
+    private func bindViewModel() {
+        vm.onUpdate = { [weak self] in
+            self?.memoView.tableView.reloadData()
+        }
+    }
+    //헤더 아이템 버튼 이벤트들
+    @objc private func reportError(){
+        fatalError("crash!!!!!!!!!!!!!!")
+    }
+    @objc private func addMemo(){
+        present(createAddMemoAlert(), animated: true)
     }
     
-    lazy var tableView:UITableView = {
-        let table = UITableView(frame: .zero,style: .insetGrouped)
-        table.translatesAutoresizingMaskIntoConstraints = false
-        return table
-    }()
-    func setupView(){
-        view.addSubview(tableView)
-        view.addSubview(headerView)
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "MemoCell")
-    }
-    func setupLayout(){
-        NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: headerView.bottomAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
-            tableView.rightAnchor.constraint(equalTo: view.rightAnchor),
-            
-            headerView.topAnchor.constraint(equalTo: view.topAnchor),
-            headerView.heightAnchor.constraint(equalToConstant: 100),
-            headerView.widthAnchor.constraint(equalToConstant: view.bounds.width)
-        ])
-        //header
-        NSLayoutConstraint.activate([
-            titleLabel.centerXAnchor.constraint(equalTo: headerView.centerXAnchor),
-            titleLabel.centerYAnchor.constraint(equalTo: headerView.bottomAnchor,constant: -20),
-            
-            addButton.trailingAnchor.constraint(equalTo: headerView.trailingAnchor, constant: -16),
-            addButton.centerYAnchor.constraint(equalTo: headerView.bottomAnchor,constant: -20),
-        ])
-    }
-    func actions(){
-        addButton.addTarget(self, action: #selector(addMemo), for: .touchUpInside)
-    }
-    @objc func errors(){
-        fatalError("강제 크래시 발생!")
-    }
-    @objc func addMemo(){
+    //메모 작성 시 알림 추가
+    private func createAddMemoAlert()->UIAlertController{
         let alert = UIAlertController(title: "Add memo", message: nil, preferredStyle: .alert)
-        alert.addTextField { textField in
-            textField.placeholder = "Please write down a memo."
-        }
+        alert.addTextField { $0.placeholder = "Please write down a memo." }
+        
         let addAction = UIAlertAction(title: "Add", style: .default){ _ in
             guard let text = alert.textFields?.first?.text else { return }
-            self.list.append(text)
-            let newIndexPath = IndexPath(row: self.list.count - 1, section: 0)
-            self.tableView.insertRows(at: [newIndexPath], with: .automatic)
-            self.defaults.set(self.list, forKey: "memo")
+            if text.isEmpty{
+                self.present(self.createEmptyMemoAlert(alert), animated: true)
+            }else{
+                self.vm.saveMemo(Memo(content: text))
+            }
         }
         let canelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        
         alert.addAction(addAction)
         alert.addAction(canelAction)
+        return alert
+    }
+    //메모가 비었을 때 알림 추가
+    private func createEmptyMemoAlert(_ alert:UIAlertController)->UIAlertController{
+        let emptyAlert = UIAlertController(title: "Empty Memo", message: "You cannot add an empty memo.", preferredStyle: .alert)
+        let confirmAction = UIAlertAction(title: "confirm", style: .default){ _ in
+            self.present(alert, animated: true)
+        }
+        emptyAlert.addAction(confirmAction)
+        return emptyAlert
         
-        present(alert, animated: true, completion: nil)
     }
 }
 
@@ -111,20 +85,21 @@ class MemoViewController: UIViewController {
 
 
 extension MemoViewController:UITableViewDelegate,UITableViewDataSource{
+    //테이블 개수
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        list.count
+        vm.memoList.count
     }
-    
+    //셀 설정
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "MemoCell", for: indexPath) // 셀 재사용
-        cell.textLabel?.text = list[indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: "MemoCell", for: indexPath)
+        cell.textLabel?.text = vm.memoList[indexPath.row].content
         return cell
     }
+    //삭제 이벤트
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete{
-            list.remove(at: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .fade)
-            defaults.set(list, forKey: "memo")
-        }
+        if editingStyle == .delete{ self.vm.deleteMemo(indexPath) }
     }
 }
+
+
+
