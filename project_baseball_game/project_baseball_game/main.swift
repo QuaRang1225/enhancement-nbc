@@ -1,4 +1,4 @@
 
 import Foundation
 
-playGame()
+playGame2()
