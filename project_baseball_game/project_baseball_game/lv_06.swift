@@ -61,6 +61,10 @@ private func getResult(digits:[Character],correctDigits:[Character])->String{
 //2. 입력값을 숫자로만 제한
 //2. 임력값과 정답을 비교해 정답일 경우 return(이미 정답은 조건에 만족하기 때문에 붑필요한 계산을 피하기 위함)
 
+
+//LV6
+//게임 시작 번호 입력 시 1,2,3이 아닌 정수나 정수가 아닌 값이 들어올 경우 재입력 문구 출력 후 continue
+//3이 들어올 경우 return
 private func gameOption(completion:@escaping ()->Int){
     var score:[Int:Int] = [:]
     var numOfGame = 1

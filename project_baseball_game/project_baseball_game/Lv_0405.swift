@@ -60,7 +60,6 @@ private func getResult(digits:[Character],correctDigits:[Character])->String{
 //1. 루프를 돌며 숫자를 입력받음
 //2. 입력값을 숫자로만 제한
 //2. 임력값과 정답을 비교해 정답일 경우 return(이미 정답은 조건에 만족하기 때문에 붑필요한 계산을 피하기 위함)
-
 private func gameOption(completion:@escaping ()->Int){
     var score:[Int:Int] = [:]
     var numOfGame = 1
