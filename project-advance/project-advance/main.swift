@@ -8,6 +8,6 @@
 import Foundation
 
 func main(){
-    
+    print(sum(10,20))
 }
 
