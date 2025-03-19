@@ -6,11 +6,11 @@ Swift에서 활용할 수 있는 **커스텀 클로저, 커스텀 고차함수, 
 ---
 
 ## 1️⃣ 커스텀 클로저 (Custom Closure)
-### 📌 정의  
+### 정의  
 - 두 개의 `Int` 값을 입력으로 받고, 그들의 합을 `String` 형태로 반환하는 클로저
 - `calculate` 함수를 통해 클로저를 호출하여 결과를 출력
 
-### 💻 코드
+### 코드
 ```swift
 let sum: (Int, Int) -> String = { (a, b) in
     return "두 수의 합은 \(a + b) 입니다"
@@ -27,10 +27,10 @@ calculate(completion: sum)
 ```
 ## 2️⃣ 커스텀 고차함수 (Custom Higher-Order Function)
 
-### 📌 정의
+### 정의
 - 주어진 배열의 각 요소를 변환하는 커스텀 map 함수
 - Int 배열을 받아 String 배열로 변환
-### 💻 코드
+### 코드
 ```swift
 func myMap(_ arr: [Int], completion: (Int) -> String) -> [String] {
     arr.map { completion($0) }
@@ -46,11 +46,11 @@ print(result) // 출력: ["1", "2", "3", "4", "5"]
 
 ## 3️⃣ 커스텀 제네릭 함수 (Custom Generic Function)
 
-### 📌 정의
+### 정의
 - 제네릭(Generic)을 활용하여 짝수 인덱스 요소만을 반환하는 함수
 - 다양한 타입을 처리하기 위해 제네릭(T)을 사용
 - Numeric 프로토콜을 활용한 버전과 일반적인 버전 제공
-### 💻 코드
+### 코드
 ```swift
 // Int 배열에서 짝수 인덱스의 요소만 반환
 func a(_ arr: [Int]) -> [Int] {
