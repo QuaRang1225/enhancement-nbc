@@ -10,3 +10,7 @@ import Foundation
 let sum:(Int, Int) -> String = { (a, b) in
     return "두 수의 합은 \(a + b) 입니다"
 }
+func calculate(completion:(Int, Int) -> String){
+    let result = completion(10, 20)
+    print(result)
+}
