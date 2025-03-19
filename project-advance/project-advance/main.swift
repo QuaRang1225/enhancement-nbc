@@ -8,6 +8,6 @@
 import Foundation
 
 func main(){
-    print(a([1, 2, 3, 4, 5]))
+    print(b(["가", "나", "다", "라", "마"]))
 }
 main()
