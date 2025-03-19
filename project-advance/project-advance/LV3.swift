@@ -1,0 +1,14 @@
+//
+//  LV3.swift
+//  project-advance
+//
+//  Created by 유영웅 on 3/19/25.
+//
+
+import Foundation
+
+//요소의 타입별로 사용하기 위해 제네릭으로 선언
+//요구사항 중  << 'Numeric 프로토콜'을 준수하는 타입의 요소를 가진 배열 >>이 있어 추가
+func a<T:Numeric>(_ arr:[T])->[T]{
+    (0..<arr.count).filter{ $0%2 == 0 }.map{ arr[$0] }
+}
