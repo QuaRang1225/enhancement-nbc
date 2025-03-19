@@ -16,3 +16,7 @@ func a<T:Numeric>(_ arr:[T])->[T]{
 func b(_ arr:[String])->[String]{
     (0..<arr.count).filter{ $0%2 == 0 }.map{ arr[$0] }
 }
+//a에 Numeric 의존을 삭제
+func c<T>(_ arr:[T])->[T]{
+    (0..<arr.count).filter{ $0%2 == 0 }.map{ arr[$0] }
+}
