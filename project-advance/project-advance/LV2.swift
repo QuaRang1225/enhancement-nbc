@@ -9,4 +9,11 @@ import Foundation
 
 let numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
-var result = numbers.filter{ $0%2 == 0 }.map{ "\($0)" }
+var result = myMap([1, 2, 3, 4, 5]) {
+    String($0)
+}
+
+func myMap(_ arr :[Int],completion:(Int) -> String) -> [String]{
+    arr.map{ completion($0) }
+}
+
