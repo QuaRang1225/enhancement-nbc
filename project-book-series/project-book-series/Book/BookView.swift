@@ -16,7 +16,6 @@ final class BookView:UIView{
     //MARK: 타이틀
     private let titleLabel:UILabel = {
         let label = UILabel()
-        label.text = "Harry Potter and the Philosopher’s Stone "
         label.numberOfLines = 0
         label.textAlignment = .center
         label.font = .boldSystemFont(ofSize: 24)
@@ -25,7 +24,6 @@ final class BookView:UIView{
     //MARK: 시리즈 순서
     private let seriesButton:UIButton = {
         let button = UIButton()
-        button.setTitle("1", for: .normal)
         button.backgroundColor = .systemBlue
         button.layer.cornerRadius = 20
         button.titleLabel?.font = .systemFont(ofSize: 16)
@@ -55,6 +53,11 @@ final class BookView:UIView{
             make.width.height.equalTo(40)
             make.centerX.equalToSuperview()
         }
+    }
+    public func config(attributes:[Attributes]){
+        let index = 0
+        titleLabel.text = attributes[index].title
+        seriesButton.setTitle("\(index+1)", for: .normal)
     }
 }
 

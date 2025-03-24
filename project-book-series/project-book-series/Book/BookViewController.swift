@@ -13,13 +13,26 @@ final class BookViewController: UIViewController {
     
     private let bookView = BookView()
     
+    
     override func loadView() {
+        fetchInfo()
         view = bookView
     }
     override func viewDidLoad() {
         view.backgroundColor = .white
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+    }
+    private func fetchInfo(){
+        Task{
+            let data = try await JsonManager.loadJson()
+            switch data{
+            case let .success(attributes):
+                bookView.config(attributes: attributes)
+                bookView.layoutIfNeeded()
+            case let .failure(error): print(error.localizedDescription)
+            }
+        }
     }
 }
 
