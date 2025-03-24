@@ -29,6 +29,13 @@ final class BookView:UIView{
         button.titleLabel?.font = .systemFont(ofSize: 16)
         return button
     }()
+    //MARK: Alert 생성
+    public let alert:UIAlertController = {
+        let alert = UIAlertController(title: "Error", message: nil, preferredStyle: .alert)
+        let confirm = UIAlertAction(title: "Confirm", style: .default)
+        alert.addAction(confirm)
+        return alert
+    }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -54,6 +61,7 @@ final class BookView:UIView{
             make.centerX.equalToSuperview()
         }
     }
+    //MARK: json 인코딩 성공 시 데이터 세팅
     public func config(attributes:[Attributes]){
         let index = 0
         titleLabel.text = attributes[index].title
