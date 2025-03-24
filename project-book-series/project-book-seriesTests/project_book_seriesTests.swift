@@ -10,8 +10,16 @@ import Testing
 
 struct project_book_seriesTests {
 
-    @Test func example() async throws {
-        // Write your test here and use APIs like `#expect(...)` to check expected conditions.
+    //MARK: 파일을 찾을 수 없을 때
+    @Test func fileNotFound() async throws {
+        await #expect(throws:DataError.fileNotFound){
+            try await JsonManager.loadJson()
+        }
     }
-
+    //MARK: 파싱이 불가능할 때()
+    @Test func parsingFailed() async throws {
+        await #expect(throws:DataError.parsingFailed){
+            try await JsonManager.loadJson()
+        }
+    }
 }
