@@ -13,6 +13,13 @@ import SnapKit
 //UI요소 분리
 final class BookView:UIView{
     
+    //MARK: 스크롤뷰에 담을 뷰
+    private let scrollContentView = UIView()
+    
+    //MARK: Dedication & Summary 섹션 스택뷰
+    private lazy var dedication  = UISectionStackView(axis: .vertical, spacings: 8, views: [dedicationTitleLabel,dedicationLabel])
+    private lazy var summary = UISectionStackView(axis: .vertical, spacings: 8, views: [summaryTitleLabel,summaryLabel])
+    
     //MARK: 타이틀 라벨
     private let titleLabel = UITitleLabel(size: 24)
     private let bookTitleLabel = UITitleLabel(size: 20)
@@ -21,6 +28,7 @@ final class BookView:UIView{
     private let pageTitleLabel = UITitleLabel(texts: "Page",size: 14)
     private let dedicationTitleLabel = UITitleLabel(texts: "Dedication", size: 18)
     private let summaryTitleLabel = UITitleLabel(texts: "Summary", size: 18)
+    private let chaptersTitleLabel = UITitleLabel(texts: "Chapters", size: 18)
     
     //MARK: 각 타이틀에 따른 데이터 라벨
     private let authorLabel = UIContentLabel(fonts: .systemFont(ofSize: 18), color: .darkGray)
@@ -43,6 +51,13 @@ final class BookView:UIView{
         view.contentMode = .scaleToFill
         return view
     }()
+    //MARK: 스크롤뷰
+    private let scrollView:UIScrollView = {
+        let view = UIScrollView()
+        view.isScrollEnabled = true
+        view.showsVerticalScrollIndicator = false
+        return view
+    }()
     //MARK: 해당 에피소드 작품 Horizontal 스택뷰
     private lazy var bookInfoHStackView:UIStackView = {
         let view = UIStackView(arrangedSubviews: [posterImageView,bookInfoVStackView])
@@ -59,15 +74,6 @@ final class BookView:UIView{
         view.spacing = 8
         return view
     }()
-    //MARK: Dedication & Summary 섹션/헤더 스택뷰
-    private func frontVstackView(labels:[UILabel]) -> UIStackView{
-        let view = UIStackView(arrangedSubviews:labels)
-        labels.forEach{ $0.textAlignment = .left }
-        view.axis = .vertical
-        view.alignment = .leading
-        view.spacing = 8
-        return view
-    }
     //MARK: Alert 생성
     public let alert:UIAlertController = {
         let alert = UIAlertController(title: "Error", message: nil, preferredStyle: .alert)
@@ -87,11 +93,11 @@ final class BookView:UIView{
     //MARK: 컴포넌트 및 레이아웃 설정
     private func configureUI(){
         
-        let dedication = frontVstackView(labels: [dedicationTitleLabel,dedicationLabel])
-        let summary = frontVstackView(labels: [summaryTitleLabel,summaryLabel])
-        
-        [titleLabel,seriesButton,bookInfoHStackView,authorLabel,realesLabel,pageLabel,dedication,summary]
+        scrollView.addSubview(scrollContentView)
+        [titleLabel,seriesButton,scrollView]
             .forEach{ addSubview($0) }
+        [bookInfoHStackView,authorLabel,realesLabel,pageLabel,dedication,summary]
+            .forEach{ scrollContentView.addSubview($0) }
         
         titleLabel.snp.makeConstraints { make in
             make.top.equalTo(safeAreaLayoutGuide).offset(10)
@@ -102,6 +108,16 @@ final class BookView:UIView{
             make.top.equalTo(titleLabel.snp.bottom).offset(16)
             make.width.height.equalTo(40)
             make.centerX.equalToSuperview()
+            make.bottom.equalTo(scrollView.snp.top).offset(-5)
+        }
+        scrollView.snp.makeConstraints { make in
+            make.top.equalTo(seriesButton.snp.bottom)
+            make.horizontalEdges.equalToSuperview()
+            make.bottom.equalToSuperview()
+        }
+        scrollContentView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+            make.width.equalToSuperview()
         }
         posterImageView.snp.makeConstraints { make in
             make.width.equalTo(100)
@@ -120,16 +136,8 @@ final class BookView:UIView{
             make.leading.equalTo(pageTitleLabel.snp.trailing).offset(8)
         }
         bookInfoHStackView.snp.makeConstraints { make in
-            make.top.equalTo(seriesButton.snp.bottom).offset(24)
+            make.top.equalToSuperview().offset(19)
             make.horizontalEdges.equalTo(titleLabel)
-        }
-        dedication.snp.makeConstraints { make in
-            make.top.equalTo(bookInfoHStackView.snp.bottom).offset(24)
-            make.horizontalEdges.equalToSuperview().inset(20)
-        }
-        summary.snp.makeConstraints { make in
-            make.top.equalTo(dedication.snp.bottom).offset(24)
-            make.horizontalEdges.equalToSuperview().inset(20)
         }
     }
     //MARK: json 인코딩 성공 시 데이터 세팅
@@ -144,6 +152,26 @@ final class BookView:UIView{
         pageLabel.text = "\(attributes[index].pages)"
         dedicationLabel.text = attributes[index].dedication
         summaryLabel.text = attributes[index].summary
+        configChapters(chapters: attributes[index].chapters)
+        
+    }
+    //MARK: 챕터 라벨 리스트 생성 후 다른 섹션과 함께 scrollContentView에 추가
+    private func configChapters(chapters:[Chapter]){
+        let labels = chapters.map{
+            let label = UIContentLabel(fonts: .systemFont(ofSize: 14), color: .darkGray)
+            label.text = $0.title
+            return label
+        }
+        let chapters = UISectionStackView(axis: .vertical, spacings: 8, views: [chaptersTitleLabel] + labels)
+        let sections = UISectionStackView(axis: .vertical, spacings: 24, views: [dedication,summary,chapters])
+        
+        scrollContentView.addSubview(sections)
+        
+        sections.snp.makeConstraints { make in
+            make.top.equalTo(bookInfoHStackView.snp.bottom).offset(24)
+            make.horizontalEdges.equalToSuperview().inset(20)
+            make.bottom.equalToSuperview().offset(-20)
+        }
     }
 }
 
