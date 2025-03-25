@@ -18,7 +18,7 @@ final class BookView:UIView{
     
     //MARK: Dedication & Summary 섹션 스택뷰
     private lazy var dedication  = UISectionStackView(axis: .vertical, spacings: 8, views: [dedicationTitleLabel,dedicationLabel])
-    private lazy var summary = UISectionStackView(axis: .vertical, spacings: 8, views: [summaryTitleLabel,summaryLabel])
+    private lazy var summary = UISectionStackView(axis: .vertical, spacings: 8, views: [summaryTitleLabel,summaryLabel,expandButton])
     
     //MARK: 타이틀 라벨
     private let titleLabel = UITitleLabel(size: 24)
@@ -58,6 +58,15 @@ final class BookView:UIView{
         view.showsVerticalScrollIndicator = false
         return view
     }()
+    //MARK: 더보기 버튼
+    private let expandButton:UIButton = {
+        let button = UIButton()
+        button.setTitle("더보기", for: .normal)
+        button.setTitleColor(.systemBlue, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 14)
+        button.contentHorizontalAlignment = .right
+        return button
+    }()
     //MARK: 해당 에피소드 작품 Horizontal 스택뷰
     private lazy var bookInfoHStackView:UIStackView = {
         let view = UIStackView(arrangedSubviews: [posterImageView,bookInfoVStackView])
@@ -96,7 +105,7 @@ final class BookView:UIView{
         scrollView.addSubview(scrollContentView)
         [titleLabel,seriesButton,scrollView]
             .forEach{ addSubview($0) }
-        [bookInfoHStackView,authorLabel,realesLabel,pageLabel,dedication,summary]
+        [bookInfoHStackView,authorLabel,realesLabel,pageLabel]
             .forEach{ scrollContentView.addSubview($0) }
         
         titleLabel.snp.makeConstraints { make in
@@ -172,6 +181,12 @@ final class BookView:UIView{
             make.horizontalEdges.equalToSuperview().inset(20)
             make.bottom.equalToSuperview().offset(-20)
         }
+        expandButton.snp.makeConstraints { make in
+            make.trailing.equalToSuperview()
+        }
+    }
+    @objc func printss(){
+        print("dasdad")
     }
 }
 
