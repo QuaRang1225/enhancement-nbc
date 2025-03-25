@@ -19,11 +19,15 @@ final class BookView:UIView{
     private let authorTitleLabel = UITitleLabel(texts: "Author",size: 16)
     private let realesTitleLabel = UITitleLabel(texts: "Released", size: 14)
     private let pageTitleLabel = UITitleLabel(texts: "Page",size: 14)
+    private let dedicationTitleLabel = UITitleLabel(texts: "Dedication", size: 18)
+    private let summaryTitleLabel = UITitleLabel(texts: "Summary", size: 18)
     
     //MARK: 각 타이틀에 따른 데이터 라벨
     private let authorLabel = UIContentLabel(fonts: .systemFont(ofSize: 18), color: .darkGray)
     private let realesLabel = UIContentLabel(fonts: .systemFont(ofSize: 14), color: .gray)
     private let pageLabel = UIContentLabel(fonts: .systemFont(ofSize: 14), color: .gray)
+    private let dedicationLabel = UIContentLabel(fonts: .systemFont(ofSize: 14), color: .darkGray)
+    private let summaryLabel = UIContentLabel(fonts: .systemFont(ofSize: 14), color: .darkGray)
     
     //MARK: 시리즈 순서
     private let seriesButton:UIButton = {
@@ -55,6 +59,15 @@ final class BookView:UIView{
         view.spacing = 8
         return view
     }()
+    //MARK: Dedication & Summary 섹션/헤더 스택뷰
+    private func frontVstackView(labels:[UILabel]) -> UIStackView{
+        let view = UIStackView(arrangedSubviews:labels)
+        labels.forEach{ $0.textAlignment = .left }
+        view.axis = .vertical
+        view.alignment = .leading
+        view.spacing = 8
+        return view
+    }
     //MARK: Alert 생성
     public let alert:UIAlertController = {
         let alert = UIAlertController(title: "Error", message: nil, preferredStyle: .alert)
@@ -73,7 +86,11 @@ final class BookView:UIView{
     
     //MARK: 컴포넌트 및 레이아웃 설정
     private func configureUI(){
-        [titleLabel,seriesButton,bookInfoHStackView,authorLabel,realesLabel,pageLabel]
+        
+        let dedication = frontVstackView(labels: [dedicationTitleLabel,dedicationLabel])
+        let summary = frontVstackView(labels: [summaryTitleLabel,summaryLabel])
+        
+        [titleLabel,seriesButton,bookInfoHStackView,authorLabel,realesLabel,pageLabel,dedication,summary]
             .forEach{ addSubview($0) }
         
         titleLabel.snp.makeConstraints { make in
@@ -103,8 +120,16 @@ final class BookView:UIView{
             make.leading.equalTo(pageTitleLabel.snp.trailing).offset(8)
         }
         bookInfoHStackView.snp.makeConstraints { make in
-            make.top.equalTo(seriesButton.snp.bottom).offset(20)
-            make.horizontalEdges.equalTo(titleLabel).inset(5)
+            make.top.equalTo(seriesButton.snp.bottom).offset(24)
+            make.horizontalEdges.equalTo(titleLabel)
+        }
+        dedication.snp.makeConstraints { make in
+            make.top.equalTo(bookInfoHStackView.snp.bottom).offset(24)
+            make.horizontalEdges.equalToSuperview().inset(20)
+        }
+        summary.snp.makeConstraints { make in
+            make.top.equalTo(dedication.snp.bottom).offset(24)
+            make.horizontalEdges.equalToSuperview().inset(20)
         }
     }
     //MARK: json 인코딩 성공 시 데이터 세팅
@@ -117,6 +142,8 @@ final class BookView:UIView{
         authorLabel.text = attributes[index].author
         realesLabel.text = attributes[index].releaseDate.getAmericaDateFormatter()
         pageLabel.text = "\(attributes[index].pages)"
+        dedicationLabel.text = attributes[index].dedication
+        summaryLabel.text = attributes[index].summary
     }
 }
 
