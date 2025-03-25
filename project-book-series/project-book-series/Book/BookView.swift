@@ -13,6 +13,8 @@ import SnapKit
 //UI요소 분리
 final class BookView:UIView{
     
+    public var summaryTuple:(text:String,cut:String,cutCount:Int) = ("","",0)
+    
     //MARK: 스크롤뷰에 담을 뷰
     private let scrollContentView = UIView()
     
@@ -35,7 +37,7 @@ final class BookView:UIView{
     private let realesLabel = UIContentLabel(fonts: .systemFont(ofSize: 14), color: .gray)
     private let pageLabel = UIContentLabel(fonts: .systemFont(ofSize: 14), color: .gray)
     private let dedicationLabel = UIContentLabel(fonts: .systemFont(ofSize: 14), color: .darkGray)
-    private let summaryLabel = UIContentLabel(fonts: .systemFont(ofSize: 14), color: .darkGray)
+    public let summaryLabel = UIContentLabel(fonts: .systemFont(ofSize: 14), color: .darkGray)
     
     //MARK: 시리즈 순서
     private let seriesButton:UIButton = {
@@ -57,15 +59,6 @@ final class BookView:UIView{
         view.isScrollEnabled = true
         view.showsVerticalScrollIndicator = false
         return view
-    }()
-    //MARK: 더보기 버튼
-    private let expandButton:UIButton = {
-        let button = UIButton()
-        button.setTitle("더보기", for: .normal)
-        button.setTitleColor(.systemBlue, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 14)
-        button.contentHorizontalAlignment = .right
-        return button
     }()
     //MARK: 해당 에피소드 작품 Horizontal 스택뷰
     private lazy var bookInfoHStackView:UIStackView = {
@@ -89,6 +82,15 @@ final class BookView:UIView{
         let confirm = UIAlertAction(title: "Confirm", style: .default)
         alert.addAction(confirm)
         return alert
+    }()
+    //MARK: 더보기 버튼
+    public lazy var expandButton:UIButton = {
+        let button = UIButton()
+        button.setTitle("더보기", for: .normal)
+        button.setTitleColor(.systemBlue, for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 14)
+        button.contentHorizontalAlignment = .right
+        return button
     }()
     
     override init(frame: CGRect) {
@@ -160,9 +162,9 @@ final class BookView:UIView{
         realesLabel.text = attributes[index].releaseDate.getAmericaDateFormatter()
         pageLabel.text = "\(attributes[index].pages)"
         dedicationLabel.text = attributes[index].dedication
-        summaryLabel.text = attributes[index].summary
-        configChapters(chapters: attributes[index].chapters)
         
+        expandString(text: attributes[index].summary)
+        configChapters(chapters: attributes[index].chapters)
     }
     //MARK: 챕터 라벨 리스트 생성 후 다른 섹션과 함께 scrollContentView에 추가
     private func configChapters(chapters:[Chapter]){
@@ -185,8 +187,18 @@ final class BookView:UIView{
             make.trailing.equalToSuperview()
         }
     }
-    @objc func printss(){
-        print("dasdad")
+    //MARK: 문자열의 길이가 450이상일 경우
+    private func expandString(text:String){
+        let cut = String(text.dropFirst(450))
+        summaryTuple.text = String(text.prefix(450))
+        summaryTuple.cut = cut
+        summaryTuple.cutCount = cut.count
+        if text.count > 450{
+            summaryTuple.text.append("...")
+        }else{
+            expandButton.isHidden = true
+        }
+        summaryLabel.text = summaryTuple.text
     }
 }
 
