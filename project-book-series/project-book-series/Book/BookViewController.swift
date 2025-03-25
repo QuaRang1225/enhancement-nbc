@@ -9,28 +9,30 @@ import UIKit
 
 //MARK: BookViewController
 //View와 관련된 이벤트를 처리
-final class BookViewController: UIViewController {
-    
+final class BookViewController: UIViewController{
+
     private let bookView = BookView()
     
-    
     override func loadView() {
-        fetchInfo()
         view = bookView
     }
     override func viewDidLoad() {
         view.backgroundColor = .white
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        fetchInfo()
     }
+    //MARK: json 인코딩 성공 후 View 데이터 세팅
     private func fetchInfo(){
         Task{
-            let data = try await JsonManager.loadJson()
-            switch data{
-            case let .success(attributes):
-                bookView.config(attributes: attributes)
-                bookView.layoutIfNeeded()
-            case let .failure(error): print(error.localizedDescription)
+            do{
+                let data = try await JsonManager.loadJson().get()
+                bookView.isHidden = false
+                bookView.config(attributes: data)
+            }catch let error{
+                guard let dataError = error as? DataError else {return}
+                bookView.isHidden = true
+                bookView.alert.message = dataError.rawValue
+                present(bookView.alert, animated: true)
             }
         }
     }
