@@ -55,8 +55,10 @@ final class BookViewController: UIViewController{
         bookView?.summaryLabel.text?.append(isExpand ? bookView?.summaryTuple.cut ?? "": "...")
         bookView?.expandButton.setTitle(isExpand ? "접기" : "더보기", for: .normal)
     }
+    //MARK: 에피소드 버튼 터치 이벤트
     @objc private func setEpisodeInfo(_ gesture:SelecteEpisodeGesture){
         bookView?.episode = gesture.episode
+        isExpand = false
         bookView?.update()
     }
 }

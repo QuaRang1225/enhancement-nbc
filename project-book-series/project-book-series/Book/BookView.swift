@@ -9,25 +9,27 @@ import Foundation
 import UIKit
 import SnapKit
 
-class SelecteEpisodeGesture: UITapGestureRecognizer {
-    var episode: Int = 0
-}
 //MARK: BookView
 //UI요소 분리
 final class BookView:UIView{
-    private let attributes:[Attributes]
+    
     //MARK: 버튼 정보
     public var episode = 0
+    //MARK: Book 속성 추가
+    private let attributes:[Attributes]
+    //MARK: 버튼 터치 이벤트 Delegate로 위임
     weak var delegate:BookViewDeleagate?
     
-    //MARK: Summary 정보
-    public var summaryTuple:(text:String,cut:String,cutCount:Int) = ("","",0)
+    
     //MARK: 스크롤뷰에 담을 뷰
     private let scrollContentView = UIView()
+    //MARK: Summary 정보
+    public var summaryTuple:(text:String,cut:String,cutCount:Int) = ("","",0)
     
-    //MARK: Dedication & Summary 섹션 스택뷰
+    
+    //MARK: Dedication & Summary 섹션 및 전체 필드 스택뷰
     private lazy var dedication  = UISectionStackView(axis: .vertical, spacings: 8, views: [dedicationTitleLabel,dedicationLabel])
-    private lazy var summary = UISectionStackView(axis: .vertical, spacings: 8, views: [summaryTitleLabel,summaryLabel])
+    private lazy var summary = UISectionStackView(axis: .vertical, spacings: 8, views: [summaryTitleLabel,summaryLabel,expandButton])
     private var section:UISectionStackView?
     
     //MARK: 타이틀 라벨
@@ -85,7 +87,7 @@ final class BookView:UIView{
     }()
     
     //MARK: 더보기 버튼
-    public lazy var expandButton:UIButton = {
+    public let expandButton:UIButton = {
         let button = UIButton()
         button.setTitle("더보기", for: .normal)
         button.setTitleColor(.systemBlue, for: .normal)
@@ -102,7 +104,7 @@ final class BookView:UIView{
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    //MARK: 챕터 라벨 리스트 생성 후 다른 섹션과 함께 scrollContentView에 추가
+    //MARK: 챕터 라벨 리스트 생성 후 다른 섹션과 함께 scrollContentView에 추가 및 오토레이아웃 설정
     private func configSection(){
         
         var labels = [UIContentLabel]()
@@ -114,7 +116,6 @@ final class BookView:UIView{
         }
         let chapters = UISectionStackView(axis: .vertical, spacings: 8, views: [chaptersTitleLabel] + labels)
         
-        summary.addArrangedSubview(expandButton)
         section = UISectionStackView(axis: .vertical, spacings: 24, views: [dedication,summary,chapters])
         
         guard let section else { return }
@@ -137,6 +138,7 @@ final class BookView:UIView{
         summaryTuple.cut = cut
         summaryTuple.cutCount = cut.count
         if text.count > 450{
+            expandButton.isHidden = false
             summaryTuple.text.append("...")
         }else{
             expandButton.isHidden = true
@@ -202,9 +204,15 @@ final class BookView:UIView{
             seriesButtonsStack.addArrangedSubview(delegate.didSetEpisodeButton(button))
         }
     }
+    //MARK: 에피소드 버튼 시 업데이트 사항
+    //시리즈 버튼 리스트 삭제 후 다시 생성해 추가 -> 이부분은 컬렉션 뷰로 다시 생성할 지 고려 중
+    //섹션 삭제 후 새로 추가
+    //더보기 버튼 문자열 초기화 및 summary 문자열 재분리
+    //각 컴포넌트 데이터 업데이트
     public func update(){
         seriesButtonsStack.arrangedSubviews.forEach { $0.removeFromSuperview() }
         section?.removeFromSuperview()
+        expandButton.setTitle("더보기", for: .normal)
         config()
         configExpandString()
         configSection()
