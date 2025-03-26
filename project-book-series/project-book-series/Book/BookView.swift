@@ -99,6 +99,7 @@ final class BookView:UIView{
     init(attributes:[Attributes]) {
         self.attributes = attributes
         super.init(frame: .zero)
+        backgroundColor = .white
         configureUI()
     }
     required init?(coder: NSCoder) {
