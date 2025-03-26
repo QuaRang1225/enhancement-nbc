@@ -14,45 +14,63 @@ final class BookViewController: UIViewController{
     //MARK: 더보기/접기 여부
     private var isExpand = false
     //MARK: BookView
-    private let bookView = BookView()
+    private var bookView:BookView?
     
-    override func loadView() {
-        view = bookView
-    }
+    //MARK: Alert 생성
+    public let alert:UIAlertController = {
+        let alert = UIAlertController(title: "Error", message: nil, preferredStyle: .alert)
+        let confirm = UIAlertAction(title: "Confirm", style: .default)
+        alert.addAction(confirm)
+        return alert
+    }()
     override func viewDidLoad() {
-        view.backgroundColor = .white
         super.viewDidLoad()
         fetchInfo()
-        configureTarget()
     }
     //MARK: json 인코딩 성공 후 View 데이터 세팅
     private func fetchInfo(){
         Task{
             do{
                 let data = try await JsonManager.loadJson().get()
-                bookView.isHidden = false
-                bookView.config(attributes: data)
+                bookView = BookView(attributes: data)
+                bookView?.delegate = self
+                bookView?.config()
+                configureTarget()
+                view = bookView
             }catch let error{
                 guard let dataError = error as? DataError else {return}
-                bookView.isHidden = true
-                bookView.alert.message = dataError.rawValue
-                present(bookView.alert, animated: true)
+                alert.message = dataError.rawValue
+                present(alert, animated: true)
             }
         }
     }
     //MARK: 버튼 타켓 설정
     private func configureTarget(){
-        bookView.expandButton.addTarget(self, action: #selector(toggleSummaryExpand), for: .touchUpInside)
+        bookView?.expandButton.addTarget(self, action: #selector(toggleSummaryExpand), for: .touchUpInside)
     }
     //MARK: summary 더보기 버튼 이벤트
     @objc private func toggleSummaryExpand(){
         isExpand.toggle()
-        bookView.summaryLabel.text?.removeLast(isExpand ? 3 : bookView.summaryTuple.cutCount)
-        bookView.summaryLabel.text?.append(isExpand ? bookView.summaryTuple.cut : "...")
-        bookView.expandButton.setTitle(isExpand ? "접기" : "더보기", for: .normal)
+        bookView?.summaryLabel.text?.removeLast(isExpand ? 3 : bookView?.summaryTuple.cutCount ?? 0)
+        bookView?.summaryLabel.text?.append(isExpand ? bookView?.summaryTuple.cut ?? "": "...")
+        bookView?.expandButton.setTitle(isExpand ? "접기" : "더보기", for: .normal)
+    }
+    @objc private func setEpisodeInfo(_ gesture:SelecteEpisodeGesture){
+        bookView?.episode = gesture.episode
+        bookView?.update()
     }
 }
 
 #Preview{
     BookViewController()
+}
+
+extension BookViewController:BookViewDeleagate{
+    //MARK: 버튼 생성과 함께 타겟 설정
+    func didSetEpisodeButton(_ button: UIEpisodeButton) -> UIEpisodeButton {
+        let gesture = SelecteEpisodeGesture(target: self, action: #selector(setEpisodeInfo))
+        gesture.episode = button.tag
+        button.addGestureRecognizer(gesture)
+        return button
+    }
 }
