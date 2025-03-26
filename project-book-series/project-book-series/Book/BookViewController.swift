@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 //MARK: BookViewController
 //View와 관련된 이벤트를 처리
@@ -26,6 +27,14 @@ final class BookViewController: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         fetchInfo()
+        
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        view = bookView
+        bookView?.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
     }
     //MARK: json 인코딩 성공 후 View 데이터 세팅
     private func fetchInfo(){
@@ -36,7 +45,6 @@ final class BookViewController: UIViewController{
                 bookView?.delegate = self
                 bookView?.config()
                 configureTarget()
-                view = bookView
             }catch let error{
                 guard let dataError = error as? DataError else {return}
                 alert.message = dataError.rawValue
