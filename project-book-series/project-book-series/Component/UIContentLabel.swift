@@ -11,8 +11,9 @@ import UIKit
 //MARK: View의 라벨 중 내용에 해당하는 커스텀 컴포넌트
 class UIContentLabel:UILabel{
     
-    init(fonts:UIFont,color:UIColor) {
+    init(fonts:UIFont,color:UIColor,text:String? = nil) {
         super.init(frame: .zero)
+        self.text = text
         font = fonts
         textColor = color
         numberOfLines = 0

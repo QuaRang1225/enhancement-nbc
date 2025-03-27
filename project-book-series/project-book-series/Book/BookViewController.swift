@@ -13,6 +13,14 @@ final class BookViewController: UIViewController{
 
     private let bookView = BookView()
     
+    //MARK: Alert 생성
+    public let alert:UIAlertController = {
+        let alert = UIAlertController(title: "Error", message: nil, preferredStyle: .alert)
+        let confirm = UIAlertAction(title: "Confirm", style: .default)
+        alert.addAction(confirm)
+        return alert
+    }()
+    
     override func loadView() {
         view = bookView
     }
@@ -31,8 +39,8 @@ final class BookViewController: UIViewController{
             }catch let error{
                 guard let dataError = error as? DataError else {return}
                 bookView.isHidden = true
-                bookView.alert.message = dataError.rawValue
-                present(bookView.alert, animated: true)
+                alert.message = dataError.rawValue
+                present(alert, animated: true)
             }
         }
     }
