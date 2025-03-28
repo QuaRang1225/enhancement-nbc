@@ -25,9 +25,9 @@ class UIArticleStackView:UIStackView{
         }
     }
     //MARK: 타이틀 라벨
-    private lazy var titleLabel = UITitleLabel(texts: title, size: 18)
+    private lazy var titleLabel = UITitleLabel(text: title, size: 18)
     //MARK: 컨텐츠 라벨
-    private lazy var contentLabel = UIContentLabel(fonts: .systemFont(ofSize: 14), color: .darkGray)
+    private lazy var contentLabel = UIContentLabel(font: .systemFont(ofSize: 14), color: .darkGray)
     //MARK: 컨텐츠 리스트 스택뷰
     private lazy var contentStackView:UIStackView = {
         let view = UIStackView()
@@ -43,9 +43,8 @@ class UIArticleStackView:UIStackView{
         axis = .vertical
         spacing = 8
         alignment = .leading
-        addArrangedSubview(titleLabel)
-        addArrangedSubview(contentLabel)
-        addArrangedSubview(contentStackView)
+        [titleLabel,contentLabel,contentStackView]
+            .forEach{ addArrangedSubview($0) }
     }
     
     required init(coder: NSCoder) {
@@ -56,14 +55,8 @@ class UIArticleStackView:UIStackView{
         if let content {
             contentLabel.text = content
         } else if let contents {
-            contentStackView.arrangedSubviews
-                .forEach {
-                    removeArrangedSubview($0)
-                    $0.removeFromSuperview()
-                }
-            contents.forEach {
-                contentStackView.addArrangedSubview(UIContentLabel(fonts: .systemFont(ofSize: 14), color: .darkGray,text: $0))
-            }
+            contentStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+            contents.forEach { contentStackView.addArrangedSubview(UIContentLabel(font: .systemFont(ofSize: 14), color: .darkGray,text: $0)) }
         }
     }
 }

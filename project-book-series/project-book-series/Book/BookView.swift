@@ -12,8 +12,7 @@ import SnapKit
 //MARK: BookView
 //UI요소 분리
 final class BookView:UIView{
-    //MARK: 버튼 정보
-    public var episode = 0
+    
     //MARK: 속성 배열
     public var attributes = [Attributes]()
     //MARK: 스크롤뷰에 담을 뷰
@@ -22,14 +21,14 @@ final class BookView:UIView{
     //MARK: 타이틀 라벨
     private let titleLabel = UITitleLabel(size: 24)
     private let bookTitleLabel = UITitleLabel(size: 20)
-    private let authorTitleLabel = UITitleLabel(texts: "Author",size: 16)
-    private let realesTitleLabel = UITitleLabel(texts: "Released", size: 14)
-    private let pageTitleLabel = UITitleLabel(texts: "Page",size: 14)
+    private let authorTitleLabel = UITitleLabel(text: "Author",size: 16)
+    private let realesTitleLabel = UITitleLabel(text: "Released", size: 14)
+    private let pageTitleLabel = UITitleLabel(text: "Page",size: 14)
     
     //MARK: 각 타이틀에 따른 데이터 라벨
-    private let authorLabel = UIContentLabel(fonts: .systemFont(ofSize: 18), color: .darkGray)
-    private let realesLabel = UIContentLabel(fonts: .systemFont(ofSize: 14), color: .gray)
-    private let pageLabel = UIContentLabel(fonts: .systemFont(ofSize: 14), color: .gray)
+    private let authorLabel = UIContentLabel(font: .systemFont(ofSize: 18), color: .darkGray)
+    private let realesLabel = UIContentLabel(font: .systemFont(ofSize: 14), color: .gray)
+    private let pageLabel = UIContentLabel(font: .systemFont(ofSize: 14), color: .gray)
     
     //MARK: Title & Content 스택 뷰
     private let dedicationStackView = UIArticleStackView(title: "Dedication")
@@ -76,7 +75,6 @@ final class BookView:UIView{
     //MARK: 더보기 버튼
     public let expandButton:UIButton = {
         let button = UIButton()
-        button.setTitle("더보기", for: .normal)
         button.setTitleColor(.systemBlue, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 14)
         button.contentHorizontalAlignment = .right
@@ -89,6 +87,7 @@ final class BookView:UIView{
         layout.itemSize = CGSize(width:40, height: 40)
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
         view.contentMode = .center
+        view.backgroundColor = .white
         view.showsHorizontalScrollIndicator = false
         view.register(UIEpisodeCell.self, forCellWithReuseIdentifier: UIEpisodeCell.identifier)
         return view
@@ -104,8 +103,8 @@ final class BookView:UIView{
     //MARK: 컴포넌트 및 레이아웃 설정
     private func configureUI(){
         
-        scrollView.addSubview(scrollContentView)
-        
+        [scrollContentView]
+            .forEach{ scrollView.addSubview($0) }
         [titleLabel,seriesCollectionView,scrollView]
             .forEach{ addSubview($0) }
         [bookInfoHStackView,authorLabel,realesLabel,pageLabel,contentsVStackView,expandButton]
@@ -164,10 +163,9 @@ final class BookView:UIView{
     //MARK: 속성 데이터 업데이트
     public func configAttributes(attributes:[Attributes]){
         self.attributes = attributes
-        config()
     }
     //MARK: json 인코딩 성공 시 데이터 세팅
-    public func config(){
+    public func config(episode:Int){
         titleLabel.text = attributes[episode].title
         posterImageView.image = UIImage(named: "harrypotter\(episode+1)")
         bookTitleLabel.text = attributes[episode].title
@@ -176,15 +174,13 @@ final class BookView:UIView{
         pageLabel.text = "\(attributes[episode].pages)"
         
         dedicationStackView.content = attributes[episode].dedication
-        summaryStackView.content = attributes[episode].summary
         chapterStackView.contents = attributes[episode].chapters.map{ $0.title }
         
         seriesCollectionView.reloadData()
     }
     //MARK: 에피소드 버튼 터치 시 UI 업데이트
     public func update(index:Int){
-        config()
-        episode = index
+        config(episode: index)
         expandButton.setTitle("더보기", for: .normal)
     }
 }

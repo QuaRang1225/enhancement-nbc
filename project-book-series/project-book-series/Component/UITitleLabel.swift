@@ -11,9 +11,9 @@ import UIKit
 //MARK: View의 라벨 중 타이틀에 해당하는 커스텀 컴포넌트
 class UITitleLabel:UILabel{
     
-    init(texts:String? = nil,size:CGFloat) {
+    init(text:String? = nil,size:CGFloat) {
         super.init(frame: .zero)
-        text = texts
+        self.text = text
         font = .boldSystemFont(ofSize: size)
         textColor = .black
         numberOfLines = 0
