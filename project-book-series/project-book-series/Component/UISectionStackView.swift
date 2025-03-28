@@ -43,8 +43,6 @@ class UIArticleStackView:UIStackView{
         axis = .vertical
         spacing = 8
         alignment = .leading
-        [titleLabel, contentLabel, contentStackView]
-            .forEach{ addArrangedSubview($0) }
     }
     
     required init(coder: NSCoder) {
@@ -53,16 +51,22 @@ class UIArticleStackView:UIStackView{
     //MARK: 단일 컨텐츠의 경우 text교체/리스트일 경우 스택뷰에서 전부 제거 후 새로 추가
     private func configure(){
         if let content {
+            [titleLabel, contentLabel]
+                .forEach{ addArrangedSubview($0) }
             contentLabel.text = content
         } else if let contents {
+            contentStackView.removeFromSuperview()
+            [titleLabel, contentStackView]
+                .forEach{ addArrangedSubview($0) }
             contentStackView.arrangedSubviews
-                .forEach {
-//                    removeArrangedSubview($0)
-                    $0.removeFromSuperview()
-                }
+                .forEach {  $0.removeFromSuperview() }
             contents.forEach {
                 contentStackView.addArrangedSubview(UIContentLabel(font: .systemFont(ofSize: 14), color: .darkGray,text: $0))
             }
         }
     }
+}
+
+#Preview{
+    BookViewController()
 }

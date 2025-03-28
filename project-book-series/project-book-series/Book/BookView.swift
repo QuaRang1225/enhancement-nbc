@@ -118,7 +118,7 @@ final class BookView:UIView{
         }
         posterImageView.snp.makeConstraints { make in
             make.width.equalTo(100)
-            make.height.equalTo(150)
+            make.height.equalTo(posterImageView.snp.width).multipliedBy(1.5)
         }
         authorLabel.snp.makeConstraints { make in
             make.centerY.equalTo(authorTitleLabel)
