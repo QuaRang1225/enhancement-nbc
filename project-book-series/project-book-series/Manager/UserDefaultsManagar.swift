@@ -12,6 +12,7 @@ final class UserDefaultsManagar{
     enum Mode:String{
         case expand
         case summary
+        case episode
     }
     //MARK: 싱글턴 인스턴스 생성
     static let shared = UserDefaultsManagar()
@@ -19,21 +20,19 @@ final class UserDefaultsManagar{
     func getData<T>(mode: Mode) -> T? {
         guard let object = UserDefaults.standard.object(forKey: mode.rawValue) as? T else{
             switch mode {
-            case .expand:
-                return (false as! T)
-            case .summary:
-                return SummaryAttributes() as? T
+            case .expand: return (false as! T)
+            case .summary: return (SummaryAttributes() as! T)
+            case .episode: return (0 as! T)
             }
         }
         
         return object
     }
     func setData<T:Codable>(mode:Mode,value:T){
-        guard let value = try? JSONEncoder().encode(value),let value = value as? T else { return }
-        UserDefaults.standard.set(value, forKey: mode.rawValue)
-        print(type(of: UserDefaults.standard.object(forKey: mode.rawValue)))
-    }
-    func removeData(mode: Mode){
-        UserDefaults.standard.removeObject(forKey: mode.rawValue)
+        if let value = try? JSONEncoder().encode(value) {
+            UserDefaults.standard.set(value, forKey: mode.rawValue) // Codable 객체 저장
+        } else {
+            UserDefaults.standard.set(value, forKey: mode.rawValue) // 기본 타입 저장
+        }
     }
 }

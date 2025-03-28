@@ -12,26 +12,31 @@ import SnapKit
 //View와 관련된 이벤트를 처리
 final class BookViewController: UIViewController{
     
-    //MARK: 버튼 정보
-    private var episode:Int = UserDefaults.standard.integer(forKey: "episode") {
-        willSet{
-            UserDefaults.standard.set(newValue, forKey: "episode")
-        }
-    }
     //MARK: BookView
     private var bookView = BookView()
-    
-    //MARK: 더보기/접기 여부
-    private var isExpand:Bool = UserDefaults.standard.bool(forKey: "expand") {
+    //MARK: 버튼 정보
+    private var episode:Int = UserDefaultsManagar.shared.getData(mode: .episode)! {
         willSet{
-            UserDefaults.standard.set(newValue, forKey: "expand")
+            UserDefaultsManagar.shared.setData(mode: .episode, value: newValue)
+            print(UserDefaultsManagar.shared.getData(mode: .episode)!)
+        }
+    }
+//    private var episode:Int = UserDefaults.standard.integer(forKey: "episode") {
+//        willSet{
+//            UserDefaults.standard.set(newValue, forKey: "episode")
+////            UserDefaultsManagar.shared.setData(mode: .episode, value: newValue)
+//        }
+//    }
+    //MARK: 더보기/접기 여부
+    private var isExpand:Bool = UserDefaultsManagar.shared.getData(mode: .expand)! {
+        willSet{
+            UserDefaultsManagar.shared.setData(mode: .expand, value: newValue)
         }
     }
     //MARK: Summary 문자열의 길이에 따라 분류(text:450자, cut: 451~자,cutCount)
-    private var summaryAttributes:SummaryAttributes = UserDefaults.standard.object(forKey: "summary") as? SummaryAttributes ?? SummaryAttributes(){
+    private var summaryAttributes:SummaryAttributes = UserDefaultsManagar.shared.getData(mode: .summary)! {
         willSet{
-            guard let value = try? JSONEncoder().encode(newValue) else { return }
-            UserDefaults.standard.set(value, forKey: "summary")
+            UserDefaultsManagar.shared.setData(mode: .summary, value: newValue)
         }
     }
     //MARK: Alert 생성
