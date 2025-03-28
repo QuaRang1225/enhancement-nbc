@@ -14,24 +14,24 @@ import SnapKit
 final class BookView:UIView{
     
     //MARK: 스크롤뷰에 담을 뷰
-        private let scrollContentView = UIView()
-        
-        //MARK: 타이틀 라벨
-        private let titleLabel = UITitleLabel(size: 24)
-        private let bookTitleLabel = UITitleLabel(size: 20)
-        private let authorTitleLabel = UITitleLabel(texts: "Author",size: 16)
-        private let realesTitleLabel = UITitleLabel(texts: "Released", size: 14)
-        private let pageTitleLabel = UITitleLabel(texts: "Page",size: 14)
-        
-        //MARK: 각 타이틀에 따른 데이터 라벨
-        private let authorLabel = UIContentLabel(fonts: .systemFont(ofSize: 18), color: .darkGray)
-        private let realesLabel = UIContentLabel(fonts: .systemFont(ofSize: 14), color: .gray)
-        private let pageLabel = UIContentLabel(fonts: .systemFont(ofSize: 14), color: .gray)
-        
-        //MARK: Title & Content 스택 뷰
-        private let dedicationStackView = UIArticleStackView(title: "Dedication")
-        public let summaryStackView = UIArticleStackView(title: "Summary")
-        private let chapterStackView = UIArticleStackView(title: "Chapters")
+    private let scrollContentView = UIView()
+    
+    //MARK: 타이틀 라벨
+    private let titleLabel = UITitleLabel(size: 24)
+    private let bookTitleLabel = UITitleLabel(size: 20)
+    private let authorTitleLabel = UITitleLabel(text: "Author",size: 16)
+    private let realesTitleLabel = UITitleLabel(text: "Released", size: 14)
+    private let pageTitleLabel = UITitleLabel(text: "Page",size: 14)
+    
+    //MARK: 각 타이틀에 따른 데이터 라벨
+    private let authorLabel = UIContentLabel(font: .systemFont(ofSize: 18), color: .darkGray)
+    private let realesLabel = UIContentLabel(font: .systemFont(ofSize: 14), color: .gray)
+    private let pageLabel = UIContentLabel(font: .systemFont(ofSize: 14), color: .gray)
+    
+    //MARK: Title & Content 스택 뷰
+    private let dedicationStackView = UIArticleStackView(title: "Dedication")
+    private let summaryStackView = UIArticleStackView(title: "Summary")
+    private let chapterStackView = UIArticleStackView(title: "Chapters")
     
     //MARK: 시리즈 순서
     private let seriesButton:UIButton = {
@@ -71,14 +71,13 @@ final class BookView:UIView{
         return view
     }()
     //MARK: 책 내용 관련 스택뷰
-        public lazy var contentsVStackView:UIStackView = {
-            let view = UIStackView(arrangedSubviews: [dedicationStackView,summaryStackView,chapterStackView])
-            view.axis = .vertical
-            view.alignment = .leading
-            view.spacing = 24
-            return view
-        }()
-    
+    public lazy var contentsVStackView:UIStackView = {
+        let view = UIStackView(arrangedSubviews: [dedicationStackView,summaryStackView,chapterStackView])
+        view.axis = .vertical
+        view.alignment = .leading
+        view.spacing = 24
+        return view
+    }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
