@@ -17,7 +17,7 @@ final class UserDefaultsManagar{
     //MARK: 싱글턴 인스턴스 생성
     static let shared = UserDefaultsManagar()
     
-    func getData<T>(mode: Mode) -> T? {
+    func getData<T>(mode: Mode) -> T {
         guard let object = UserDefaults.standard.object(forKey: mode.rawValue) as? T else{
             switch mode {
             case .expand: return (false as! T)
@@ -25,14 +25,14 @@ final class UserDefaultsManagar{
             case .episode: return (0 as! T)
             }
         }
-        
         return object
     }
     func setData<T:Codable>(mode:Mode,value:T){
+        UserDefaults.standard.set(value, forKey: mode.rawValue)
+    }
+    func setEncodeData<T:Codable>(mode:Mode,value:T){
         if let value = try? JSONEncoder().encode(value) {
-            UserDefaults.standard.set(value, forKey: mode.rawValue) // Codable 객체 저장
-        } else {
-            UserDefaults.standard.set(value, forKey: mode.rawValue) // 기본 타입 저장
+            UserDefaults.standard.set(value, forKey: mode.rawValue)
         }
     }
 }

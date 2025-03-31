@@ -15,28 +15,21 @@ final class BookViewController: UIViewController{
     //MARK: BookView
     private var bookView = BookView()
     //MARK: 버튼 정보
-    private var episode:Int = UserDefaultsManagar.shared.getData(mode: .episode)! {
+    private var episode:Int = UserDefaultsManagar.shared.getData(mode: .episode) {
         willSet{
             UserDefaultsManagar.shared.setData(mode: .episode, value: newValue)
-            print(UserDefaultsManagar.shared.getData(mode: .episode)!)
         }
     }
-//    private var episode:Int = UserDefaults.standard.integer(forKey: "episode") {
-//        willSet{
-//            UserDefaults.standard.set(newValue, forKey: "episode")
-////            UserDefaultsManagar.shared.setData(mode: .episode, value: newValue)
-//        }
-//    }
     //MARK: 더보기/접기 여부
-    private var isExpand:Bool = UserDefaultsManagar.shared.getData(mode: .expand)! {
+    private var isExpand:Bool = UserDefaultsManagar.shared.getData(mode: .expand) {
         willSet{
             UserDefaultsManagar.shared.setData(mode: .expand, value: newValue)
         }
     }
     //MARK: Summary 문자열의 길이에 따라 분류(text:450자, cut: 451~자,cutCount)
-    private var summaryAttributes:SummaryAttributes = UserDefaultsManagar.shared.getData(mode: .summary)! {
+    private var summaryAttributes:SummaryAttributes = UserDefaultsManagar.shared.getData(mode: .summary) {
         willSet{
-            UserDefaultsManagar.shared.setData(mode: .summary, value: newValue)
+            UserDefaultsManagar.shared.setEncodeData(mode: .summary, value: newValue)
         }
     }
     //MARK: Alert 생성
@@ -120,7 +113,8 @@ extension BookViewController:UICollectionViewDelegate,UICollectionViewDataSource
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         isExpand = false
         episode = indexPath.row
-        bookView.update(index: indexPath.row)
+        bookView.expandButton.setTitle("더보기", for: .normal)
+        bookView.config(episode: episode)
         configExpandString()
     }
     //MARK: 컬렉션 뷰 가운데 정렬

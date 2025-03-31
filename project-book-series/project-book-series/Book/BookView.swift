@@ -178,11 +178,6 @@ final class BookView:UIView{
         
         seriesCollectionView.reloadData()
     }
-    //MARK: 에피소드 버튼 터치 시 UI 업데이트
-    public func update(index:Int){
-        config(episode: index)
-        expandButton.setTitle("더보기", for: .normal)
-    }
 }
 
 #Preview{
