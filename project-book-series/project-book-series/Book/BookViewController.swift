@@ -44,7 +44,6 @@ final class BookViewController: UIViewController{
     }
     override func viewDidLoad() {
         fetchInfo()
-        configureTarget()
         bookView.seriesCollectionView.delegate = self
         bookView.seriesCollectionView.dataSource = self
     }
@@ -56,6 +55,7 @@ final class BookViewController: UIViewController{
                 bookView.configAttributes(attributes: data)
                 bookView.config(episode: episode)
                 configExpandString()
+                configureTarget()
             }catch let error{
                 guard let dataError = error as? DataError else {return}
                 alert.message = dataError.rawValue
@@ -81,6 +81,7 @@ final class BookViewController: UIViewController{
     //MARK: 버튼 타켓 설정
     private func configureTarget(){
         bookView.expandButton.addTarget(self, action: #selector(toggleSummaryExpand), for: .touchUpInside)
+        bookView.posterImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(presentWebView)))
     }
     //MARK: summary 더보기 버튼 이벤트
     @objc private func toggleSummaryExpand(){
@@ -88,6 +89,11 @@ final class BookViewController: UIViewController{
         bookView.summaryStackView.content?.removeLast(isExpand ? 3 : summaryAttributes.cutCount)
         bookView.summaryStackView.content?.append(isExpand ? summaryAttributes.cut : "...")
         bookView.expandButton.setTitle(isExpand ? "접기" : "더보기", for: .normal)
+    }
+    @objc private func presentWebView(){
+        let vc = WikiWebView(url: URL(string: bookView.attributes[episode].wiki)!)
+        vc.modalPresentationStyle = .formSheet
+        present(vc, animated: true)
     }
 }
 

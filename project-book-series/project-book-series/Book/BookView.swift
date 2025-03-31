@@ -36,9 +36,10 @@ final class BookView:UIView{
     private let chapterStackView = UIArticleStackView(title: "Chapters")
     
     //MARK: 포스터 이미지
-    private let posterImageView:UIImageView = {
+    public let posterImageView:UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleToFill
+        view.isUserInteractionEnabled = true
         return view
     }()
     //MARK: 스크롤뷰
