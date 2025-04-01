@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		D64738E22D91423A00E5E758 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = D64738E12D91423A00E5E758 /* SnapKit */; };
+		D6D80DEB2D9BBF2400835F42 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = D6D80DEA2D9BBF2400835F42 /* RxCocoa */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +70,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D6D80DEB2D9BBF2400835F42 /* RxCocoa in Frameworks */,
 				D64738E22D91423A00E5E758 /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -131,6 +133,7 @@
 			name = "project-book-series";
 			packageProductDependencies = (
 				D64738E12D91423A00E5E758 /* SnapKit */,
+				D6D80DEA2D9BBF2400835F42 /* RxCocoa */,
 			);
 			productName = "project-book-series";
 			productReference = D60395352D91147B00C8AB35 /* project-book-series.app */;
@@ -216,6 +219,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				D64738E02D91423A00E5E758 /* XCRemoteSwiftPackageReference "SnapKit" */,
+				D6D80DE92D9BBF2400835F42 /* XCRemoteSwiftPackageReference "RxSwift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = D60395362D91147B00C8AB35 /* Products */;
@@ -312,13 +316,9 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "quarang.project-book-series";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -343,13 +343,9 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "quarang.project-book-series";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -594,6 +590,14 @@
 				minimumVersion = 5.7.1;
 			};
 		};
+		D6D80DE92D9BBF2400835F42 /* XCRemoteSwiftPackageReference "RxSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ReactiveX/RxSwift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.9.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -601,6 +605,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D64738E02D91423A00E5E758 /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
+		};
+		D6D80DEA2D9BBF2400835F42 /* RxCocoa */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D6D80DE92D9BBF2400835F42 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxCocoa;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

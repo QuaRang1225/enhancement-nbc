@@ -7,6 +7,8 @@
 
 import UIKit
 import SnapKit
+import RxSwift
+import RxCocoa
 
 //MARK: BookViewController
 //View와 관련된 이벤트를 처리
