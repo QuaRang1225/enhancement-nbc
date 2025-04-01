@@ -39,7 +39,6 @@ final class BookView:UIView{
     public let posterImageView:UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleToFill
-        view.isUserInteractionEnabled = true
         return view
     }()
     //MARK: 스크롤뷰
