@@ -35,21 +35,19 @@ final class BookView:UIView{
     public let summaryStackView = UIArticleStackView(title: "Summary")
     private let chapterStackView = UIArticleStackView(title: "Chapters")
     
-    //MARK: 포스터 이미지
+    //MARK: 컴포넌트
     public let posterImageView:UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleToFill
         view.isUserInteractionEnabled = true
         return view
     }()
-    //MARK: 스크롤뷰
     private let scrollView:UIScrollView = {
         let view = UIScrollView()
         view.isScrollEnabled = true
         view.showsVerticalScrollIndicator = false
         return view
     }()
-    //MARK: 해당 에피소드 작품 Horizontal 스택뷰
     private lazy var bookInfoHStackView:UIStackView = {
         let view = UIStackView(arrangedSubviews: [posterImageView,bookInfoVStackView])
         view.axis = .horizontal
@@ -57,7 +55,6 @@ final class BookView:UIView{
         view.spacing = 16
         return view
     }()
-    //MARK: 해당 에피소드 작품 Vertical 스택뷰
     private lazy var bookInfoVStackView:UIStackView = {
         let view = UIStackView(arrangedSubviews: [bookTitleLabel,authorTitleLabel,realesTitleLabel,pageTitleLabel])
         view.axis = .vertical
@@ -65,7 +62,6 @@ final class BookView:UIView{
         view.spacing = 8
         return view
     }()
-    //MARK: 책 내용 관련 스택뷰
     public lazy var contentsVStackView:UIStackView = {
         let view = UIStackView(arrangedSubviews: [dedicationStackView,summaryStackView,chapterStackView])
         view.axis = .vertical
@@ -73,7 +69,6 @@ final class BookView:UIView{
         view.spacing = 24
         return view
     }()
-    //MARK: 더보기 버튼
     public let expandButton:UIButton = {
         let button = UIButton()
         button.setTitleColor(.systemBlue, for: .normal)
@@ -81,7 +76,6 @@ final class BookView:UIView{
         button.contentHorizontalAlignment = .right
         return button
     }()
-    //MARK: 시리즈 컬렉션 뷰
     public let seriesCollectionView:UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -96,76 +90,90 @@ final class BookView:UIView{
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .white
-        configureUI()
+        configureSubViews()
+        configureLayout()
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    //MARK: 컴포넌트 및 레이아웃 설정
-    private func configureUI(){
-        
+    //MARK: 컴포넌트 추가
+    private func configureSubViews(){
         [scrollContentView]
             .forEach{ scrollView.addSubview($0) }
         [titleLabel,seriesCollectionView,scrollView]
             .forEach{ addSubview($0) }
         [bookInfoHStackView,authorLabel,realesLabel,pageLabel,contentsVStackView,expandButton]
             .forEach{ scrollContentView.addSubview($0) }
-        
+    }
+    //MARK: 컴포넌트 및 레이아웃 설정
+    private func configureLayout(){
+        //타이틀
         titleLabel.snp.makeConstraints { make in
             make.top.equalTo(safeAreaLayoutGuide).offset(10)
             make.centerX.equalToSuperview()
             make.horizontalEdges.equalToSuperview().inset(20)
         }
+        //시리즈 컬렉션 버튼
         seriesCollectionView.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(16)
             make.height.equalTo(45)
             make.horizontalEdges.equalToSuperview().inset(20)
             make.centerX.equalToSuperview()
         }
+        //스크롤뷰
         scrollView.snp.makeConstraints { make in
             make.top.equalTo(seriesCollectionView.snp.bottom).offset(5)
             make.horizontalEdges.equalToSuperview()
             make.bottom.equalToSuperview()
         }
+        //스크롤 컨텐츠뷰
         scrollContentView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
             make.width.equalToSuperview()
         }
+        //포스터 이미지
         posterImageView.snp.makeConstraints { make in
             make.width.equalTo(100)
             make.height.equalTo(150)
         }
+        //작가
         authorLabel.snp.makeConstraints { make in
             make.centerY.equalTo(authorTitleLabel)
             make.leading.equalTo(authorTitleLabel.snp.trailing).offset(8)
         }
+        //집전일
         realesLabel.snp.makeConstraints { make in
             make.centerY.equalTo(realesTitleLabel)
             make.leading.equalTo(realesTitleLabel.snp.trailing).offset(8)
         }
+        //페이지 수
         pageLabel.snp.makeConstraints { make in
             make.centerY.equalTo(pageTitleLabel)
             make.leading.equalTo(pageTitleLabel.snp.trailing).offset(8)
         }
+        //책 정보 스택
         bookInfoHStackView.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(19)
             make.horizontalEdges.equalTo(titleLabel)
         }
+        //dedication & Summary & Chpaters 스택뷰
         contentsVStackView.snp.makeConstraints { make in
             make.top.equalTo(bookInfoHStackView.snp.bottom).offset(24)
             make.horizontalEdges.equalToSuperview().inset(20)
             make.bottom.equalToSuperview().offset(-20)
         }
+        //더보기 버튼
         expandButton.snp.makeConstraints { make in
             make.trailing.equalToSuperview().inset(20)
             make.top.equalTo(summaryStackView.snp.bottom)
         }
     }
     //MARK: 속성 데이터 업데이트
+    //attributes 추가
     public func configAttributes(attributes:[Attributes]){
         self.attributes = attributes
     }
-    //MARK: json 인코딩 성공 시 데이터 세팅
+    //attributes 데이터 각 컴포넌트에 설정
     public func config(episode:Int){
         titleLabel.text = attributes[episode].title
         posterImageView.image = UIImage(named: "harrypotter\(episode+1)")

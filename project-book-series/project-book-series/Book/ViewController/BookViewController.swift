@@ -50,6 +50,7 @@ final class BookViewController: UIViewController{
     }
     override func viewDidLoad() {
         bindViewModel()
+        configureTarget()
     }
     private func bindViewModel() {
         vm.fetchSubject
@@ -58,26 +59,26 @@ final class BookViewController: UIViewController{
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] attributes in
                 self?.configureBookView(attributes)
+                self?.configExpandString()
             },onError: { [weak self] error in
                 guard let dataError = error as? DataError else { return }
                 self?.showError(dataError)
             })
             .disposed(by: disposeBag)
     }
+    //데이터 fetch 성공시 BookView 관련 설정
     private func configureBookView(_ attributes:[Attributes]){
         bookView.seriesCollectionView.delegate = self
         bookView.seriesCollectionView.dataSource = self
         bookView.configAttributes(attributes: attributes)
         bookView.config(episode: self.episode)
-        configExpandString()
-        configureTarget()
     }
     // Error 처리
     private func showError(_ error: DataError) {
         alert.message = error.rawValue
         present(alert, animated: true)
     }
-    //MARK: 문자열을 종류별로 분리해 더보기 기능 구현
+    //문자열을 종류별로 분리해 더보기 기능 구현
     private func configExpandString(){
         let text = bookView.attributes[episode].summary
         let summary = String(text.prefix(450))
@@ -92,7 +93,7 @@ final class BookViewController: UIViewController{
         bookView.expandButton.setTitle(isExpand ? "접기" : "더보기", for: .normal)
         bookView.summaryStackView.content = summaryAttributes.text
     }
-    //MARK: 버튼 타켓 설정
+    //버튼 타켓 설정
     private func configureTarget(){
         bookView.expandButton.addTarget(self, action: #selector(toggleSummaryExpand), for: .touchUpInside)
         bookView.posterImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(presentWebView)))
