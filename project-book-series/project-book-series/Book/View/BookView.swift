@@ -13,8 +13,6 @@ import SnapKit
 //UI요소 분리
 final class BookView:UIView{
     
-    //MARK: 속성 배열
-    public var attributes = [Attributes]()
     //MARK: 스크롤뷰에 담을 뷰
     private let scrollContentView = UIView()
     
@@ -71,9 +69,11 @@ final class BookView:UIView{
     }()
     public let expandButton:UIButton = {
         let button = UIButton()
+        button.setTitle("더보기", for: .normal)
+        button.setTitle("접기", for: .selected)
         button.setTitleColor(.systemBlue, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 14)
-        button.contentHorizontalAlignment = .right
+        button.contentHorizontalAlignment = .trailing
         return button
     }()
     public let seriesCollectionView:UICollectionView = {
@@ -81,6 +81,7 @@ final class BookView:UIView{
         layout.scrollDirection = .horizontal
         layout.itemSize = CGSize(width:40, height: 40)
         let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        view.isScrollEnabled = false
         view.contentMode = .center
         view.backgroundColor = .white
         view.showsHorizontalScrollIndicator = false
@@ -102,8 +103,9 @@ final class BookView:UIView{
             .forEach{ scrollView.addSubview($0) }
         [titleLabel,seriesCollectionView,scrollView]
             .forEach{ addSubview($0) }
-        [bookInfoHStackView,authorLabel,realesLabel,pageLabel,contentsVStackView,expandButton]
+        [bookInfoHStackView,authorLabel,realesLabel,pageLabel,contentsVStackView]
             .forEach{ scrollContentView.addSubview($0) }
+        summaryStackView.addArrangedSubview(expandButton)
     }
     //MARK: 컴포넌트 및 레이아웃 설정
     private func configureLayout(){
@@ -117,13 +119,13 @@ final class BookView:UIView{
         seriesCollectionView.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(16)
             make.height.equalTo(45)
-            make.horizontalEdges.equalToSuperview().inset(20)
+            make.horizontalEdges.equalToSuperview()
             make.centerX.equalToSuperview()
         }
         //스크롤뷰
         scrollView.snp.makeConstraints { make in
             make.top.equalTo(seriesCollectionView.snp.bottom).offset(5)
-            make.horizontalEdges.equalToSuperview()
+            make.horizontalEdges.equalTo(safeAreaLayoutGuide).inset(20)
             make.bottom.equalToSuperview()
         }
         //스크롤 컨텐츠뷰
@@ -134,7 +136,7 @@ final class BookView:UIView{
         //포스터 이미지
         posterImageView.snp.makeConstraints { make in
             make.width.equalTo(100)
-            make.height.equalTo(150)
+            make.height.equalTo(posterImageView.snp.width).multipliedBy(1.5)
         }
         //작가
         authorLabel.snp.makeConstraints { make in
@@ -154,27 +156,21 @@ final class BookView:UIView{
         //책 정보 스택
         bookInfoHStackView.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(19)
-            make.horizontalEdges.equalTo(titleLabel)
+            make.horizontalEdges.equalToSuperview()
         }
         //dedication & Summary & Chpaters 스택뷰
         contentsVStackView.snp.makeConstraints { make in
             make.top.equalTo(bookInfoHStackView.snp.bottom).offset(24)
-            make.horizontalEdges.equalToSuperview().inset(20)
+            make.horizontalEdges.equalToSuperview()
             make.bottom.equalToSuperview().offset(-20)
         }
         //더보기 버튼
         expandButton.snp.makeConstraints { make in
-            make.trailing.equalToSuperview().inset(20)
-            make.top.equalTo(summaryStackView.snp.bottom)
+            make.trailing.equalToSuperview()
         }
     }
-    //MARK: 속성 데이터 업데이트
-    //attributes 추가
-    public func configAttributes(attributes:[Attributes]){
-        self.attributes = attributes
-    }
     //attributes 데이터 각 컴포넌트에 설정
-    public func config(episode:Int){
+    public func config(attributes:[Attributes], episode:Int){
         titleLabel.text = attributes[episode].title
         posterImageView.image = UIImage(named: "harrypotter\(episode+1)")
         bookTitleLabel.text = attributes[episode].title
@@ -187,10 +183,6 @@ final class BookView:UIView{
         
         seriesCollectionView.reloadData()
     }
-}
-
-#Preview{
-    BookViewController()
 }
 
 

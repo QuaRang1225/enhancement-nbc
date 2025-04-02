@@ -11,7 +11,6 @@ import Foundation
 final class UserDefaultsManagar{
     enum Mode:String{
         case expand
-        case summary
         case episode
     }
     //MARK: 싱글턴 인스턴스 생성
@@ -21,7 +20,6 @@ final class UserDefaultsManagar{
         guard let object = UserDefaults.standard.object(forKey: mode.rawValue) as? T else{
             switch mode {
             case .expand: return (false as! T)
-            case .summary: return (SummaryAttributes() as! T)
             case .episode: return (0 as! T)
             }
         }
@@ -29,10 +27,5 @@ final class UserDefaultsManagar{
     }
     func setData<T:Codable>(mode:Mode,value:T){
         UserDefaults.standard.set(value, forKey: mode.rawValue)
-    }
-    func setEncodeData<T:Codable>(mode:Mode,value:T){
-        if let value = try? JSONEncoder().encode(value) {
-            UserDefaults.standard.set(value, forKey: mode.rawValue)
-        }
     }
 }

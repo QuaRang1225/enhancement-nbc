@@ -20,50 +20,64 @@ final class BookViewController: UIViewController{
     private let vm = BookViewModel()
     //MARK: disposeBag
     private let disposeBag = DisposeBag()
-    //MARK: 버튼 정보
+    //MARK: 데이터 바인딩
+    //버튼 정보
     private var episode:Int = UserDefaultsManagar.shared.getData(mode: .episode) {
         willSet{
             UserDefaultsManagar.shared.setData(mode: .episode, value: newValue)
         }
     }
-    //MARK: 더보기/접기 여부
+    //더보기/접기 여부
     private var isExpand:Bool = UserDefaultsManagar.shared.getData(mode: .expand) {
         willSet{
             UserDefaultsManagar.shared.setData(mode: .expand, value: newValue)
         }
     }
-    //MARK: Summary 문자열의 길이에 따라 분류(text:450자, cut: 451~자,cutCount)
-    private var summaryAttributes:SummaryAttributes = UserDefaultsManagar.shared.getData(mode: .summary) {
-        willSet{
-            UserDefaultsManagar.shared.setEncodeData(mode: .summary, value: newValue)
-        }
+    //MARK: 연산 프로퍼티
+    //Summary 문자열의 길이에 따라 분류(text:450자, cut: 451~자,cutCount)
+    private var translateSummary:String{
+        let text = vm.attributes[episode].summary
+        let summary = String(text.prefix(450))
+        let cut = String(text.dropFirst(450))
+        
+        return summary + (!(text.count > 450) ? "" : (isExpand ? cut : "..."))
     }
-    //MARK: Alert 생성
-    public let alert:UIAlertController = {
+    public var alert:UIAlertController{
         let alert = UIAlertController(title: "Error", message: nil, preferredStyle: .alert)
         let confirm = UIAlertAction(title: "Confirm", style: .default)
         alert.addAction(confirm)
         return alert
-    }()
-    override func loadView() {
-        view = bookView
     }
+    //MARK: view life cycle
+    //데이터 가져오기 전까지 bookView 숨김
+    override func loadView() {
+        super.loadView()
+        view = bookView
+        bookView.isHidden = true
+    }
+    //바인딩 + 타겟설정
     override func viewDidLoad() {
+        super.viewDidLoad()
         bindViewModel()
         configureTarget()
     }
+    //레이아웃 변경 시 컬렉션 뷰 업데이트
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         bookView.seriesCollectionView.collectionViewLayout.invalidateLayout()
     }
+    //MARK: VC 메서드
+    //뷰 바인딩
     private func bindViewModel() {
         vm.fetchSubject
-            .onNext(())
+            .onNext((bookView.isHidden = false))
         vm.attributesSubject
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] attributes in
                 self?.configureBookView(attributes)
-                self?.configExpandString()
+                self?.configureCollectionViewDelegate()
+                self?.configureExpandButton()
+                self?.configureSummaryStackView()
             },onError: { [weak self] error in
                 guard let dataError = error as? DataError else { return }
                 self?.showError(dataError)
@@ -72,52 +86,47 @@ final class BookViewController: UIViewController{
     }
     //데이터 fetch 성공시 BookView 관련 설정
     private func configureBookView(_ attributes:[Attributes]){
+        bookView.config(attributes: vm.attributes, episode: episode)
+    }
+    //bookView 컬렉션뷰 델리게이트 설정
+    private func configureCollectionViewDelegate(){
         bookView.seriesCollectionView.delegate = self
         bookView.seriesCollectionView.dataSource = self
-        bookView.configAttributes(attributes: attributes)
-        bookView.config(episode: self.episode)
     }
     // Error 처리
     private func showError(_ error: DataError) {
+        bookView.isHidden = true
         alert.message = error.rawValue
         present(alert, animated: true)
     }
-    //문자열을 종류별로 분리해 더보기 기능 구현
-    private func configExpandString(){
-        let text = bookView.attributes[episode].summary
-        let summary = String(text.prefix(450))
-        let cut = String(text.dropFirst(450))
-        if text.count > 450{
-            bookView.expandButton.isHidden = false
-            summaryAttributes = SummaryAttributes(text: summary + (isExpand ? cut : "..."),cut: cut)
-        }else{
-            bookView.expandButton.isHidden = true
-            summaryAttributes = SummaryAttributes(text: text, cut: cut)
-        }
-        bookView.expandButton.setTitle(isExpand ? "접기" : "더보기", for: .normal)
-        bookView.summaryStackView.content = summaryAttributes.text
+    //더보기 버튼 세팅
+    private func configureExpandButton(){
+        let summary = vm.attributes[episode].summary
+        bookView.expandButton.isHidden = !(summary.count > 450)
+        bookView.expandButton.isSelected = isExpand
+    }
+    //summary 내용 세팅
+    private func configureSummaryStackView(){
+        bookView.summaryStackView.content = translateSummary
     }
     //버튼 타켓 설정
     private func configureTarget(){
         bookView.expandButton.addTarget(self, action: #selector(toggleSummaryExpand), for: .touchUpInside)
         bookView.posterImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(presentWebView)))
     }
-    //MARK: summary 더보기 버튼 이벤트
+    //MARK: 버튼 이벤트 메서드
+    //summary 더보기
     @objc private func toggleSummaryExpand(){
         isExpand.toggle()
-        bookView.summaryStackView.content?.removeLast(isExpand ? 3 : summaryAttributes.cutCount)
-        bookView.summaryStackView.content?.append(isExpand ? summaryAttributes.cut : "...")
-        bookView.expandButton.setTitle(isExpand ? "접기" : "더보기", for: .normal)
+        bookView.expandButton.isSelected.toggle()
+        configureSummaryStackView()
     }
+    //포스터 이미지 터치
     @objc private func presentWebView(){
-        let vc = WikiWebView(url: URL(string: bookView.attributes[episode].wiki)!)
+        let vc = WikiWebView(url: URL(string: vm.attributes[episode].wiki)!)
         vc.modalPresentationStyle = .formSheet
         present(vc, animated: true)
     }
-}
-
-#Preview{
-    BookViewController()
 }
 
 //MARK: 컬렉션뷰 컨트롤러 델리게이트
@@ -125,7 +134,7 @@ extension BookViewController:UICollectionViewDelegate,UICollectionViewDataSource
     
     //MARK: 컬렉션 뷰 개수 반환
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        bookView.attributes.count
+        vm.attributes.count
     }
     //MARK: 컬렉션 뷰 셀 설정
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -138,9 +147,9 @@ extension BookViewController:UICollectionViewDelegate,UICollectionViewDataSource
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         isExpand = false
         episode = indexPath.row
-        bookView.expandButton.setTitle("더보기", for: .normal)
-        bookView.config(episode: episode)
-        configExpandString()
+        configureBookView(vm.attributes)
+        configureSummaryStackView()
+        configureExpandButton()
     }
     //MARK: 컬렉션 뷰 가운데 정렬
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
