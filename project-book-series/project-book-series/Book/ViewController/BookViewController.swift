@@ -52,6 +52,10 @@ final class BookViewController: UIViewController{
         bindViewModel()
         configureTarget()
     }
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        bookView.seriesCollectionView.collectionViewLayout.invalidateLayout()
+    }
     private func bindViewModel() {
         vm.fetchSubject
             .onNext(())
