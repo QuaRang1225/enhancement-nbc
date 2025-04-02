@@ -16,6 +16,10 @@ final class BookViewController: UIViewController{
     
     //MARK: BookView
     private var bookView = BookView()
+    //MARK: viewModel
+    private let vm = BookViewModel()
+    //MARK: disposeBag
+    private let disposeBag = DisposeBag()
     //MARK: 버튼 정보
     private var episode:Int = UserDefaultsManagar.shared.getData(mode: .episode) {
         willSet{
@@ -45,25 +49,33 @@ final class BookViewController: UIViewController{
         view = bookView
     }
     override func viewDidLoad() {
-        fetchInfo()
+        bindViewModel()
+    }
+    private func bindViewModel() {
+        vm.fetchSubject
+            .onNext(())
+        vm.attributesSubject
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] attributes in
+                self?.configureBookView(attributes)
+            },onError: { [weak self] error in
+                guard let dataError = error as? DataError else { return }
+                self?.showError(dataError)
+            })
+            .disposed(by: disposeBag)
+    }
+    private func configureBookView(_ attributes:[Attributes]){
         bookView.seriesCollectionView.delegate = self
         bookView.seriesCollectionView.dataSource = self
+        bookView.configAttributes(attributes: attributes)
+        bookView.config(episode: self.episode)
+        configExpandString()
+        configureTarget()
     }
-    //MARK: json 인코딩 성공 후 View 데이터 세팅
-    private func fetchInfo(){
-        Task{
-            do{
-                let data = try await JsonManager.loadJson().get()
-                bookView.configAttributes(attributes: data)
-                bookView.config(episode: episode)
-                configExpandString()
-                configureTarget()
-            }catch let error{
-                guard let dataError = error as? DataError else {return}
-                alert.message = dataError.rawValue
-                present(alert, animated: true)
-            }
-        }
+    // Error 처리
+    private func showError(_ error: DataError) {
+        alert.message = error.rawValue
+        present(alert, animated: true)
     }
     //MARK: 문자열을 종류별로 분리해 더보기 기능 구현
     private func configExpandString(){
