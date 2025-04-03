@@ -15,7 +15,7 @@
     </td>
     <td align="center">
       <img src="https://github.com/user-attachments/assets/372f68a6-f781-486c-88f5-219197d559d1" height="200"><br>
-      <sub>📌 iPhone 16 pro max 세로모드</sub>
+      <sub>📌 iPhone 16 pro max 가로모드</sub>
     </td>
   </tr>
   <td align="center">
@@ -24,7 +24,7 @@
     </td>
     <td align="center">
       <img src="https://github.com/user-attachments/assets/93e5518b-fb86-45b2-9e6e-adfeb8ab2e08" height="200"><br>
-      <sub>📌 iPhone SE 세로모드</sub>
+      <sub>📌 iPhone SE 가로모드</sub>
     </td>
   </tr>
 </table>
