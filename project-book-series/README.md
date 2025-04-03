@@ -18,6 +18,7 @@
 ### LEVEL 05
 - [👉 LEVEL 05 기능 설명으로 이동](https://github.com/QuaRang1225/enhancement-nbc/blob/feature/%2321-level-05/project-book-series/README.md)
 ### LEVEL 06
+- [👉 LEVEL 06 기능 설명으로 이동](https://github.com/QuaRang1225/enhancement-nbc/tree/feature/%2322-level-06/project-book-series#README.md)
 ### LEVEL 07
 
 ### TIL 및 팀원간 코드리뷰
