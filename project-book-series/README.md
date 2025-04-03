@@ -8,6 +8,7 @@
 ## 🖥 주요 기능
 
 ### LEVEL 01
+- [👉 기능 설명으로 이동](https://github.com/QuaRang1225/enhancement-nbc/blob/feature/%2316-level-01/project-book-series/README.md)
 ### LEVEL 02
 ### LEVEL 03
 ### LEVEL 04
@@ -15,6 +16,9 @@
 ### LEVEL 06
 ### LEVEL 07
 
+### TIL 및 팀원간 코드리뷰
+- [👉 코드리뷰 노션 링크](https://www.notion.so/teamsparta/2-1bf2dc3ef514814bb0c8ec13c2cf4533)
+- [👉 블로그 링크](https://quarang.tistory.com/102)
 ### 느낀점
 ```
 이번 프로젝트에서는 구현 후 리팩토링에 집중했습니다.
