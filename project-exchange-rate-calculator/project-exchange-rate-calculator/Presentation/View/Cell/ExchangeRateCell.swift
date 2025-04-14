@@ -17,12 +17,12 @@ final class ExchangeRateCell: UITableViewCell {
     
     // 국가 코드 라벨
     private let countryCodeLabel = UILabel().then {
-        $0.font = .systemFont(ofSize: 14)
+        $0.font = .systemFont(ofSize: 18, weight: .bold)
     }
     
     // 환율 라벨
     private let rateLabel = UILabel().then {
-        $0.font = .systemFont(ofSize: 14, weight: .bold)
+        $0.font = .systemFont(ofSize: 18)
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -36,8 +36,9 @@ final class ExchangeRateCell: UITableViewCell {
     }
     
     // cell 컴포넌트 데이터 업데이트
-    public func configure(){
-        
+    public func configure(response: ExchangeRatesResponse){
+        countryCodeLabel.text = response.key
+        rateLabel.text = String(format: "%.4f", response.value)
     }
     
     // sub view 추가
@@ -54,7 +55,7 @@ final class ExchangeRateCell: UITableViewCell {
         }
         rateLabel.snp.makeConstraints {
             $0.centerY.equalTo(countryCodeLabel)
-            $0.trailing.equalToSuperview().offset(8)
+            $0.trailing.equalToSuperview().offset(-8)
         }
     }
 }

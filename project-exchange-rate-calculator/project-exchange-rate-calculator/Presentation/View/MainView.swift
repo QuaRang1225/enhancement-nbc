@@ -11,11 +11,10 @@ import SnapKit
 
 final class MainView:UIView{
     
-    public let tableView = UITableView()
+    public let rateTableView = UITableView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        configure()
         configureSubView()
         configureLayout()
     }
@@ -29,13 +28,13 @@ final class MainView:UIView{
     }
     
     private func configureSubView(){
-        [tableView]
+        [rateTableView]
             .forEach{ addSubview($0) }
     }
     
     private func configureLayout(){
-        tableView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(-100)
+        rateTableView.snp.makeConstraints {
+            $0.top.equalToSuperview()
             $0.width.equalToSuperview()
             $0.bottom.equalToSuperview()
         }
