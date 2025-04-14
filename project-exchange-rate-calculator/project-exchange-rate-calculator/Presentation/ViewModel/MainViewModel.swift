@@ -49,9 +49,7 @@ class MainViewModel: ViewModelProtocol {
             .subscribe(with: self, onSuccess: { owner, response in
                 owner.state.responseData.onNext(response)
             }, onFailure: { owner, error in
-                if let error = error as? DataError {
-                    print("\(error)")
-                }
+                owner.state.responseData.onError(error)
             })
             .disposed(by: disposeBag)
     }
