@@ -10,8 +10,21 @@ import Testing
 
 struct project_exchange_rate_calculatorTests {
 
-    @Test func example() async throws {
-        // Write your test here and use APIs like `#expect(...)` to check expected conditions.
+    //MARK: url이 존재하지 않을 때
+    @Test func fetchRequest() async throws {
+        await #expect(throws:DataError.requestFailed){
+            try await NetworkAPIManager.fetchRates()
+        }
     }
-
+    //MARK: 디코딩 에러
+    @Test func decodigError() async throws {
+        await #expect(throws:DataError.decodigError){
+            try await NetworkAPIManager.fetchRates()
+        }
+    }
+    //MARK: 데이터 파싱 테스트
+    @Test func fetchData() async throws{
+        let data = try await NetworkAPIManager.fetchRates().get()
+        #expect(Exchange.getMock().rates == data)
+    }
 }

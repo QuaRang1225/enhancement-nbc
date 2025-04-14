@@ -7,7 +7,10 @@
 
 import Foundation
 
-struct Episode: Codable {
+//MARK: DTO
+typealias ExchangeRatesResponse = [String: Double]
+
+struct Exchange: Codable {
     let result: String
     let provider, documentation, termsOfUse: String
     let timeLastUpdateUnix: Int
@@ -16,7 +19,7 @@ struct Episode: Codable {
     let timeNextUpdateUTC: String
     let timeEOLUnix: Int
     let baseCode: String
-    let rates: [String: Double]
+    let rates: ExchangeRatesResponse
 
     enum CodingKeys: String, CodingKey {
         case result, provider, documentation
