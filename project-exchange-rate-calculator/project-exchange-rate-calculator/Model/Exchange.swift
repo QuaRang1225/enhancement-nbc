@@ -8,7 +8,7 @@
 import Foundation
 
 //MARK: DTO
-typealias ExchangeRatesResponse = [String: Double]
+typealias ExchangeRatesResponse = Dictionary<String, Double>
 
 struct Exchange: Codable {
     let result: String
