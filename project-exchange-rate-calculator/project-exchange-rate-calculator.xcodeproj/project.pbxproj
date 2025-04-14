@@ -6,83 +6,76 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXBuildFile section */
-		D64738E22D91423A00E5E758 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = D64738E12D91423A00E5E758 /* SnapKit */; };
-		D6D80DEB2D9BBF2400835F42 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = D6D80DEA2D9BBF2400835F42 /* RxCocoa */; };
-/* End PBXBuildFile section */
-
 /* Begin PBXContainerItemProxy section */
-		D603954C2D91147D00C8AB35 /* PBXContainerItemProxy */ = {
+		D6FE145C2DACADE8001DEBB8 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = D603952D2D91147B00C8AB35 /* Project object */;
+			containerPortal = D6FE143D2DACADE6001DEBB8 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = D60395342D91147B00C8AB35;
-			remoteInfo = "project-book-series";
+			remoteGlobalIDString = D6FE14442DACADE6001DEBB8;
+			remoteInfo = "project-exchange-rate-calculator";
 		};
-		D60395562D91147D00C8AB35 /* PBXContainerItemProxy */ = {
+		D6FE14662DACADE8001DEBB8 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = D603952D2D91147B00C8AB35 /* Project object */;
+			containerPortal = D6FE143D2DACADE6001DEBB8 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = D60395342D91147B00C8AB35;
-			remoteInfo = "project-book-series";
+			remoteGlobalIDString = D6FE14442DACADE6001DEBB8;
+			remoteInfo = "project-exchange-rate-calculator";
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		D60395352D91147B00C8AB35 /* project-book-series.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "project-book-series.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		D603954B2D91147D00C8AB35 /* project-book-seriesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "project-book-seriesTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		D60395552D91147D00C8AB35 /* project-book-seriesUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "project-book-seriesUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D6FE14452DACADE6001DEBB8 /* project-exchange-rate-calculator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "project-exchange-rate-calculator.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D6FE145B2DACADE8001DEBB8 /* project-exchange-rate-calculatorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "project-exchange-rate-calculatorTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D6FE14652DACADE8001DEBB8 /* project-exchange-rate-calculatorUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "project-exchange-rate-calculatorUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		D603955D2D91147D00C8AB35 /* Exceptions for "project-book-series" folder in "project-book-series" target */ = {
+		D6FE146D2DACADE8001DEBB8 /* Exceptions for "project-exchange-rate-calculator" folder in "project-exchange-rate-calculator" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
-			target = D60395342D91147B00C8AB35 /* project-book-series */;
+			target = D6FE14442DACADE6001DEBB8 /* project-exchange-rate-calculator */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		D60395372D91147B00C8AB35 /* project-book-series */ = {
+		D6FE14472DACADE6001DEBB8 /* project-exchange-rate-calculator */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				D603955D2D91147D00C8AB35 /* Exceptions for "project-book-series" folder in "project-book-series" target */,
+				D6FE146D2DACADE8001DEBB8 /* Exceptions for "project-exchange-rate-calculator" folder in "project-exchange-rate-calculator" target */,
 			);
-			path = "project-book-series";
+			path = "project-exchange-rate-calculator";
 			sourceTree = "<group>";
 		};
-		D603954E2D91147D00C8AB35 /* project-book-seriesTests */ = {
+		D6FE145E2DACADE8001DEBB8 /* project-exchange-rate-calculatorTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "project-book-seriesTests";
+			path = "project-exchange-rate-calculatorTests";
 			sourceTree = "<group>";
 		};
-		D60395582D91147D00C8AB35 /* project-book-seriesUITests */ = {
+		D6FE14682DACADE8001DEBB8 /* project-exchange-rate-calculatorUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "project-book-seriesUITests";
+			path = "project-exchange-rate-calculatorUITests";
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		D60395322D91147B00C8AB35 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				D6D80DEB2D9BBF2400835F42 /* RxCocoa in Frameworks */,
-				D64738E22D91423A00E5E758 /* SnapKit in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		D60395482D91147D00C8AB35 /* Frameworks */ = {
+		D6FE14422DACADE6001DEBB8 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		D60395522D91147D00C8AB35 /* Frameworks */ = {
+		D6FE14582DACADE8001DEBB8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D6FE14622DACADE8001DEBB8 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -92,22 +85,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		D603952C2D91147B00C8AB35 = {
+		D6FE143C2DACADE6001DEBB8 = {
 			isa = PBXGroup;
 			children = (
-				D60395372D91147B00C8AB35 /* project-book-series */,
-				D603954E2D91147D00C8AB35 /* project-book-seriesTests */,
-				D60395582D91147D00C8AB35 /* project-book-seriesUITests */,
-				D60395362D91147B00C8AB35 /* Products */,
+				D6FE14472DACADE6001DEBB8 /* project-exchange-rate-calculator */,
+				D6FE145E2DACADE8001DEBB8 /* project-exchange-rate-calculatorTests */,
+				D6FE14682DACADE8001DEBB8 /* project-exchange-rate-calculatorUITests */,
+				D6FE14462DACADE6001DEBB8 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		D60395362D91147B00C8AB35 /* Products */ = {
+		D6FE14462DACADE6001DEBB8 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				D60395352D91147B00C8AB35 /* project-book-series.app */,
-				D603954B2D91147D00C8AB35 /* project-book-seriesTests.xctest */,
-				D60395552D91147D00C8AB35 /* project-book-seriesUITests.xctest */,
+				D6FE14452DACADE6001DEBB8 /* project-exchange-rate-calculator.app */,
+				D6FE145B2DACADE8001DEBB8 /* project-exchange-rate-calculatorTests.xctest */,
+				D6FE14652DACADE8001DEBB8 /* project-exchange-rate-calculatorUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -115,140 +108,134 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		D60395342D91147B00C8AB35 /* project-book-series */ = {
+		D6FE14442DACADE6001DEBB8 /* project-exchange-rate-calculator */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D603955E2D91147D00C8AB35 /* Build configuration list for PBXNativeTarget "project-book-series" */;
+			buildConfigurationList = D6FE146E2DACADE8001DEBB8 /* Build configuration list for PBXNativeTarget "project-exchange-rate-calculator" */;
 			buildPhases = (
-				D60395312D91147B00C8AB35 /* Sources */,
-				D60395322D91147B00C8AB35 /* Frameworks */,
-				D60395332D91147B00C8AB35 /* Resources */,
+				D6FE14412DACADE6001DEBB8 /* Sources */,
+				D6FE14422DACADE6001DEBB8 /* Frameworks */,
+				D6FE14432DACADE6001DEBB8 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				D60395372D91147B00C8AB35 /* project-book-series */,
+				D6FE14472DACADE6001DEBB8 /* project-exchange-rate-calculator */,
 			);
-			name = "project-book-series";
+			name = "project-exchange-rate-calculator";
 			packageProductDependencies = (
-				D64738E12D91423A00E5E758 /* SnapKit */,
-				D6D80DEA2D9BBF2400835F42 /* RxCocoa */,
 			);
-			productName = "project-book-series";
-			productReference = D60395352D91147B00C8AB35 /* project-book-series.app */;
+			productName = "project-exchange-rate-calculator";
+			productReference = D6FE14452DACADE6001DEBB8 /* project-exchange-rate-calculator.app */;
 			productType = "com.apple.product-type.application";
 		};
-		D603954A2D91147D00C8AB35 /* project-book-seriesTests */ = {
+		D6FE145A2DACADE8001DEBB8 /* project-exchange-rate-calculatorTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D60395632D91147D00C8AB35 /* Build configuration list for PBXNativeTarget "project-book-seriesTests" */;
+			buildConfigurationList = D6FE14732DACADE8001DEBB8 /* Build configuration list for PBXNativeTarget "project-exchange-rate-calculatorTests" */;
 			buildPhases = (
-				D60395472D91147D00C8AB35 /* Sources */,
-				D60395482D91147D00C8AB35 /* Frameworks */,
-				D60395492D91147D00C8AB35 /* Resources */,
+				D6FE14572DACADE8001DEBB8 /* Sources */,
+				D6FE14582DACADE8001DEBB8 /* Frameworks */,
+				D6FE14592DACADE8001DEBB8 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				D603954D2D91147D00C8AB35 /* PBXTargetDependency */,
+				D6FE145D2DACADE8001DEBB8 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				D603954E2D91147D00C8AB35 /* project-book-seriesTests */,
+				D6FE145E2DACADE8001DEBB8 /* project-exchange-rate-calculatorTests */,
 			);
-			name = "project-book-seriesTests";
+			name = "project-exchange-rate-calculatorTests";
 			packageProductDependencies = (
 			);
-			productName = "project-book-seriesTests";
-			productReference = D603954B2D91147D00C8AB35 /* project-book-seriesTests.xctest */;
+			productName = "project-exchange-rate-calculatorTests";
+			productReference = D6FE145B2DACADE8001DEBB8 /* project-exchange-rate-calculatorTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		D60395542D91147D00C8AB35 /* project-book-seriesUITests */ = {
+		D6FE14642DACADE8001DEBB8 /* project-exchange-rate-calculatorUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D60395662D91147D00C8AB35 /* Build configuration list for PBXNativeTarget "project-book-seriesUITests" */;
+			buildConfigurationList = D6FE14762DACADE8001DEBB8 /* Build configuration list for PBXNativeTarget "project-exchange-rate-calculatorUITests" */;
 			buildPhases = (
-				D60395512D91147D00C8AB35 /* Sources */,
-				D60395522D91147D00C8AB35 /* Frameworks */,
-				D60395532D91147D00C8AB35 /* Resources */,
+				D6FE14612DACADE8001DEBB8 /* Sources */,
+				D6FE14622DACADE8001DEBB8 /* Frameworks */,
+				D6FE14632DACADE8001DEBB8 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				D60395572D91147D00C8AB35 /* PBXTargetDependency */,
+				D6FE14672DACADE8001DEBB8 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				D60395582D91147D00C8AB35 /* project-book-seriesUITests */,
+				D6FE14682DACADE8001DEBB8 /* project-exchange-rate-calculatorUITests */,
 			);
-			name = "project-book-seriesUITests";
+			name = "project-exchange-rate-calculatorUITests";
 			packageProductDependencies = (
 			);
-			productName = "project-book-seriesUITests";
-			productReference = D60395552D91147D00C8AB35 /* project-book-seriesUITests.xctest */;
+			productName = "project-exchange-rate-calculatorUITests";
+			productReference = D6FE14652DACADE8001DEBB8 /* project-exchange-rate-calculatorUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		D603952D2D91147B00C8AB35 /* Project object */ = {
+		D6FE143D2DACADE6001DEBB8 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1620;
 				LastUpgradeCheck = 1620;
 				TargetAttributes = {
-					D60395342D91147B00C8AB35 = {
+					D6FE14442DACADE6001DEBB8 = {
 						CreatedOnToolsVersion = 16.2;
 					};
-					D603954A2D91147D00C8AB35 = {
+					D6FE145A2DACADE8001DEBB8 = {
 						CreatedOnToolsVersion = 16.2;
-						TestTargetID = D60395342D91147B00C8AB35;
+						TestTargetID = D6FE14442DACADE6001DEBB8;
 					};
-					D60395542D91147D00C8AB35 = {
+					D6FE14642DACADE8001DEBB8 = {
 						CreatedOnToolsVersion = 16.2;
-						TestTargetID = D60395342D91147B00C8AB35;
+						TestTargetID = D6FE14442DACADE6001DEBB8;
 					};
 				};
 			};
-			buildConfigurationList = D60395302D91147B00C8AB35 /* Build configuration list for PBXProject "project-book-series" */;
+			buildConfigurationList = D6FE14402DACADE6001DEBB8 /* Build configuration list for PBXProject "project-exchange-rate-calculator" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
 			);
-			mainGroup = D603952C2D91147B00C8AB35;
+			mainGroup = D6FE143C2DACADE6001DEBB8;
 			minimizedProjectReferenceProxies = 1;
-			packageReferences = (
-				D64738E02D91423A00E5E758 /* XCRemoteSwiftPackageReference "SnapKit" */,
-				D6D80DE92D9BBF2400835F42 /* XCRemoteSwiftPackageReference "RxSwift" */,
-			);
 			preferredProjectObjectVersion = 77;
-			productRefGroup = D60395362D91147B00C8AB35 /* Products */;
+			productRefGroup = D6FE14462DACADE6001DEBB8 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				D60395342D91147B00C8AB35 /* project-book-series */,
-				D603954A2D91147D00C8AB35 /* project-book-seriesTests */,
-				D60395542D91147D00C8AB35 /* project-book-seriesUITests */,
+				D6FE14442DACADE6001DEBB8 /* project-exchange-rate-calculator */,
+				D6FE145A2DACADE8001DEBB8 /* project-exchange-rate-calculatorTests */,
+				D6FE14642DACADE8001DEBB8 /* project-exchange-rate-calculatorUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		D60395332D91147B00C8AB35 /* Resources */ = {
+		D6FE14432DACADE6001DEBB8 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		D60395492D91147D00C8AB35 /* Resources */ = {
+		D6FE14592DACADE8001DEBB8 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		D60395532D91147D00C8AB35 /* Resources */ = {
+		D6FE14632DACADE8001DEBB8 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -258,21 +245,21 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		D60395312D91147B00C8AB35 /* Sources */ = {
+		D6FE14412DACADE6001DEBB8 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		D60395472D91147D00C8AB35 /* Sources */ = {
+		D6FE14572DACADE8001DEBB8 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		D60395512D91147D00C8AB35 /* Sources */ = {
+		D6FE14612DACADE8001DEBB8 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -282,20 +269,20 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		D603954D2D91147D00C8AB35 /* PBXTargetDependency */ = {
+		D6FE145D2DACADE8001DEBB8 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = D60395342D91147B00C8AB35 /* project-book-series */;
-			targetProxy = D603954C2D91147D00C8AB35 /* PBXContainerItemProxy */;
+			target = D6FE14442DACADE6001DEBB8 /* project-exchange-rate-calculator */;
+			targetProxy = D6FE145C2DACADE8001DEBB8 /* PBXContainerItemProxy */;
 		};
-		D60395572D91147D00C8AB35 /* PBXTargetDependency */ = {
+		D6FE14672DACADE8001DEBB8 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = D60395342D91147B00C8AB35 /* project-book-series */;
-			targetProxy = D60395562D91147D00C8AB35 /* PBXContainerItemProxy */;
+			target = D6FE14442DACADE6001DEBB8 /* project-exchange-rate-calculator */;
+			targetProxy = D6FE14662DACADE8001DEBB8 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		D603955F2D91147D00C8AB35 /* Debug */ = {
+		D6FE146F2DACADE8001DEBB8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -304,30 +291,26 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = N676ZFA7W8;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "project-book-series/Info.plist";
+				INFOPLIST_FILE = "project-exchange-rate-calculator/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "quarang.project-book-series";
+				PRODUCT_BUNDLE_IDENTIFIER = "quarang.project-exchange-rate-calculator";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
-		D60395602D91147D00C8AB35 /* Release */ = {
+		D6FE14702DACADE8001DEBB8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -336,30 +319,26 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = N676ZFA7W8;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "project-book-series/Info.plist";
+				INFOPLIST_FILE = "project-exchange-rate-calculator/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "quarang.project-book-series";
+				PRODUCT_BUNDLE_IDENTIFIER = "quarang.project-exchange-rate-calculator";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
-		D60395612D91147D00C8AB35 /* Debug */ = {
+		D6FE14712DACADE8001DEBB8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -422,7 +401,7 @@
 			};
 			name = Debug;
 		};
-		D60395622D91147D00C8AB35 /* Release */ = {
+		D6FE14722DACADE8001DEBB8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -478,7 +457,7 @@
 			};
 			name = Release;
 		};
-		D60395642D91147D00C8AB35 /* Debug */ = {
+		D6FE14742DACADE8001DEBB8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -488,16 +467,16 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "quarang.project-book-seriesTests";
+				PRODUCT_BUNDLE_IDENTIFIER = "quarang.project-exchange-rate-calculatorTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/project-book-series.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/project-book-series";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/project-exchange-rate-calculator.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/project-exchange-rate-calculator";
 			};
 			name = Debug;
 		};
-		D60395652D91147D00C8AB35 /* Release */ = {
+		D6FE14752DACADE8001DEBB8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -507,16 +486,16 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "quarang.project-book-seriesTests";
+				PRODUCT_BUNDLE_IDENTIFIER = "quarang.project-exchange-rate-calculatorTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/project-book-series.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/project-book-series";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/project-exchange-rate-calculator.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/project-exchange-rate-calculator";
 			};
 			name = Release;
 		};
-		D60395672D91147D00C8AB35 /* Debug */ = {
+		D6FE14772DACADE8001DEBB8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
@@ -524,16 +503,16 @@
 				DEVELOPMENT_TEAM = N676ZFA7W8;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "quarang.project-book-seriesUITests";
+				PRODUCT_BUNDLE_IDENTIFIER = "quarang.project-exchange-rate-calculatorUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = "project-book-series";
+				TEST_TARGET_NAME = "project-exchange-rate-calculator";
 			};
 			name = Debug;
 		};
-		D60395682D91147D00C8AB35 /* Release */ = {
+		D6FE14782DACADE8001DEBB8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
@@ -541,87 +520,55 @@
 				DEVELOPMENT_TEAM = N676ZFA7W8;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "quarang.project-book-seriesUITests";
+				PRODUCT_BUNDLE_IDENTIFIER = "quarang.project-exchange-rate-calculatorUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = "project-book-series";
+				TEST_TARGET_NAME = "project-exchange-rate-calculator";
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		D60395302D91147B00C8AB35 /* Build configuration list for PBXProject "project-book-series" */ = {
+		D6FE14402DACADE6001DEBB8 /* Build configuration list for PBXProject "project-exchange-rate-calculator" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				D60395612D91147D00C8AB35 /* Debug */,
-				D60395622D91147D00C8AB35 /* Release */,
+				D6FE14712DACADE8001DEBB8 /* Debug */,
+				D6FE14722DACADE8001DEBB8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D603955E2D91147D00C8AB35 /* Build configuration list for PBXNativeTarget "project-book-series" */ = {
+		D6FE146E2DACADE8001DEBB8 /* Build configuration list for PBXNativeTarget "project-exchange-rate-calculator" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				D603955F2D91147D00C8AB35 /* Debug */,
-				D60395602D91147D00C8AB35 /* Release */,
+				D6FE146F2DACADE8001DEBB8 /* Debug */,
+				D6FE14702DACADE8001DEBB8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D60395632D91147D00C8AB35 /* Build configuration list for PBXNativeTarget "project-book-seriesTests" */ = {
+		D6FE14732DACADE8001DEBB8 /* Build configuration list for PBXNativeTarget "project-exchange-rate-calculatorTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				D60395642D91147D00C8AB35 /* Debug */,
-				D60395652D91147D00C8AB35 /* Release */,
+				D6FE14742DACADE8001DEBB8 /* Debug */,
+				D6FE14752DACADE8001DEBB8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D60395662D91147D00C8AB35 /* Build configuration list for PBXNativeTarget "project-book-seriesUITests" */ = {
+		D6FE14762DACADE8001DEBB8 /* Build configuration list for PBXNativeTarget "project-exchange-rate-calculatorUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				D60395672D91147D00C8AB35 /* Debug */,
-				D60395682D91147D00C8AB35 /* Release */,
+				D6FE14772DACADE8001DEBB8 /* Debug */,
+				D6FE14782DACADE8001DEBB8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		D64738E02D91423A00E5E758 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.7.1;
-			};
-		};
-		D6D80DE92D9BBF2400835F42 /* XCRemoteSwiftPackageReference "RxSwift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/ReactiveX/RxSwift.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 6.9.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		D64738E12D91423A00E5E758 /* SnapKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = D64738E02D91423A00E5E758 /* XCRemoteSwiftPackageReference "SnapKit" */;
-			productName = SnapKit;
-		};
-		D6D80DEA2D9BBF2400835F42 /* RxCocoa */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = D6D80DE92D9BBF2400835F42 /* XCRemoteSwiftPackageReference "RxSwift" */;
-			productName = RxCocoa;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
-	rootObject = D603952D2D91147B00C8AB35 /* Project object */;
+	rootObject = D6FE143D2DACADE6001DEBB8 /* Project object */;
 }

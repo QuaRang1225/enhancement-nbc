@@ -69,20 +69,37 @@ final class BookViewController: UIViewController{
     //MARK: VC 메서드
     //뷰 바인딩
     private func bindViewModel() {
-        vm.fetchSubject
-            .onNext((bookView.isHidden = false))
+        
+        print("ㄱ")
         vm.attributesSubject
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] attributes in
-                self?.configureBookView(attributes)
-                self?.configureCollectionViewDelegate()
-                self?.configureExpandButton()
-                self?.configureSummaryStackView()
+                self?.configureBookView(attributes) //BookView 컴포넌트 데이터 업데이트
             },onError: { [weak self] error in
                 guard let dataError = error as? DataError else { return }
-                self?.showError(dataError)
+                self?.showError(dataError)          //Alert 이벤트 실행
+            },onCompleted: { [weak self] in
+                self?.configureCollectionViewDelegate() //컬렉션뷰 델리게이트 설정
+                self?.configureExpandButton()           //더보기 버튼 설정(앱 종료 후 실행됐을 때)
+                self?.configureSummaryStackView()       //요약 버튼 초기화(앱 종료 후 실행됐을 때)
+                self?.bookView.isHidden = false         //데이터를 모두 불러오기 전까지 bookView
             })
             .disposed(by: disposeBag)
+        
+        
+//        sleep(2)
+//        print("ㄴ")
+//        vm.fetchSubject.onNext(())
+//        let input = BookViewModel.Input(buttonTap: bookView.expandButton.rx.tap.asObservable())
+//        let output = vm.transform(input: input)
+        
+//        output.expand
+//            .drive(countLabel.rx.text)
+//            .disposed(by: disposeBag)
+//        
+//        output.buttonTextColor
+//            .drive(countButton.rx.titleColor(for: .normal))
+//            .disposed(by: disposeBag)
     }
     //데이터 fetch 성공시 BookView 관련 설정
     private func configureBookView(_ attributes:[Attributes]){
@@ -101,6 +118,7 @@ final class BookViewController: UIViewController{
     }
     //더보기 버튼 세팅
     private func configureExpandButton(){
+        vm.attributes[episode]
         let summary = vm.attributes[episode].summary
         bookView.expandButton.isHidden = !(summary.count > 450)
         bookView.expandButton.isSelected = isExpand
@@ -160,4 +178,7 @@ extension BookViewController:UICollectionViewDelegate,UICollectionViewDataSource
         let inset = (collectionView.frame.width - CGFloat(totalCellWidth) - CGFloat(totalSpacing))  / 2
         return UIEdgeInsets(top: 0, left: inset, bottom: 0, right: inset)
     }
+}
+#Preview{
+    BookViewController()
 }
