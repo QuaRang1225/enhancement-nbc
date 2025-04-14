@@ -28,7 +28,7 @@ class MainViewModel: ViewModelProtocol {
     
     // View에 전달될 상태 데이터
     struct State{
-        fileprivate(set) var responseData = BehaviorSubject<ExchangeRatesResponse>(value: [:])
+        fileprivate(set) var responseData = BehaviorSubject<ExchangeRatesResponseList>(value: [:])
     }
     
     // 액션에 따라 구독할 이벤트 분기처리

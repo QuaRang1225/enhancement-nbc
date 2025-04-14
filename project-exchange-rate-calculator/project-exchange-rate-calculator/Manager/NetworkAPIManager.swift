@@ -12,8 +12,8 @@ import RxSwift
 class NetworkAPIManager{
     
     //환율 정보 fetch
-    static func fetchRates() -> Single<ExchangeRatesResponse> {
-        return Single<ExchangeRatesResponse>.create { single in
+    static func fetchRates() -> Single<ExchangeRatesResponseList> {
+        return Single<ExchangeRatesResponseList>.create { single in
             guard let url = URL(string: "https://open.er-api.com/v6/latest/USD") else {
                 single(.failure(DataError.requestFailed))
                 return Disposables.create()
