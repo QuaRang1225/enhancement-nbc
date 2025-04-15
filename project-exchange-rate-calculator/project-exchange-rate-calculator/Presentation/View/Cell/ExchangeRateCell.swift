@@ -25,6 +25,11 @@ final class ExchangeRateCell: UITableViewCell {
         $0.font = .systemFont(ofSize: 18)
     }
     
+    // 국가 라벨
+    private let countryLabel = UILabel().then {
+        $0.font = .systemFont(ofSize: 18)
+    }
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         configureSubView()
@@ -39,11 +44,12 @@ final class ExchangeRateCell: UITableViewCell {
     public func configure(response: ExchangeRatesResponse){
         countryCodeLabel.text = response.key
         rateLabel.text = String(format: "%.4f", response.value)
+        countryLabel.text = String.iso_code[response.key]
     }
     
     // sub view 추가
     private func configureSubView(){
-        [countryCodeLabel, rateLabel]
+        [countryCodeLabel, rateLabel, countryLabel]
             .forEach{ addSubview($0) }
     }
     
@@ -56,6 +62,10 @@ final class ExchangeRateCell: UITableViewCell {
         rateLabel.snp.makeConstraints {
             $0.centerY.equalTo(countryCodeLabel)
             $0.trailing.equalToSuperview().offset(-8)
+        }
+        countryLabel.snp.makeConstraints {
+            $0.top.equalTo(countryCodeLabel.snp.bottom)
+            $0.leading.equalTo(countryCodeLabel.snp.leading)
         }
     }
 }

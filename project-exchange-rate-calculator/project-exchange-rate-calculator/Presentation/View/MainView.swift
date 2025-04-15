@@ -40,12 +40,12 @@ final class MainView:UIView{
     
     private func configureLayout(){
         searchBar.snp.makeConstraints {
-            $0.top.width.horizontalEdges.equalTo(safeAreaLayoutGuide)
+            $0.horizontalEdges.equalToSuperview()
+            $0.top.equalTo(safeAreaLayoutGuide)
         }
         rateTableView.snp.makeConstraints {
             $0.top.equalTo(searchBar.snp.bottom)
-            $0.width.horizontalEdges.equalTo(safeAreaLayoutGuide)
-            $0.bottom.equalToSuperview()
+            $0.horizontalEdges.bottom.equalTo(safeAreaLayoutGuide)
         }
     }
 }
