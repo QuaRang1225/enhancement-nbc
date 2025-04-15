@@ -63,11 +63,6 @@ final class ExchangeRateCell: UITableViewCell {
     
     // 오토 레이아웃
     private func configureLayout(){
-        // 컨텐츠 뷰
-        contentView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
-            $0.height.equalTo(60)
-        }
         // 라벨 스택 뷰
         labelStackView.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(16)

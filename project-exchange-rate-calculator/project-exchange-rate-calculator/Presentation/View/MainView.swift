@@ -12,9 +12,11 @@ import Then
 
 final class MainView:UIView{
     
-    public let rateTableView = UITableView()
+    public let rateTableView = UITableView().then {
+        $0.rowHeight = 60
+    }
     
-    private let searchBar = UISearchBar().then {
+    public let searchBar = UISearchBar().then {
         $0.placeholder = "통화 검색"
         $0.searchBarStyle = .minimal
     }
