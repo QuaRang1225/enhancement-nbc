@@ -23,7 +23,7 @@ class MainViewController: UIViewController {
     // 초기 VC 설정
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .red
+        view.backgroundColor = .systemBackground
         bindViewModel()
         configureTableView()
     }
