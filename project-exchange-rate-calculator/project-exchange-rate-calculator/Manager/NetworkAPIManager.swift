@@ -9,7 +9,7 @@ import Foundation
 import RxSwift
 
 //MARK: NetworkAPIManager - API CRUD
-class NetworkAPIManager{
+final class NetworkAPIManager{
     
     //환율 정보 fetch
     static func fetchRates() -> Single<ExchangeRatesResponseList> {

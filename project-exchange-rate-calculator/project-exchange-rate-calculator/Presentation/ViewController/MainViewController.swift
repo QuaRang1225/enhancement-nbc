@@ -9,7 +9,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class MainViewController: UIViewController {
+final class MainViewController: UIViewController {
     
     private let vm = MainViewModel()
     private let mainView = MainView()
@@ -28,12 +28,6 @@ class MainViewController: UIViewController {
         configureTableView()
     }
     
-    // View가 화면에 모두 나타난 뒤 이벤트 실행(alert 관련 문제)
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        vm.action.onNext(.fetchInfo)
-    }
-    
     // 테이블 뷰 셀 등록
     private func configureTableView(){
         mainView.rateTableView.register(ExchangeRateCell.self, forCellReuseIdentifier: ExchangeRateCell.idenfier)
@@ -41,22 +35,29 @@ class MainViewController: UIViewController {
     
     // ViewModel간의 데이터 바인딩
     private func bindViewModel(){
+        
+        vm.action.onNext(.fetchInfo)
+        
         // API 데이터 fetch
-        vm.state.responseData
+        vm.state.filteredExchangeRates
             .observe(on: MainScheduler.instance)
-            .catch{ [weak self] error in
-                guard let error = error as? DataError, let self else { return Observable.empty() }
-                showAlert(type: error)
-                return Observable.empty()
-            }
             .bind(to: mainView.rateTableView.rx.items(
                 cellIdentifier: ExchangeRateCell.idenfier,
-                cellType: ExchangeRateCell.self)){ _, response, cell in
-                    cell.configure(response: response)
+                cellType: ExchangeRateCell.self)
+            ) { _, response, cell in
+                cell.configure(response: response)
             }
             .disposed(by: disposeBag)
         
+        // 검색 텍스트 변경 마다
+        mainView.searchBar.rx.text
+            .orEmpty
+            .distinctUntilChanged()
+            .debounce(.milliseconds(300), scheduler: MainScheduler.instance)
+            .withUnretained(self)
+            .subscribe{ owner, text in
+                owner.vm.action.onNext(.searchText(text))
+            }
+            .disposed(by: disposeBag)
     }
 }
-
-
