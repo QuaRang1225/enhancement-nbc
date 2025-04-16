@@ -45,9 +45,11 @@ final class CalculatorView: UIView {
     
     // 계산 버튼
     private let convertButton = UIButton().then {
+        $0.setTitle("환율 계산", for: .normal)
         $0.backgroundColor = .systemBlue
         $0.tintColor = .white
         $0.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
+        $0.layer.cornerRadius = 8
     }
     
     // 라벨 스택 (국가 코드 + 쿡가)
@@ -55,4 +57,63 @@ final class CalculatorView: UIView {
         $0.axis = .vertical
         $0.spacing = 0
     }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        configure()
+        configureSubView()
+        configureLayout()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // 데이터 설정
+    public func configure() {
+        currencyLabel.text = "ALL"
+        countryLabel.text = "알바니아"
+        resultLabel.text = "3913.30"
+    }
+    
+    // 컴포넌트 추가
+    private func configureSubView() {
+        [titleLabel, labelStackView, amountTextField, convertButton, resultLabel]
+            .forEach{ addSubview($0)}
+    }
+    private func configureLayout() {
+        
+        // 타이틀 라벨
+        titleLabel.snp.makeConstraints {
+            $0.top.leading.equalTo(safeAreaLayoutGuide).inset(24)
+        }
+        
+        // 라벨 스택
+        labelStackView.snp.makeConstraints {
+            $0.top.equalTo(titleLabel.snp.bottom).offset(32)
+            $0.centerX.equalToSuperview()
+        }
+        
+        // 텍스트 필드
+        amountTextField.snp.makeConstraints {
+            $0.top.equalTo(labelStackView.snp.bottom).offset(32)
+            $0.horizontalEdges.equalToSuperview().inset(24)
+            $0.height.equalTo(44)
+        }
+        
+        // 계산 버튼
+        convertButton.snp.makeConstraints {
+            $0.top.equalTo(amountTextField.snp.bottom).offset(24)
+            $0.horizontalEdges.equalToSuperview().inset(24)
+            $0.height.equalTo(44)
+        }
+        
+        // 결과 라벨
+        resultLabel.snp.makeConstraints {
+            $0.top.equalTo(convertButton.snp.bottom).offset(32)
+            $0.horizontalEdges.equalToSuperview().inset(24)
+        }
+    }
 }
+
+
