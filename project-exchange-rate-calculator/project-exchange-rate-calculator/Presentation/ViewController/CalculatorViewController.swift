@@ -8,13 +8,14 @@
 import Foundation
 import UIKit
 
-class CalculatorViewController: UIViewController {
+final class CalculatorViewController: UIViewController {
     
-    private let calculatorView = CalculatorView()
+    public let calculatorView = CalculatorView()
     
     override func loadView() {
         view = calculatorView
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground 

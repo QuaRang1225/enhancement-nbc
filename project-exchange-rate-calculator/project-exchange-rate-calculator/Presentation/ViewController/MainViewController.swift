@@ -36,10 +36,7 @@ final class MainViewController: UIViewController {
     // ViewModel간의 데이터 바인딩
     private func bindViewModel(){
         
-        // MARK: 입력 VC -> VM -> Model
-        
-        //  API 데이터 fetch
-        vm.action.onNext(.fetchInfo)
+        // MARK: View Event
         
         // 검색 텍스트 변경 마다 이벤트 발출
         mainView.searchBar.rx.text
@@ -57,9 +54,16 @@ final class MainViewController: UIViewController {
             .modelSelected(ExchangeRatesResponse.self)
             .withUnretained(self)
             .subscribe{ owner, item in
-                owner.vm.action.onNext(.selectedItem(item))
+                let vc = CalculatorViewController()
+                vc.calculatorView.configure(item: item)
+                owner.navigationController?.pushViewController(vc, animated: true)
             }
             .disposed(by: disposeBag)
+        
+        // MARK: 입력 VC -> VM -> Model
+        
+        //  API 데이터 fetch
+        vm.action.onNext(.fetchInfo)
         
         // MARK: 출력 VM -> VC -> View
         
@@ -71,16 +75,6 @@ final class MainViewController: UIViewController {
                 cellType: ExchangeRateCell.self)
             ) { _, response, cell in
                 cell.configure(response: response)
-            }
-            .disposed(by: disposeBag)
-        
-        // 셀 터치 시 계산기 뷰 pop
-        vm.state.rateItem
-            .observe(on: MainScheduler.instance)
-            .withUnretained(self)
-            .subscribe{ owner, item in
-                let vc = CalculatorViewController()
-                owner.navigationController?.pushViewController(vc, animated: true)
             }
             .disposed(by: disposeBag)
     }

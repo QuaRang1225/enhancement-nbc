@@ -60,7 +60,6 @@ final class CalculatorView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        configure()
         configureSubView()
         configureLayout()
     }
@@ -70,10 +69,10 @@ final class CalculatorView: UIView {
     }
     
     // 데이터 설정
-    public func configure() {
-        currencyLabel.text = "ALL"
-        countryLabel.text = "알바니아"
-        resultLabel.text = "3913.30"
+    public func configure(item:ExchangeRatesResponse) {
+        currencyLabel.text = item.key
+        countryLabel.text = String.iso_code[item.key]
+        resultLabel.text = "\(item.value)"
     }
     
     // 컴포넌트 추가
