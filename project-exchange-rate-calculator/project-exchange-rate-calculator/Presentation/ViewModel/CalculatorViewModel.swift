@@ -20,10 +20,28 @@ final class CalculatorViewModel: ViewModelProtocol {
     
     // 주입 받을 이벤트 타입
     enum Action{
+        case calculate(Double)
     }
     
     // View에 전달될 상태 데이터
     struct State{
         fileprivate(set) var actionSubject = PublishSubject<Action>()
+        
+        fileprivate(set) var calculatedRate = PublishSubject<String>()
+    }
+    
+    init(){
+        state.actionSubject
+            .subscribe(with: self){ owner, type in
+                switch type{
+                case .calculate(let value):
+                    owner.calculateRate(value: value)
+                }
+            }
+            .disposed(by: disposeBag)
+    }
+    
+    private func calculateRate(value: Double) {
+        state.calculatedRate.onNext(String(value))
     }
 }

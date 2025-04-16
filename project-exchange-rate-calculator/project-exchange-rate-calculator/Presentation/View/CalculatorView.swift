@@ -29,14 +29,14 @@ final class CalculatorView: UIView {
     }
     
     // 결과 값 라벨
-    private let resultLabel = UILabel().then {
+    public let resultLabel = UILabel().then {
         $0.font = .systemFont(ofSize: 20, weight: .medium)
         $0.textAlignment = .center
         $0.numberOfLines = 0
     }
     
     // 텍스트 필드
-    private let amountTextField = UITextField().then {
+    public let amountTextField = UITextField().then {
         $0.borderStyle = .roundedRect
         $0.keyboardType = .decimalPad
         $0.textAlignment = .center
@@ -44,7 +44,7 @@ final class CalculatorView: UIView {
     }
     
     // 계산 버튼
-    private let convertButton = UIButton().then {
+    public let convertButton = UIButton().then {
         $0.setTitle("환율 계산", for: .normal)
         $0.backgroundColor = .systemBlue
         $0.tintColor = .white

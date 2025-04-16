@@ -43,8 +43,7 @@ final class MainViewController: UIViewController {
             .orEmpty
             .distinctUntilChanged()
             .debounce(.milliseconds(300), scheduler: MainScheduler.instance)
-            .withUnretained(self)
-            .subscribe{ owner, text in
+            .subscribe(with: self){ owner, text in
                 owner.vm.action.onNext(.searchText(text))
             }
             .disposed(by: disposeBag)
@@ -52,8 +51,7 @@ final class MainViewController: UIViewController {
         // 셀 터치 시 이벤트 방출
         mainView.rateTableView.rx
             .modelSelected(ExchangeRatesResponse.self)
-            .withUnretained(self)
-            .subscribe{ owner, item in
+            .subscribe(with: self) { owner, item in
                 let vc = CalculatorViewController()
                 vc.calculatorView.configure(item: item)
                 owner.navigationController?.pushViewController(vc, animated: true)
