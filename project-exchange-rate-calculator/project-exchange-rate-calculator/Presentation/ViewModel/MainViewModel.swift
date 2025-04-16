@@ -24,13 +24,15 @@ final class MainViewModel: ViewModelProtocol {
     enum Action{
         case fetchInfo
         case searchText(String)
+        case selectedItem(ControlEvent<ExchangeRatesResponse>.Element)
     }
     
     // View에 전달될 상태 데이터
     struct State{
         fileprivate(set) var actionSubject = PublishSubject<Action>()
-        
         fileprivate(set) var filteredExchangeRates = BehaviorSubject<ExchangeRatesResponseList>(value: [:])
+        fileprivate(set) var rateItem = PublishSubject<ExchangeRatesResponse>()
+        
         fileprivate(set) var exchangeRates = ExchangeRatesResponseList()
     }
     
@@ -44,6 +46,8 @@ final class MainViewModel: ViewModelProtocol {
                     owner.fetchExchangeRates()
                 case .searchText(let text):
                     owner.filteringExchangeRates(text: text)
+                case .selectedItem(let item):
+                    owner.seletedItemNavigation(item: item)
                 }
             })
             .disposed(by: disposeBag)
@@ -69,5 +73,9 @@ final class MainViewModel: ViewModelProtocol {
         state.exchangeRates.filter { $0.key.contains(text.uppercased()) }
         
         state.filteredExchangeRates.onNext(responseList)
+    }
+    
+    private func seletedItemNavigation(item: ControlEvent<ExchangeRatesResponse>.Element){
+        state.rateItem.onNext(item)
     }
 }

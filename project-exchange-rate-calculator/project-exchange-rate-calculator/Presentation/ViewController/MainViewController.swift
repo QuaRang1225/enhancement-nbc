@@ -36,9 +36,34 @@ final class MainViewController: UIViewController {
     // ViewModel간의 데이터 바인딩
     private func bindViewModel(){
         
+        // MARK: 입력 VC -> VM -> Model
+        
+        //  API 데이터 fetch
         vm.action.onNext(.fetchInfo)
         
-        // API 데이터 fetch
+        // 검색 텍스트 변경 마다 이벤트 발출
+        mainView.searchBar.rx.text
+            .orEmpty
+            .distinctUntilChanged()
+            .debounce(.milliseconds(300), scheduler: MainScheduler.instance)
+            .withUnretained(self)
+            .subscribe{ owner, text in
+                owner.vm.action.onNext(.searchText(text))
+            }
+            .disposed(by: disposeBag)
+        
+        // 셀 터치 시 이벤트 방출
+        mainView.rateTableView.rx
+            .modelSelected(ExchangeRatesResponse.self)
+            .withUnretained(self)
+            .subscribe{ owner, item in
+                owner.vm.action.onNext(.selectedItem(item))
+            }
+            .disposed(by: disposeBag)
+        
+        // MARK: 출력 VM -> VC -> View
+        
+        // fetchData 리스트로 테이블뷰 cell 컴포넌트 데이터 설정
         vm.state.filteredExchangeRates
             .observe(on: MainScheduler.instance)
             .bind(to: mainView.rateTableView.rx.items(
@@ -49,14 +74,13 @@ final class MainViewController: UIViewController {
             }
             .disposed(by: disposeBag)
         
-        // 검색 텍스트 변경 마다
-        mainView.searchBar.rx.text
-            .orEmpty
-            .distinctUntilChanged()
-            .debounce(.milliseconds(300), scheduler: MainScheduler.instance)
+        // 셀 터치 시 계산기 뷰 pop
+        vm.state.rateItem
+            .observe(on: MainScheduler.instance)
             .withUnretained(self)
-            .subscribe{ owner, text in
-                owner.vm.action.onNext(.searchText(text))
+            .subscribe{ owner, item in
+                let vc = CalculatorViewController()
+                owner.navigationController?.pushViewController(vc, animated: true)
             }
             .disposed(by: disposeBag)
     }
