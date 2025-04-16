@@ -35,10 +35,13 @@ final class CalculatorViewController: UIViewController {
             .observe(on: MainScheduler.instance)
             .withLatestFrom(calculatorView.amountTextField.rx.text.orEmpty)
             .subscribe(with: self) { owner, text in
-                guard let item = owner.calculatorView.item,
-                      let input = Double(text) else {
-                    print("빈값임~")
-                    return
+                guard let item = owner.calculatorView.item else { return }
+                
+                guard !text.isEmpty else {                                  //값이 비었을 경우
+                    return owner.showAlert(type: TextFieldCase.isEmpty)
+                }
+                guard let input = Double(text) else {                       //숫자가 아닐 경우
+                    return owner.showAlert(type: TextFieldCase.isNotDouble)
                 }
                 owner.vm.action.onNext(.calculate(input: input, item: item))
             }

@@ -43,9 +43,12 @@ final class MainViewController: UIViewController {
             .orEmpty
             .distinctUntilChanged()
             .debounce(.milliseconds(300), scheduler: MainScheduler.instance)
-            .subscribe(with: self){ owner, text in
+            .subscribe(with: self, onNext: { owner, text in
                 owner.vm.action.onNext(.searchText(text))
-            }
+            }, onError: { owner, error in
+                guard let error = error as? DataError else { return }
+                owner.showAlert(type: error)
+            })
             .disposed(by: disposeBag)
         
         // 셀 터치 시 이벤트 방출
