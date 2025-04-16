@@ -35,7 +35,12 @@ final class CalculatorViewController: UIViewController {
             .observe(on: MainScheduler.instance)
             .withLatestFrom(calculatorView.amountTextField.rx.text.orEmpty)
             .subscribe(with: self) { owner, text in
-                owner.vm.action.onNext(.calculate(Double(text)!))
+                guard let item = owner.calculatorView.item,
+                      let input = Double(text) else {
+                    print("빈값임~")
+                    return
+                }
+                owner.vm.action.onNext(.calculate(input: input, item: item))
             }
             .disposed(by: disposeBag)
         

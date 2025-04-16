@@ -20,7 +20,7 @@ final class CalculatorViewModel: ViewModelProtocol {
     
     // 주입 받을 이벤트 타입
     enum Action{
-        case calculate(Double)
+        case calculate(input: Double, item: ExchangeRatesResponse)
     }
     
     // View에 전달될 상태 데이터
@@ -34,14 +34,17 @@ final class CalculatorViewModel: ViewModelProtocol {
         state.actionSubject
             .subscribe(with: self){ owner, type in
                 switch type{
-                case .calculate(let value):
-                    owner.calculateRate(value: value)
+                case let .calculate(input, item):
+                    owner.calculateRate(input: input, item: item)
                 }
             }
             .disposed(by: disposeBag)
     }
     
-    private func calculateRate(value: Double) {
-        state.calculatedRate.onNext(String(value))
+    private func calculateRate(input: Double, item: ExchangeRatesResponse) {
+        let inputString = String(format: "$%.2f", input)
+        let resultString = String(format: "%.2f", input * item.value)
+        let result = inputString + " → " + resultString + " " + item.key
+        state.calculatedRate.onNext(result)
     }
 }

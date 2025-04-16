@@ -12,6 +12,7 @@ import Then
 
 final class CalculatorView: UIView {
     
+    public var item:ExchangeRatesResponse? = nil
     // 타이틀 라벨
     private let titleLabel = UILabel().then {
         $0.font = .systemFont(ofSize: 36, weight: .bold)
@@ -25,7 +26,8 @@ final class CalculatorView: UIView {
     
     // 국가 라벨
     private let countryLabel = UILabel().then {
-        $0.font = .systemFont(ofSize: 16, weight: .bold)
+        $0.font = .systemFont(ofSize: 16)
+        $0.textColor = .gray
     }
     
     // 결과 값 라벨
@@ -33,6 +35,7 @@ final class CalculatorView: UIView {
         $0.font = .systemFont(ofSize: 20, weight: .medium)
         $0.textAlignment = .center
         $0.numberOfLines = 0
+        $0.text = "계산 결과가 여기에 표시됩니다."
     }
     
     // 텍스트 필드
@@ -55,6 +58,7 @@ final class CalculatorView: UIView {
     // 라벨 스택 (국가 코드 + 쿡가)
     private lazy var labelStackView = UIStackView(arrangedSubviews: [currencyLabel, countryLabel]).then {
         $0.axis = .vertical
+        $0.alignment = .center
         $0.spacing = 0
     }
     
@@ -70,9 +74,9 @@ final class CalculatorView: UIView {
     
     // 데이터 설정
     public func configure(item:ExchangeRatesResponse) {
+        self.item = item
         currencyLabel.text = item.key
         countryLabel.text = String.iso_code[item.key]
-        resultLabel.text = "\(item.value)"
     }
     
     // 컴포넌트 추가
@@ -84,7 +88,8 @@ final class CalculatorView: UIView {
         
         // 타이틀 라벨
         titleLabel.snp.makeConstraints {
-            $0.top.leading.equalTo(safeAreaLayoutGuide).inset(24)
+            $0.top.equalTo(safeAreaLayoutGuide).inset(4)
+            $0.leading.equalTo(safeAreaLayoutGuide).inset(24)
         }
         
         // 라벨 스택
