@@ -65,8 +65,10 @@ final class MainViewModel: ViewModelProtocol {
         
         let responseList = text.isEmpty ?
         state.exchangeRates :
-        state.exchangeRates.filter { $0.key.contains(text.uppercased()) }
-        
+        state.exchangeRates.filter {
+            $0.key.contains(text.uppercased()) ||
+            String.iso_code[$0.key]!.contains(text)
+        }
         state.filteredExchangeRates.onNext(responseList)
     }
 }

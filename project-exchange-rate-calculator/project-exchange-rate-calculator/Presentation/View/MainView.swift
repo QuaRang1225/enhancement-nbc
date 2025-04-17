@@ -31,10 +31,6 @@ final class MainView:UIView{
         fatalError("init(coder:) has not been implemented")
     }
     
-    public func configure(){
-        
-    }
-    
     private func configureSubView(){
         [rateTableView, searchBar]
             .forEach{ addSubview($0) }

@@ -12,7 +12,9 @@ import Then
 
 final class CalculatorView: UIView {
     
+    //아이템 정보
     public var item:ExchangeRatesResponse? = nil
+    
     // 타이틀 라벨
     private let titleLabel = UILabel().then {
         $0.font = .systemFont(ofSize: 36, weight: .bold)
