@@ -71,6 +71,9 @@ final class MainViewController: UIViewController {
         // fetchData 리스트로 테이블뷰 cell 컴포넌트 데이터 설정
         vm.state.filteredExchangeRates
             .observe(on: MainScheduler.instance)
+            .do { [weak self] list in
+                self?.mainView.emptyLabel.isHidden = !list.isEmpty
+            }
             .bind(to: mainView.rateTableView.rx.items(
                 cellIdentifier: ExchangeRateCell.idenfier,
                 cellType: ExchangeRateCell.self)
