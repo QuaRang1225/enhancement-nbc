@@ -9,12 +9,20 @@ import Foundation
 import UIKit
 import Then
 import SnapKit
+import RxSwift
+import RxCocoa
 
 //MARK: 환율데이터 셀
 final class ExchangeRateCell: UITableViewCell {
     
     // ID
     static let idenfier = "ExchangeRateCell"
+    
+    // dispseBag
+    private var disposeBag = DisposeBag()
+    
+    //delegate
+    weak var delegate:ExchangeRateCellDelegate?
     
     // 국가 코드 라벨
     private let currencyLabel = UILabel().then {
@@ -49,12 +57,16 @@ final class ExchangeRateCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         configureSubView()
         configureLayout()
+        bind()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        disposeBag = DisposeBag()
+    }
     // cell 컴포넌트 데이터 업데이트
     public func configure(response: ExchangeRatesResponse){
         currencyLabel.text = response.key
@@ -90,5 +102,14 @@ final class ExchangeRateCell: UITableViewCell {
             $0.centerY.equalToSuperview()
             $0.trailing.equalToSuperview().offset(-16)
         }
+    }
+    
+    private func bind() {
+        bookmarkButton.rx.tap
+            .observe(on: MainScheduler.instance)
+            .subscribe(with: self){ owner, _ in
+                owner.delegate?.touchBookmark(id: UUID())
+            }
+            .disposed(by: disposeBag)
     }
 }

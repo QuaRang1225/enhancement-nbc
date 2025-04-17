@@ -84,3 +84,9 @@ final class MainViewController: UIViewController {
             .disposed(by: disposeBag)
     }
 }
+
+extension MainViewController: ExchangeRateCellDelegate {
+    func touchBookmark(id: UUID) {
+        
+    }
+}
