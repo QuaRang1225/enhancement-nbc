@@ -8,6 +8,7 @@
 import Foundation
 import RxSwift
 
+// MARK: MainViewModel - CalculatorView의 비즈니스 로직 및 바인딩 관리
 final class CalculatorViewModel: ViewModelProtocol {
     
     var state = State()
@@ -30,6 +31,7 @@ final class CalculatorViewModel: ViewModelProtocol {
         fileprivate(set) var calculatedRate = PublishSubject<String>()
     }
     
+    // 액션에 따라 구독할 이벤트 분기처리
     init(){
         state.actionSubject
             .subscribe(with: self){ owner, type in
@@ -41,6 +43,7 @@ final class CalculatorViewModel: ViewModelProtocol {
             .disposed(by: disposeBag)
     }
     
+    // 계산 결과 텍스트 생성
     private func calculateRate(input: Double, item: ExchangeRatesResponse) {
         let inputString = String(format: "$%.2f", input)
         let resultString = String(format: "%.2f", input * item.value)

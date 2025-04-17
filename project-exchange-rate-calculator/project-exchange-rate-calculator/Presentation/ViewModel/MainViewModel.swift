@@ -8,7 +8,7 @@
 import Foundation
 import RxSwift
 
-//MARK: MainViewModel - MainView의 비즈니스 로직 및 바인딩 관리
+// MARK: MainViewModel - MainView의 비즈니스 로직 및 바인딩 관리
 final class MainViewModel: ViewModelProtocol {
     
     var state = State()

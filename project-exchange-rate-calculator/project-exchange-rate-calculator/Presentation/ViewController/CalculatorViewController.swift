@@ -10,6 +10,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
+// MARK: 환율 계산기 컨트롤러
 final class CalculatorViewController: UIViewController {
     
     public let calculatorView = CalculatorView()

@@ -10,6 +10,7 @@ import UIKit
 import SnapKit
 import Then
 
+// MARK: 환율 계산기 화면
 final class CalculatorView: UIView {
     
     //아이템 정보

@@ -10,6 +10,7 @@ import UIKit
 import Then
 import SnapKit
 
+//MARK: 환율데이터 셀
 final class ExchangeRateCell: UITableViewCell {
     
     // ID

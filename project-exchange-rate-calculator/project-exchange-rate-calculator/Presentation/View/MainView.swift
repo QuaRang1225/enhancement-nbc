@@ -10,6 +10,7 @@ import UIKit
 import SnapKit
 import Then
 
+// MARK: 메인화면
 final class MainView:UIView{
     
     // 테이블 뷰

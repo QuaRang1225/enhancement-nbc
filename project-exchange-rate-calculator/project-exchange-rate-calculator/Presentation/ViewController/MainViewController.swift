@@ -9,6 +9,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
+// MARK: 메인 컨트롤러
 final class MainViewController: UIViewController {
     
     private let vm = MainViewModel()
