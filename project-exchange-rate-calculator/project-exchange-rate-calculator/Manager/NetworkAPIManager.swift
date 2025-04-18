@@ -12,8 +12,8 @@ import RxSwift
 final class NetworkAPIManager{
     
     //환율 정보 fetch
-    static func fetchRates() -> Single<ExchangeRatesResponseList> {
-        return Single<ExchangeRatesResponseList>.create { single in
+    static func fetchRates() -> Single<Entitys> {
+        return Single<Entitys>.create { single in
             guard let url = URL(string: "https://open.er-api.com/v6/latest/USD") else {
                 single(.failure(DataError.requestFailed))
                 return Disposables.create()
@@ -29,11 +29,24 @@ final class NetworkAPIManager{
                     single(.failure(DataError.decodigError))
                     return
                 }
-                single(.success(result.rates))
+                single(.success(transformEntitys(result.rates)))
             }
             
             task.resume()
             return Disposables.create { task.cancel() }
+        }
+    }
+    
+    // 네트워크 데이터 DTO Entitys로 변환
+    private static func transformEntitys(_ responseList: ExchangeRatesResponseList) -> Entitys {
+        return responseList.map { key, value in
+            [
+                "id": UUID(),
+                "currency": key,
+                "country": String.iso_code[key] ?? "",
+                "rate": value,
+                "isBookmark": false
+            ]
         }
     }
 }

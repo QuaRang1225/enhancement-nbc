@@ -48,19 +48,6 @@ final class MainViewModel: ViewModelProtocol {
             .disposed(by: disposeBag)
     }
     
-    //
-    private func transformEntitys(_ responseList: ExchangeRatesResponseList) -> Entitys {
-        return responseList.map { key, value in
-            [
-                "id": UUID(),
-                "currency": key,
-                "country": String.iso_code[key] ?? "",
-                "rate": value,
-                "isBookmark": false
-            ]
-        }
-    }
-    
     // CoreData DB 데이터 조회
     private func fetchPersistenceExchangeRates(){
         PersistenceManager.shared.fetchAll(type: ExchangeRate.self)
@@ -80,8 +67,7 @@ final class MainViewModel: ViewModelProtocol {
         NetworkAPIManager.fetchRates()
             .subscribe(with: self, onSuccess: { owner, response in
                 Task{
-                    let list = owner.transformEntitys(response)
-                    let entitys = try await PersistenceManager.shared.saveAll(type: ExchangeRate.self, values: list)
+                    let entitys = try await PersistenceManager.shared.saveAll(type: ExchangeRate.self, values: response)
                     owner.state.exchangeRates = entitys
                     owner.state.filteredExchangeRates.onNext(entitys)
                 }
