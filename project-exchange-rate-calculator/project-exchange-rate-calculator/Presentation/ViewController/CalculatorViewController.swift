@@ -38,7 +38,8 @@ final class CalculatorViewController: UIViewController {
         bindViewModel()
     }
     
-    private func bindViewModel(){
+    // ViewModel과 바인딩
+    private func bindViewModel() {
         
         // MARK: 입력 VC -> VM -> Model
         

@@ -27,15 +27,23 @@ final class MainViewController: UIViewController {
         view.backgroundColor = .systemBackground
         bindViewModel()
         configureTableView()
+        configureNavigation()
+    }
+    
+    // 네비게이션 타이틀 설정
+    private func configureNavigation() {
+        navigationItem.title = "환율 정보"
+        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.largeTitleDisplayMode = .always
     }
     
     // 테이블 뷰 셀 등록
-    private func configureTableView(){
+    private func configureTableView() {
         mainView.rateTableView.register(ExchangeRateCell.self, forCellReuseIdentifier: ExchangeRateCell.idenfier)
     }
     
     // ViewModel간의 데이터 바인딩
-    private func bindViewModel(){
+    private func bindViewModel() {
         
         // MARK: View Event
         
@@ -58,6 +66,7 @@ final class MainViewController: UIViewController {
             .bind(with: self) { owner, response in
                 guard let id = response.id else { return }
                 let vc = CalculatorViewController(id: id)
+                owner.navigationItem.backBarButtonItem = UIBarButtonItem(title: "환율 정보", style: .plain, target: nil, action: nil)
                 owner.navigationController?.pushViewController(vc, animated: true)
             }
             .disposed(by: disposeBag)
