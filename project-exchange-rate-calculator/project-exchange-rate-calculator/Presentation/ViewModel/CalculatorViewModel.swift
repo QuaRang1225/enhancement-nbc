@@ -21,33 +21,50 @@ final class CalculatorViewModel: ViewModelProtocol {
     
     // 주입 받을 이벤트 타입
     enum Action{
-        case calculate(input: Double, item: ExchangeRatesResponse)
+        case fecthExchageRate(id: UUID)
+        case calculate(input: Double)
     }
     
     // View에 전달될 상태 데이터
     struct State{
         fileprivate(set) var actionSubject = PublishSubject<Action>()
         
+        fileprivate(set) var exchageRate = BehaviorSubject<ExchangeRate?>(value: nil)
         fileprivate(set) var calculatedRate = PublishSubject<String>()
     }
     
     // 액션에 따라 구독할 이벤트 분기처리
     init(){
         state.actionSubject
-            .subscribe(with: self){ owner, type in
+            .subscribe(with: self) { owner, type in
                 switch type{
-                case let .calculate(input, item):
-                    owner.calculateRate(input: input, item: item)
+                case let .fecthExchageRate(id):
+                    owner.fetchPersistenceEntity(id: id)
+                case let .calculate(input):
+                    owner.calculateRate(input: input)
                 }
             }
             .disposed(by: disposeBag)
     }
     
+    // Persistence 저장소에서 환율정보 fetch
+    private func fetchPersistenceEntity(id: UUID) {
+        PersistenceManager.shared.fetch(type: ExchangeRate.self, predicate: NSPredicate(format: "id == %@", id as CVarArg))
+            .subscribe(with: self) { owner, response in
+                guard let response else { return print("데이터를 찾을 수 없습니다.") }
+                owner.state.exchageRate.onNext(response)
+            }
+            .disposed(by: disposeBag)
+    }
+    
+    
     // 계산 결과 텍스트 생성
-    private func calculateRate(input: Double, item: ExchangeRatesResponse) {
+    private func calculateRate(input: Double) {
+        guard let item = try? state.exchageRate.value() else { return }
+        
         let inputString = String(format: "$%.2f", input)
-        let resultString = String(format: "%.2f", input * item.value)
-        let result = inputString + " → " + resultString + " " + item.key
+        let resultString = String(format: "%.2f", input * item.rate)
+        let result = inputString + " → " + resultString + " " + (item.currency ?? "")
         state.calculatedRate.onNext(result)
     }
 }

@@ -13,9 +13,6 @@ import Then
 // MARK: 환율 계산기 화면
 final class CalculatorView: UIView {
     
-    //아이템 정보
-    public var item:ExchangeRatesResponse? = nil
-    
     // 타이틀 라벨
     private let titleLabel = UILabel().then {
         $0.font = .systemFont(ofSize: 36, weight: .bold)
@@ -76,10 +73,9 @@ final class CalculatorView: UIView {
     }
     
     // 데이터 설정
-    public func configure(item:ExchangeRatesResponse) {
-        self.item = item
-        currencyLabel.text = item.key
-        countryLabel.text = String.iso_code[item.key]
+    public func configure(response: ExchangeRate) {
+        currencyLabel.text = response.currency
+        countryLabel.text = response.country
     }
     
     // 컴포넌트 추가

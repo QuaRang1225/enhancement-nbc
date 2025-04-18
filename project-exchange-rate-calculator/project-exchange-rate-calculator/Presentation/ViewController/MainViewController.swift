@@ -54,10 +54,10 @@ final class MainViewController: UIViewController {
         
         // 셀 터치 시 이벤트 방출
         mainView.rateTableView.rx
-            .modelSelected(ExchangeRatesResponse.self)
-            .subscribe(with: self) { owner, item in
-                let vc = CalculatorViewController()
-                vc.calculatorView.configure(item: item)
+            .modelSelected(ExchangeRate.self)
+            .subscribe(with: self) { owner, response in
+                guard let id = response.id else { return }
+                let vc = CalculatorViewController(id: id)
                 owner.navigationController?.pushViewController(vc, animated: true)
             }
             .disposed(by: disposeBag)
@@ -87,6 +87,6 @@ final class MainViewController: UIViewController {
 
 extension MainViewController: ExchangeRateCellDelegate {
     func touchBookmark(id: UUID) {
-        
+        print("asdasd")
     }
 }

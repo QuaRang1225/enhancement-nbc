@@ -40,7 +40,7 @@ final class MainViewModel: ViewModelProtocol {
             .subscribe(onNext: { owner, action in
                 switch action {
                 case .fetchInfo:
-                    owner.fetchPersistenceExchangeRates()
+                    owner.fetchPersistenceEntitys()
                 case .searchText(let text):
                     owner.filteringExchangeRates(text: text)
                 }
@@ -49,7 +49,7 @@ final class MainViewModel: ViewModelProtocol {
     }
     
     // CoreData DB 데이터 조회
-    private func fetchPersistenceExchangeRates(){
+    private func fetchPersistenceEntitys(){
         PersistenceManager.shared.fetchAll(type: ExchangeRate.self)
             .subscribe(with: self) { owner, list in
                 if list.isEmpty{
@@ -59,7 +59,7 @@ final class MainViewModel: ViewModelProtocol {
                     owner.state.filteredExchangeRates.onNext(list)
                 }
             }
-            .disposed(by: self.disposeBag)
+            .disposed(by: disposeBag)
     }
     
     // 네트워크 API fetch시 실행
