@@ -45,7 +45,7 @@ final class MainViewController: UIViewController {
             .distinctUntilChanged()
             .debounce(.milliseconds(300), scheduler: MainScheduler.instance)
             .subscribe(with: self, onNext: { owner, text in
-                owner.vm.action.onNext(.searchText(text))
+                owner.vm.action.onNext(.searchText(text: text))
             }, onError: { owner, error in
                 guard let error = error as? DataError else { return }
                 owner.showAlert(type: error)
@@ -55,7 +55,7 @@ final class MainViewController: UIViewController {
         // 셀 터치 시 이벤트 방출
         mainView.rateTableView.rx
             .modelSelected(ExchangeRate.self)
-            .subscribe(with: self) { owner, response in
+            .bind(with: self) { owner, response in
                 guard let id = response.id else { return }
                 let vc = CalculatorViewController(id: id)
                 owner.navigationController?.pushViewController(vc, animated: true)
@@ -72,6 +72,10 @@ final class MainViewController: UIViewController {
         // fetchData 리스트로 테이블뷰 cell 컴포넌트 데이터 설정
         vm.state.filteredExchangeRates
             .observe(on: MainScheduler.instance)
+            .map {
+                let alphabetSorted = $0.sorted { $0.currency ?? "" < $1.currency ?? "" }
+                return alphabetSorted.sorted { $0.isBookmark && !$1.isBookmark }
+            }
             .do { [weak self] list in
                 self?.mainView.emptyLabel.isHidden = !list.isEmpty
             }
@@ -79,14 +83,17 @@ final class MainViewController: UIViewController {
                 cellIdentifier: ExchangeRateCell.idenfier,
                 cellType: ExchangeRateCell.self)
             ) { _, response, cell in
+                let image = UIImage(systemName: response.isBookmark ? "star.fill" : "star")
+                cell.bookmarkButton.setImage(image, for: .normal)
                 cell.configure(response: response)
+                cell.delegate = self
             }
             .disposed(by: disposeBag)
     }
 }
 
 extension MainViewController: ExchangeRateCellDelegate {
-    func touchBookmark(id: UUID) {
-        print("asdasd")
+    func touchBookmark(id: UUID, bookmark: Bool) {
+        vm.action.onNext(.bookmark(id: id, isBookmark: bookmark))
     }
 }

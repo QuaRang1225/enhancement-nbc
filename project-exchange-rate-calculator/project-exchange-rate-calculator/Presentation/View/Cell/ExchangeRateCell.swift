@@ -24,6 +24,10 @@ final class ExchangeRateCell: UITableViewCell {
     //delegate
     weak var delegate:ExchangeRateCellDelegate?
     
+    private var id: UUID?
+    
+    private var isBookmarked = BehaviorRelay<Bool>(value: false)
+    
     // 국가 코드 라벨
     private let currencyLabel = UILabel().then {
         $0.font = .systemFont(ofSize: 16, weight: .medium)
@@ -44,6 +48,7 @@ final class ExchangeRateCell: UITableViewCell {
     // 즐겨찾기 라벨
     public let bookmarkButton = UIButton().then {
         $0.setImage(UIImage(systemName: "star"), for: .normal)
+        $0.isExclusiveTouch = true
         $0.tintColor = .systemYellow
     }
     
@@ -55,9 +60,10 @@ final class ExchangeRateCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        selectionStyle = .none
         configureSubView()
         configureLayout()
-        bind()
+        
     }
     
     required init?(coder: NSCoder) {
@@ -74,12 +80,16 @@ final class ExchangeRateCell: UITableViewCell {
         currencyLabel.text = response.currency
         rateLabel.text = String(format: "%.4f", response.rate)
         countryLabel.text = response.country
+        id = response.id
+        
+        isBookmarked.accept(response.isBookmark)
+        bind()
     }
     
     // sub view 추가
     private func configureSubView(){
         [rateLabel, labelStackView, bookmarkButton]
-            .forEach{ addSubview($0) }
+            .forEach { contentView.addSubview($0) }
     }
     
     // 오토 레이아웃
@@ -109,8 +119,10 @@ final class ExchangeRateCell: UITableViewCell {
     private func bind() {
         bookmarkButton.rx.tap
             .observe(on: MainScheduler.instance)
-            .subscribe(with: self){ owner, _ in
-                owner.delegate?.touchBookmark(id: UUID())
+            .withLatestFrom(isBookmarked)
+            .bind(with: self){ owner, bookmark in
+                guard let id = owner.id else { return }
+                owner.delegate?.touchBookmark(id: id, bookmark: bookmark)
             }
             .disposed(by: disposeBag)
     }

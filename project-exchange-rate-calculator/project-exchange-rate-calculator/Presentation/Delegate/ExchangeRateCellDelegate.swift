@@ -7,6 +7,7 @@
 
 import Foundation
 
+// MARK: Cell 데이터 ViewController로 이전
 protocol ExchangeRateCellDelegate: AnyObject {
-    func touchBookmark(id: UUID)
+    func touchBookmark(id: UUID, bookmark: Bool)
 }

@@ -50,7 +50,6 @@ final class CalculatorViewController: UIViewController {
             .observe(on: MainScheduler.instance)
             .withLatestFrom(calculatorView.amountTextField.rx.text.orEmpty)
             .subscribe(with: self) { owner, text in
-                
                 guard !text.isEmpty else {                                  //값이 비었을 경우
                     return owner.showAlert(type: TextFieldCase.isEmpty)
                 }
