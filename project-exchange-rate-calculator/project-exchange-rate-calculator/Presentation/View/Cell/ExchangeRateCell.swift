@@ -63,15 +63,17 @@ final class ExchangeRateCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
     override func prepareForReuse() {
         super.prepareForReuse()
         disposeBag = DisposeBag()
     }
+    
     // cell 컴포넌트 데이터 업데이트
-    public func configure(response: ExchangeRatesResponse){
-        currencyLabel.text = response.key
-        rateLabel.text = String(format: "%.4f", response.value)
-        countryLabel.text = String.iso_code[response.key]
+    public func configure(response: ExchangeRate){
+        currencyLabel.text = response.currency
+        rateLabel.text = String(format: "%.4f", response.rate)
+        countryLabel.text = response.country
     }
     
     // sub view 추가
