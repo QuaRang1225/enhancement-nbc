@@ -48,19 +48,15 @@ final class PersistenceManager {
     }
     
     // 모든 객체 저장
-    func saveAll<T: NSManagedObject>(type: T.Type, values: Entitys) async throws -> [T] {
-        var result: [T] = []
-
+    func saveAll<T: NSManagedObject>(type: T.Type, values: Entitys) async throws {
         for value in values {
             guard let entity = NSEntityDescription.entity(forEntityName: "\(T.self)", in: context) else { continue }
             let object = T(entity: entity, insertInto: context)
             value.forEach { key, val in
                 object.setValue(val, forKey: key)
             }
-            result.append(object)
         }
         try await saveContext(context, "모든 객체 저장")
-        return result
     }
     
     // fetchAll을 Single로 반환하기
@@ -74,38 +70,45 @@ final class PersistenceManager {
                 let result = try self.context.fetch(request)
                 single(.success(result))
             } catch {
-                single(.failure(error))
+                single(.failure(DataError.requestFailed))
             }
             return Disposables.create()
         }
     }
 
     // fetch를 Single로 반환하기
-    func fetch<T: NSManagedObject>(type: T.Type, predicate: NSPredicate) -> Single<T?> {
+    func fetch<T: NSManagedObject>(type: T.Type, id: UUID) -> Single<T?> {
         return Single.create { [weak self] single in
             
             guard let self else { return Disposables.create() }
             let request = NSFetchRequest<T>(entityName: "\(T.self)")
-            request.predicate = predicate
+            request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
             
             do {
                 let result = try self.context.fetch(request).first
                 single(.success(result))
             } catch {
-                single(.failure(error))
+                single(.failure(DataError.requestFailed))
             }
             return Disposables.create()
         }
     }
     
     // 객체 업데이트
-    func update<T: NSManagedObject>(type: T.Type, predicate: NSPredicate, updates: Entity) async throws {
-        let context = persistentContainer.newBackgroundContext()
-        try await context.perform {
-            let request = NSFetchRequest<T>(entityName: "\(T.self)")
-            request.predicate = predicate
-            if let object = try context.fetch(request).first {
-                updates.forEach { object.setValue($1, forKey: $0) }
+    func update<T: NSManagedObject>(type: T.Type, entity: Entity) async throws{
+        guard let id = entity["id"] as? UUID else { return }
+        
+        let request = NSFetchRequest<T>(entityName: "\(T.self)")
+        request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+        request.fetchLimit = 1
+
+        guard let object = try context.fetch(request).first else { return }
+        
+        entity.forEach { key, value in
+            guard key != "id" else { return }
+            let oldValue = object.value(forKey: key)
+            if !(oldValue as AnyObject).isEqual(value) {
+                object.setValue(value, forKey: key)
             }
         }
         try await saveContext(context, "업데이트")

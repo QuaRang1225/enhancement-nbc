@@ -49,7 +49,7 @@ final class CalculatorViewModel: ViewModelProtocol {
     
     // Persistence 저장소에서 환율정보 fetch
     private func fetchPersistenceEntity(id: UUID) {
-        PersistenceManager.shared.fetch(type: ExchangeRate.self, predicate: NSPredicate(format: "id == %@", id as CVarArg))
+        PersistenceManager.shared.fetch(type: ExchangeRate.self, id: id)
             .subscribe(with: self) { owner, response in
                 guard let response else { return print("데이터를 찾을 수 없습니다.") }
                 owner.state.exchageRate.onNext(response)
