@@ -9,6 +9,10 @@ import Foundation
 import CoreData
 import RxSwift
 
+// 타입명 재정의
+typealias Entitys = [[String: Any]]
+typealias Entity = [String: Any]
+
 // MARK: NSPersistentContainer 설정과 viewContext, backgroundContext 제공
 final class PersistenceManager {
     
@@ -30,63 +34,80 @@ final class PersistenceManager {
         persistentContainer.viewContext
     }
     
-    //특정 행위가 완수되면 해당 context 저장
-    private func saveContext(_ message: String, completion:(() throws -> Void)? = nil) {
+    // context를 받아 저장하는 비동기 함수
+    private func saveContext(_ context: NSManagedObjectContext, _ message: String) async throws {
         guard context.hasChanges else { return }
         do {
-            try completion?()
-            try context.save()
+            try await context.perform {
+                try context.save()
+            }
         } catch {
             print("\(message) 실패: \(error.localizedDescription)")
+            throw error
         }
     }
     
-    // 모든 정보 불러오기
-    func fetchAll<T: NSManagedObject>(type: T.Type) -> Single<[T]>{
-        
-        let request = NSFetchRequest<T>(entityName: "\(T.self)")
-        
-        return Single.create { single in
-            do{
+    // 모든 객체 저장
+    func saveAll<T: NSManagedObject>(type: T.Type, values: Entitys) async throws -> [T] {
+        var result: [T] = []
+
+        for value in values {
+            guard let entity = NSEntityDescription.entity(forEntityName: "\(T.self)", in: context) else { continue }
+            let object = T(entity: entity, insertInto: context)
+            value.forEach { key, val in
+                object.setValue(val, forKey: key)
+            }
+            result.append(object)
+        }
+        try await saveContext(context, "모든 객체 저장")
+        return result
+    }
+    
+    // fetchAll을 Single로 반환하기
+    func fetchAll<T: NSManagedObject>(type: T.Type) -> Single<[T]> {
+        return Single.create { [weak self] single in
+            
+            guard let self else { return Disposables.create() }
+            let request = NSFetchRequest<T>(entityName: "\(T.self)")
+            
+            do {
                 let result = try self.context.fetch(request)
                 single(.success(result))
-                return Disposables.create()
-            }catch{
-                print("아이템 리스트 가져오기 실패: \(error.localizedDescription)")
+            } catch {
                 single(.failure(error))
-                return Disposables.create()
             }
+            return Disposables.create()
         }
     }
-    
-    // 모든 정보 불러오기
-    func fetch<T: NSManagedObject>(type: T.Type, predicate: NSPredicate) -> Single<T>{
-        
-        let request = NSFetchRequest<T>(entityName: "\(T.self)")
-        request.predicate = predicate
-        
+
+    // fetch를 Single로 반환하기
+    func fetch<T: NSManagedObject>(type: T.Type, predicate: NSPredicate) -> Single<T?> {
         return Single.create { [weak self] single in
-            do{
-                guard let object = try self?.context.fetch(request).first else { return Disposables.create() }
-                single(.success(object))
-                return Disposables.create()
-            }catch{
-                print("아이템 가져오기 실패: \(error.localizedDescription)")
+            
+            guard let self else { return Disposables.create() }
+            let request = NSFetchRequest<T>(entityName: "\(T.self)")
+            request.predicate = predicate
+            
+            do {
+                let result = try self.context.fetch(request).first
+                single(.success(result))
+            } catch {
                 single(.failure(error))
-                return Disposables.create()
             }
+            return Disposables.create()
         }
     }
     
     // 객체 업데이트
-    func update<T: NSManagedObject>(type: T.Type, predicate: NSPredicate, updates: [String: Any]) {
-        
-        let request = NSFetchRequest<T>(entityName: "\(T.self)")
-        request.predicate = predicate
-
-        saveContext("업데이트"){
-            guard let object = try self.context.fetch(request).first else { return }
-            updates.forEach { object.setValue($1, forKey: $0) }
+    func update<T: NSManagedObject>(type: T.Type, predicate: NSPredicate, updates: Entity) async throws {
+        let context = persistentContainer.newBackgroundContext()
+        try await context.perform {
+            let request = NSFetchRequest<T>(entityName: "\(T.self)")
+            request.predicate = predicate
+            if let object = try context.fetch(request).first {
+                updates.forEach { object.setValue($1, forKey: $0) }
+            }
         }
+        try await saveContext(context, "업데이트")
     }
 }
