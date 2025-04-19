@@ -24,7 +24,7 @@ final class ExchangeRateCell: UITableViewCell {
     //delegate
     weak var delegate:ExchangeRateCellDelegate?
     
-    private var exchangeRate: ExchangeRate?
+    private var exchangeRate: ExchangeRateModel?
     
     private var isBookmarked = BehaviorRelay<Bool>(value: false)
     
@@ -75,7 +75,7 @@ final class ExchangeRateCell: UITableViewCell {
     }
     
     // cell 컴포넌트 데이터 업데이트
-    public func configure(response: ExchangeRate){
+    public func configure(response: ExchangeRateModel){
         self.exchangeRate = response
         
         let image = UIImage(systemName: response.isBookmark ? "star.fill" : "star")
@@ -122,9 +122,9 @@ final class ExchangeRateCell: UITableViewCell {
             .observe(on: MainScheduler.instance)
             .withLatestFrom(isBookmarked)
             .bind(with: self){ owner, bookmark in
-                guard let entity = owner.exchangeRate else { return }
-                entity.isBookmark = !bookmark
-                owner.delegate?.touchBookmark(entity: entity)
+                guard var model = owner.exchangeRate else { return }
+                model.isBookmark = !bookmark
+                owner.delegate?.touchBookmark(model: model)
             }
             .disposed(by: disposeBag)
     }

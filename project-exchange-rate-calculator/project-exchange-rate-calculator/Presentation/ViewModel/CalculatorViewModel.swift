@@ -29,7 +29,7 @@ final class CalculatorViewModel: ViewModelProtocol {
     struct State{
         fileprivate(set) var actionSubject = PublishSubject<Action>()
         
-        fileprivate(set) var exchageRate = BehaviorSubject<ExchangeRate?>(value: nil)
+        fileprivate(set) var exchageRate = BehaviorSubject<ExchangeRateModel?>(value: nil)
         fileprivate(set) var calculatedRate = PublishSubject<String>()
     }
     
@@ -49,7 +49,7 @@ final class CalculatorViewModel: ViewModelProtocol {
     
     // Persistence 저장소에서 환율정보 fetch
     private func fetchPersistenceEntity(id: UUID) {
-        PersistenceManager.shared.fetch(type: ExchangeRate.self, id: id)
+        PersistenceManager.shared.fetch(id: id)
             .subscribe(with: self) { owner, response in
                 guard let response else { return print("데이터를 찾을 수 없습니다.") }
                 owner.state.exchageRate.onNext(response)
@@ -64,7 +64,7 @@ final class CalculatorViewModel: ViewModelProtocol {
         
         let inputString = String(format: "$%.2f", input)
         let resultString = String(format: "%.2f", input * item.rate)
-        let result = inputString + " → " + resultString + " " + (item.currency ?? "")
+        let result = inputString + " → " + resultString + " " + item.currency
         state.calculatedRate.onNext(result)
     }
 }

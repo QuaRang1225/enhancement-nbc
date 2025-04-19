@@ -23,15 +23,15 @@ final class MainViewModel: ViewModelProtocol {
     enum Action{
         case fetchInfo
         case searchText(text: String)
-        case bookmark(entity: ExchangeRate)
+        case bookmark(model: ExchangeRateModel)
     }
     
     // View에 전달될 상태 데이터
     struct State{
         fileprivate(set) var actionSubject = PublishSubject<Action>()
-        fileprivate(set) var filteredExchangeRates = BehaviorSubject<[ExchangeRate]>(value: [])
+        fileprivate(set) var filteredExchangeRates = BehaviorSubject<[ExchangeRateModel]>(value: [])
         
-        fileprivate(set) var lastExchangeRates = [ExchangeRate]()
+        fileprivate(set) var lastExchangeRates = [ExchangeRateModel]()
     }
     
     // 액션에 따라 구독할 이벤트 분기처리
@@ -44,8 +44,8 @@ final class MainViewModel: ViewModelProtocol {
                     owner.fetchPersistenceEntitys()
                 case let .searchText(text):
                     owner.filteringExchangeRates(text: text)
-                case let .bookmark(entity):
-                    owner.bookmark(entity: entity)
+                case let .bookmark(model):
+                    owner.bookmark(model: model)
                 }
             })
             .disposed(by: disposeBag)
@@ -53,7 +53,7 @@ final class MainViewModel: ViewModelProtocol {
     
     // CoreData DB 데이터 조회
     private func fetchPersistenceEntitys(){
-        PersistenceManager.shared.fetchAll(type: [ExchangeRate].self)
+        PersistenceManager.shared.fetchAll()
             .subscribe(with: self, onSuccess: { owner, list in
                 if list.isEmpty{
                     owner.fetchExchangeRates()
@@ -90,16 +90,15 @@ final class MainViewModel: ViewModelProtocol {
     private func filteringExchangeRates(text: String){
         let responseList = text.isEmpty ?
         state.lastExchangeRates : state.lastExchangeRates.filter {
-            guard let currency = $0.currency, let country = $0.country else { return false }
-            return currency.contains(text.uppercased()) || country.contains(text)
+            return $0.currency.contains(text.uppercased()) || $0.country.contains(text)
         }
         state.filteredExchangeRates.onNext(responseList)
     }
     
     // 즐겨 찾기 실행
-    private func bookmark(entity: ExchangeRate) {
+    private func bookmark(model: ExchangeRateModel) {
         Task {
-            try await PersistenceManager.shared.update(entity: entity)
+            try await PersistenceManager.shared.update(model: model)
             self.fetchPersistenceEntitys()
         }
     }

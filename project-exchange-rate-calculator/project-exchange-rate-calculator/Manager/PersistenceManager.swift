@@ -45,20 +45,20 @@ final class PersistenceManager {
     }
     
     // 모든 객체 저장
-    func saveAll<T: NSManagedObject>(entitys: [T]) async throws {
-        entitys.forEach { context.insert($0) }
+    func saveAll(entitys: [ExchangeRateModel]) async throws {
+        toEntitys(models: entitys).forEach { context.insert($0) }
         try await saveContext(context, "모든 객체 저장")
     }
     
     // fetchAll을 Single로 반환하기
-    func fetchAll<T: NSManagedObject>(type: [T].Type) -> Single<[T]> {
+    func fetchAll() -> Single<[ExchangeRateModel]> {
         return Single.create { [weak self] single in
             guard let self else { return Disposables.create() }
-            let request = NSFetchRequest<T>(entityName: "\(T.self)")
+            let request = NSFetchRequest<ExchangeRate>(entityName: "\(ExchangeRate.self)")
             
             do {
                 let result = try self.context.fetch(request)
-                single(.success(result))
+                single(.success(toModels(entitys: result)))
             } catch {
                 single(.failure(DataError.requestFailed))
             }
@@ -67,16 +67,16 @@ final class PersistenceManager {
     }
 
     // fetch를 Single로 반환하기
-    func fetch<T: NSManagedObject>(type: T.Type, id: UUID) -> Single<T?> {
+    func fetch(id: UUID) -> Single<ExchangeRateModel?> {
         return Single.create { [weak self] single in
             
             guard let self else { return Disposables.create() }
-            let request = NSFetchRequest<T>(entityName: "\(T.self)")
+            let request = NSFetchRequest<ExchangeRate>(entityName: "\(ExchangeRate.self)")
             request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
             
             do {
                 let result = try self.context.fetch(request).first
-                single(.success(result))
+                single(.success(toModel(entity: result)))
             } catch {
                 single(.failure(DataError.requestFailed))
             }
@@ -85,23 +85,72 @@ final class PersistenceManager {
     }
     
     // 객체 업데이트
-    func update<T: NSManagedObject>(entity: T) async throws {
-        guard let id = entity.value(forKey: "id") as? UUID else { return }
+    func update(model: ExchangeRateModel) async throws {
         
-        let request = NSFetchRequest<T>(entityName: "\(T.self)")
-        request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+        let request = NSFetchRequest<ExchangeRate>(entityName: "\(ExchangeRate.self)")
+        request.predicate = NSPredicate(format: "id == %@", model.id as CVarArg)
         request.fetchLimit = 1
         
         guard let object = try context.fetch(request).first else { return }
         
-        // 동적으로 속성을 업데이트
-        let mirror = Mirror(reflecting: entity)
-        for child in mirror.children {
-            if let propertyName = child.label, propertyName != "id" {
-                object.setValue(child.value, forKey: propertyName)
-            }
-        }
+        object.currency = model.currency
+        object.country = model.country
+        object.rate = model.rate
+        object.isBookmark = model.isBookmark
+        object.rateOfChange = model.rateOfChange
         
         try await saveContext(context, "업데이트")
+    }
+    
+    // [Entity] -> [Model]
+    private func toEntitys(models: [ExchangeRateModel]) -> [ExchangeRate] {
+        models.map { model in
+            let entity = ExchangeRate(context: context)
+            entity.currency = model.currency
+            entity.country = model.country
+            entity.rate = model.rate
+            entity.isBookmark = model.isBookmark
+            entity.rateOfChange = model.rateOfChange
+            entity.id = model.id
+            return entity
+        }
+    }
+    
+    // [Model] -> [Entity]
+    private func toModels(entitys: [ExchangeRate]) -> [ExchangeRateModel] {
+        entitys.map { entity in
+            let entity = ExchangeRateModel(
+                id: entity.id!,
+                currency: entity.currency ?? "",
+                country: entity.country ?? "",
+                rate: entity.rate,
+                isBookmark: entity.isBookmark,
+                rateOfChange: entity.rateOfChange)
+            return entity
+        }
+    }
+    
+    // Entity -> Model
+    private func toModel(entity: ExchangeRate?) -> ExchangeRateModel? {
+        guard let entity else { return nil }
+        return ExchangeRateModel(
+            id: entity.id!,
+            currency: entity.currency ?? "",
+            country: entity.country ?? "",
+            rate: entity.rate,
+            isBookmark: entity.isBookmark,
+            rateOfChange: entity.rateOfChange)
+    }
+    
+    // Model -> Entity
+    private func toEntity(model: ExchangeRateModel) -> ExchangeRate {
+        let entity = ExchangeRate(context: context)
+        entity.currency = model.currency
+        entity.country = model.country
+        entity.rate = model.rate
+        entity.isBookmark = model.isBookmark
+        entity.rateOfChange = model.rateOfChange
+        entity.id = model.id
+        return entity
     }
 }

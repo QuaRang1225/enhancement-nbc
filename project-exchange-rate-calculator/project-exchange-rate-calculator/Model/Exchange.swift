@@ -30,4 +30,15 @@ struct Exchange: Codable {
         case baseCode = "base_code"
         case rates
     }
+    
+    func toEntity() -> [ExchangeRateModel] {
+        return rates.map { key, value in
+            ExchangeRateModel(id: UUID(),
+                              currency: key,
+                              country: String.iso_code[key] ?? "",
+                              rate: value,
+                              isBookmark: false,
+                              rateOfChange: 0)
+        }
+    }
 }

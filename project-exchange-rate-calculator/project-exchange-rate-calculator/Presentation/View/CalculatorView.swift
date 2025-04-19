@@ -73,7 +73,7 @@ final class CalculatorView: UIView {
     }
     
     // 데이터 설정
-    public func configure(response: ExchangeRate) {
+    public func configure(response: ExchangeRateModel) {
         currencyLabel.text = response.currency
         countryLabel.text = response.country
     }

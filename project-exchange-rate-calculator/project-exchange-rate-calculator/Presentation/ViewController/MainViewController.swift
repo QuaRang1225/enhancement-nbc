@@ -82,7 +82,7 @@ final class MainViewController: UIViewController {
         vm.state.filteredExchangeRates
             .observe(on: MainScheduler.instance)
             .map {
-                let alphabetSorted = $0.sorted { $0.currency ?? "" < $1.currency ?? "" }
+                let alphabetSorted = $0.sorted { $0.currency < $1.currency }
                 return alphabetSorted.sorted { $0.isBookmark && !$1.isBookmark }
             }
             .do { [weak self] list in
@@ -100,7 +100,7 @@ final class MainViewController: UIViewController {
 }
 
 extension MainViewController: ExchangeRateCellDelegate {
-    func touchBookmark(entity: ExchangeRate) {
-        vm.action.onNext(.bookmark(entity: entity))
+    func touchBookmark(model: ExchangeRateModel) {
+        vm.action.onNext(.bookmark(model: model))
     }
 }
