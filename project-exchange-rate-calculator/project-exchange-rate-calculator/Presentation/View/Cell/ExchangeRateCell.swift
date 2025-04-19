@@ -24,30 +24,29 @@ final class ExchangeRateCell: UITableViewCell {
     //delegate
     weak var delegate:ExchangeRateCellDelegate?
     
-    private var id: UUID?
+    private var exchangeRate: ExchangeRate?
     
     private var isBookmarked = BehaviorRelay<Bool>(value: false)
     
     // 국가 코드 라벨
-    private let currencyLabel = UILabel().then {
+    private lazy var currencyLabel = UILabel().then {
         $0.font = .systemFont(ofSize: 16, weight: .medium)
     }
     
     // 환율 라벨
-    private let rateLabel = UILabel().then {
+    private lazy var rateLabel = UILabel().then {
         $0.font = .systemFont(ofSize: 16)
         $0.textAlignment = .right
     }
     
     // 국가 라벨
-    private let countryLabel = UILabel().then {
+    private lazy var countryLabel = UILabel().then {
         $0.textColor = .gray
         $0.font = .systemFont(ofSize: 14)
     }
     
     // 즐겨찾기 라벨
-    public let bookmarkButton = UIButton().then {
-        $0.setImage(UIImage(systemName: "star"), for: .normal)
+    public lazy var bookmarkButton = UIButton().then {
         $0.isExclusiveTouch = true
         $0.tintColor = .systemYellow
     }
@@ -77,11 +76,13 @@ final class ExchangeRateCell: UITableViewCell {
     
     // cell 컴포넌트 데이터 업데이트
     public func configure(response: ExchangeRate){
-        currencyLabel.text = response.currency
-        rateLabel.text = String(format: "%.4f", response.rate)
-        countryLabel.text = response.country
-        id = response.id
+        self.exchangeRate = response
         
+        let image = UIImage(systemName: response.isBookmark ? "star.fill" : "star")
+        bookmarkButton.setImage(image, for: .normal)
+        countryLabel.text = exchangeRate?.country
+        rateLabel.text = String(format: "%.4f", response.rate)
+        currencyLabel.text = response.currency
         isBookmarked.accept(response.isBookmark)
         bind()
     }
@@ -121,8 +122,9 @@ final class ExchangeRateCell: UITableViewCell {
             .observe(on: MainScheduler.instance)
             .withLatestFrom(isBookmarked)
             .bind(with: self){ owner, bookmark in
-                guard let id = owner.id else { return }
-                owner.delegate?.touchBookmark(id: id, bookmark: bookmark)
+                guard let entity = owner.exchangeRate else { return }
+                entity.isBookmark = !bookmark
+                owner.delegate?.touchBookmark(entity: entity)
             }
             .disposed(by: disposeBag)
     }

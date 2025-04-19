@@ -7,8 +7,19 @@
 
 import Foundation
 
-//MARK: 국가코드와 국가명 매칭
+//MARK: String extension
 extension String{
+    
+    // String to Date
+    func stringToDate() -> Date {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        formatter.dateFormat = "E, dd MMM yyyy HH:mm:ss z"
+        return formatter.date(from: self)!
+    }
+    
+    // 국가코드와 국가명 매칭
     static let iso_code: [String:String] = [
     "USD": "미국",
     "AED": "아랍에미리트",

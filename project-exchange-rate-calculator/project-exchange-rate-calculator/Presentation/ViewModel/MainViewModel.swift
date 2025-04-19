@@ -23,7 +23,7 @@ final class MainViewModel: ViewModelProtocol {
     enum Action{
         case fetchInfo
         case searchText(text: String)
-        case bookmark(id: UUID, isBookmark: Bool)
+        case bookmark(entity: ExchangeRate)
     }
     
     // View에 전달될 상태 데이터
@@ -31,7 +31,7 @@ final class MainViewModel: ViewModelProtocol {
         fileprivate(set) var actionSubject = PublishSubject<Action>()
         fileprivate(set) var filteredExchangeRates = BehaviorSubject<[ExchangeRate]>(value: [])
         
-        fileprivate(set) var exchangeRates = [ExchangeRate]()
+        fileprivate(set) var lastExchangeRates = [ExchangeRate]()
     }
     
     // 액션에 따라 구독할 이벤트 분기처리
@@ -44,8 +44,8 @@ final class MainViewModel: ViewModelProtocol {
                     owner.fetchPersistenceEntitys()
                 case let .searchText(text):
                     owner.filteringExchangeRates(text: text)
-                case let .bookmark(id, isBookmark):
-                    owner.bookmark(id: id, isBookmark: isBookmark)
+                case let .bookmark(entity):
+                    owner.bookmark(entity: entity)
                 }
             })
             .disposed(by: disposeBag)
@@ -53,12 +53,12 @@ final class MainViewModel: ViewModelProtocol {
     
     // CoreData DB 데이터 조회
     private func fetchPersistenceEntitys(){
-        PersistenceManager.shared.fetchAll(type: ExchangeRate.self)
+        PersistenceManager.shared.fetchAll(type: [ExchangeRate].self)
             .subscribe(with: self, onSuccess: { owner, list in
                 if list.isEmpty{
                     owner.fetchExchangeRates()
                 }else{
-                    owner.state.exchangeRates = list
+                    owner.state.lastExchangeRates = list
                     owner.state.filteredExchangeRates.onNext(list)
                 }
             }, onFailure: { owner, error in
@@ -70,11 +70,12 @@ final class MainViewModel: ViewModelProtocol {
     // 네트워크 API fetch시 실행
     private func fetchExchangeRates() {
         NetworkAPIManager.fetchRates()
-            .subscribe(with: self, onSuccess: { owner, response in
+            .subscribe(with: self, onSuccess: { owner, entitys in
                 Task{
                     do {
-                        try await PersistenceManager.shared.saveAll(type: ExchangeRate.self, values: response)
-                        owner.fetchPersistenceEntitys()
+                        try await PersistenceManager.shared.saveAll(entitys: entitys)
+                        owner.state.lastExchangeRates = entitys
+                        owner.state.filteredExchangeRates.onNext(entitys)
                     } catch {
                         owner.state.filteredExchangeRates.onError(error)
                     }
@@ -88,8 +89,7 @@ final class MainViewModel: ViewModelProtocol {
     // 검색 텍스트 변경 시 실행
     private func filteringExchangeRates(text: String){
         let responseList = text.isEmpty ?
-        state.exchangeRates :
-        state.exchangeRates.filter {
+        state.lastExchangeRates : state.lastExchangeRates.filter {
             guard let currency = $0.currency, let country = $0.country else { return false }
             return currency.contains(text.uppercased()) || country.contains(text)
         }
@@ -97,10 +97,9 @@ final class MainViewModel: ViewModelProtocol {
     }
     
     // 즐겨 찾기 실행
-    private func bookmark(id: UUID, isBookmark: Bool) {
+    private func bookmark(entity: ExchangeRate) {
         Task {
-            let entity: Entity = ["id": id, "isBookmark": !isBookmark]
-            try await PersistenceManager.shared.update(type: ExchangeRate.self, entity: entity)
+            try await PersistenceManager.shared.update(entity: entity)
             self.fetchPersistenceEntitys()
         }
     }

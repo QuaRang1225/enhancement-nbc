@@ -7,13 +7,14 @@
 
 import Foundation
 import RxSwift
+import CoreData
 
 //MARK: NetworkAPIManager - API CRUD
-final class NetworkAPIManager{
+final class NetworkAPIManager {
     
-    //환율 정보 fetch
-    static func fetchRates() -> Single<Entitys> {
-        return Single<Entitys>.create { single in
+    // 환율 정보 fetch
+    static func fetchRates() -> Single<[ExchangeRate]> {
+        return Single<[ExchangeRate]>.create { single in
             guard let url = URL(string: "https://open.er-api.com/v6/latest/USD") else {
                 single(.failure(DataError.requestFailed))
                 return Disposables.create()
@@ -29,7 +30,7 @@ final class NetworkAPIManager{
                     single(.failure(DataError.decodigError))
                     return
                 }
-                single(.success(transformEntitys(result.rates)))
+                single(.success(transformEntitys(result)))
             }
             
             task.resume()
@@ -38,15 +39,23 @@ final class NetworkAPIManager{
     }
     
     // 네트워크 데이터 DTO Entitys로 변환
-    private static func transformEntitys(_ responseList: ExchangeRatesResponseList) -> Entitys {
-        return responseList.map { key, value in
-            [
-                "id": UUID(),
-                "currency": key,
-                "country": String.iso_code[key] ?? "",
-                "rate": value,
-                "isBookmark": false
-            ]
+    private static func transformEntitys(_ response: Exchange) -> [ExchangeRate] {
+        let context = PersistenceManager.shared.context
+        
+        var rates = [ExchangeRate]()
+        
+        // ExchangeRate와 ExchangeRateResponse 간 관계 설정
+        for (key, value) in response.rates {
+            let rate = ExchangeRate(context: context)
+            rate.id = UUID()
+            rate.currency = key
+            rate.country = String.iso_code[key] ?? ""
+            rate.rate = value
+            rate.isBookmark = false
+            
+            rates.append(rate)
         }
+        UserDefaults.standard.set(response.timeLastUpdateUTC.stringToDate(), forKey: "lastUpdate")
+        return rates
     }
 }

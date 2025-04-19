@@ -8,9 +8,6 @@
 import Foundation
 
 //MARK: DTO
-typealias ExchangeRatesResponse = Dictionary<String, Double>.Element
-typealias ExchangeRatesResponseList = Dictionary<String, Double>
-
 struct Exchange: Codable {
     let result: String
     let provider, documentation, termsOfUse: String
@@ -20,7 +17,7 @@ struct Exchange: Codable {
     let timeNextUpdateUTC: String
     let timeEOLUnix: Int
     let baseCode: String
-    let rates: ExchangeRatesResponseList
+    let rates: Dictionary<String, Double>
 
     enum CodingKeys: String, CodingKey {
         case result, provider, documentation

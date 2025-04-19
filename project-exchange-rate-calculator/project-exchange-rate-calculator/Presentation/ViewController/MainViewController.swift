@@ -91,9 +91,7 @@ final class MainViewController: UIViewController {
             .bind(to: mainView.rateTableView.rx.items(
                 cellIdentifier: ExchangeRateCell.idenfier,
                 cellType: ExchangeRateCell.self)
-            ) { _, response, cell in
-                let image = UIImage(systemName: response.isBookmark ? "star.fill" : "star")
-                cell.bookmarkButton.setImage(image, for: .normal)
+            ) { (_, response, cell) in
                 cell.configure(response: response)
                 cell.delegate = self
             }
@@ -102,7 +100,7 @@ final class MainViewController: UIViewController {
 }
 
 extension MainViewController: ExchangeRateCellDelegate {
-    func touchBookmark(id: UUID, bookmark: Bool) {
-        vm.action.onNext(.bookmark(id: id, isBookmark: bookmark))
+    func touchBookmark(entity: ExchangeRate) {
+        vm.action.onNext(.bookmark(entity: entity))
     }
 }
