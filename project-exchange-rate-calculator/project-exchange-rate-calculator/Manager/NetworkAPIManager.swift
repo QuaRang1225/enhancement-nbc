@@ -30,6 +30,7 @@ final class NetworkAPIManager {
                     single(.failure(DataError.decodigError))
                     return
                 }
+                print("네트워크 요청 성공")
                 single(.success(result.toEntity()))
             }
             

@@ -45,6 +45,11 @@ final class ExchangeRateCell: UITableViewCell {
         $0.font = .systemFont(ofSize: 14)
     }
     
+    // 변동률 라벨
+    public lazy var rateOfChangelabel = UILabel().then {
+        $0.font = .systemFont(ofSize: 14)
+    }
+    
     // 즐겨찾기 라벨
     public lazy var bookmarkButton = UIButton().then {
         $0.isExclusiveTouch = true
@@ -83,13 +88,19 @@ final class ExchangeRateCell: UITableViewCell {
         countryLabel.text = exchangeRate?.country
         rateLabel.text = String(format: "%.4f", response.rate)
         currencyLabel.text = response.currency
+        
+        if response.rateOfChange > 0.01{
+            rateOfChangelabel.text = "🔼"
+        }else if response.rateOfChange < -0.01{
+            rateOfChangelabel.text = "🔽"
+        }
         isBookmarked.accept(response.isBookmark)
         bind()
     }
     
     // sub view 추가
     private func configureSubView(){
-        [rateLabel, labelStackView, bookmarkButton]
+        [rateLabel, labelStackView, bookmarkButton, rateOfChangelabel]
             .forEach { contentView.addSubview($0) }
     }
     
@@ -109,9 +120,16 @@ final class ExchangeRateCell: UITableViewCell {
             $0.width.equalTo(120)
         }
         
-        //즐겨 찾기 버튼
-        bookmarkButton.snp.makeConstraints {
+        // 변동률 라벨
+        rateOfChangelabel.snp.makeConstraints {
             $0.leading.equalTo(rateLabel.snp.trailing).offset(16)
+            $0.centerY.equalToSuperview()
+            $0.width.equalTo(20)
+        }
+        
+        // 즐겨 찾기 버튼
+        bookmarkButton.snp.makeConstraints {
+            $0.leading.equalTo(rateOfChangelabel.snp.trailing).offset(16)
             $0.centerY.equalToSuperview()
             $0.trailing.equalToSuperview().offset(-16)
         }

@@ -62,10 +62,9 @@ final class MainViewController: UIViewController {
         
         // 셀 터치 시 이벤트 방출
         mainView.rateTableView.rx
-            .modelSelected(ExchangeRate.self)
+            .modelSelected(ExchangeRateModel.self)
             .bind(with: self) { owner, response in
-                guard let id = response.id else { return }
-                let vc = CalculatorViewController(id: id)
+                let vc = CalculatorViewController(id: response.id)
                 owner.navigationItem.backBarButtonItem = UIBarButtonItem(title: "환율 정보", style: .plain, target: nil, action: nil)
                 owner.navigationController?.pushViewController(vc, animated: true)
             }

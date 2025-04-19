@@ -55,8 +55,11 @@ final class MainViewModel: ViewModelProtocol {
     private func fetchPersistenceEntitys(){
         PersistenceManager.shared.fetchAll()
             .subscribe(with: self, onSuccess: { owner, list in
-                if list.isEmpty{
+                let changedDate = UserDefaultManager.shared.changedDate(key: .date, newDate: Date())
+                if list.isEmpty {
                     owner.fetchExchangeRates()
+                } else if changedDate {
+                    owner.fetchExchangeRates(list: list)
                 }else{
                     owner.state.lastExchangeRates = list
                     owner.state.filteredExchangeRates.onNext(list)
@@ -68,14 +71,26 @@ final class MainViewModel: ViewModelProtocol {
     }
     
     // 네트워크 API fetch시 실행
-    private func fetchExchangeRates() {
+    private func fetchExchangeRates(list: [ExchangeRateModel] = []) {
         NetworkAPIManager.fetchRates()
             .subscribe(with: self, onSuccess: { owner, entitys in
                 Task{
                     do {
-                        try await PersistenceManager.shared.saveAll(entitys: entitys)
-                        owner.state.lastExchangeRates = entitys
-                        owner.state.filteredExchangeRates.onNext(entitys)
+                        if !list.isEmpty {
+                            let newModel = zip(entitys, list).map { new, old in
+                                var item = new
+                                item.rateOfChange = new.rate - old.rate
+                                return item
+                            }
+                            try await PersistenceManager.shared.saveAll(entitys: newModel)
+                            owner.state.lastExchangeRates = newModel
+                            owner.state.filteredExchangeRates.onNext(newModel)
+                        } else {
+                            try await PersistenceManager.shared.saveAll(entitys: entitys)
+                            owner.state.lastExchangeRates = entitys
+                            owner.state.filteredExchangeRates.onNext(entitys)
+                        }
+                        UserDefaultManager.shared.setDate(key: .date, newDate: Date())
                     } catch {
                         owner.state.filteredExchangeRates.onError(error)
                     }

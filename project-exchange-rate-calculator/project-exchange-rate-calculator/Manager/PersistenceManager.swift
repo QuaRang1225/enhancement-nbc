@@ -58,6 +58,7 @@ final class PersistenceManager {
             
             do {
                 let result = try self.context.fetch(request)
+                print("Coredata 요청 성공")
                 single(.success(toModels(entitys: result)))
             } catch {
                 single(.failure(DataError.requestFailed))
