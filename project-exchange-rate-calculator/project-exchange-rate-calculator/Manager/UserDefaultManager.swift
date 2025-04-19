@@ -26,6 +26,7 @@ final class UserDefaultManager {
         return !calendar.isDate(oldDate, inSameDayAs: newDate)
     }
     
+    // 데이터 저장
     func setDate(key: Key, newDate: Date) {
         UserDefaults.standard.set(newDate, forKey: key.rawValue)
     }
