@@ -24,7 +24,7 @@ final class MainViewController: UIViewController {
     // 초기 VC 설정
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .customBackground
         bindViewModel()
         configureTableView()
         configureNavigation()

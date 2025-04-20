@@ -15,23 +15,26 @@ final class CalculatorView: UIView {
     
     // 타이틀 라벨
     private let titleLabel = UILabel().then {
+        $0.textColor = .customTextColor
         $0.font = .systemFont(ofSize: 36, weight: .bold)
         $0.text = "환율 계산기"
     }
     
     // 국가 코드 라벨
     private let currencyLabel = UILabel().then {
+        $0.textColor = .customTextColor
         $0.font = .systemFont(ofSize: 24, weight: .bold)
     }
     
     // 국가 라벨
     private let countryLabel = UILabel().then {
         $0.font = .systemFont(ofSize: 16)
-        $0.textColor = .gray
+        $0.textColor = .customSecondaryTextColor
     }
     
     // 결과 값 라벨
     public let resultLabel = UILabel().then {
+        $0.textColor = .customTextColor
         $0.font = .systemFont(ofSize: 20, weight: .medium)
         $0.textAlignment = .center
         $0.numberOfLines = 0
@@ -49,7 +52,7 @@ final class CalculatorView: UIView {
     // 계산 버튼
     public let convertButton = UIButton().then {
         $0.setTitle("환율 계산", for: .normal)
-        $0.backgroundColor = .systemBlue
+        $0.backgroundColor = .customButtonColor
         $0.tintColor = .white
         $0.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         $0.layer.cornerRadius = 8

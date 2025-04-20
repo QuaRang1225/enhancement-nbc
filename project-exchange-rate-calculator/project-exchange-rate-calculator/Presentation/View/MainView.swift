@@ -28,7 +28,7 @@ final class MainView:UIView{
     public let emptyLabel = UILabel().then{
         $0.text = "검색 결과가 없음"
         $0.textAlignment = .center
-        $0.textColor = .gray
+        $0.textColor = .customSecondaryTextColor
         $0.isHidden = true
     }
     

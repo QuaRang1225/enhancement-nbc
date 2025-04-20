@@ -30,18 +30,20 @@ final class ExchangeRateCell: UITableViewCell {
     
     // 국가 코드 라벨
     private lazy var currencyLabel = UILabel().then {
+        $0.textColor = .customTextColor
         $0.font = .systemFont(ofSize: 16, weight: .medium)
     }
     
     // 환율 라벨
     private lazy var rateLabel = UILabel().then {
         $0.font = .systemFont(ofSize: 16)
+        $0.textColor = .customTextColor
         $0.textAlignment = .right
     }
     
     // 국가 라벨
     private lazy var countryLabel = UILabel().then {
-        $0.textColor = .gray
+        $0.textColor = .customSecondaryTextColor
         $0.font = .systemFont(ofSize: 14)
     }
     
@@ -53,7 +55,7 @@ final class ExchangeRateCell: UITableViewCell {
     // 즐겨찾기 라벨
     public lazy var bookmarkButton = UIButton().then {
         $0.isExclusiveTouch = true
-        $0.tintColor = .systemYellow
+        $0.tintColor = .customFavoriteColor
     }
     
     // 셀 컨텐츠 뷰
