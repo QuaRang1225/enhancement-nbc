@@ -16,10 +16,24 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
-        guard let windowScene = (scene as? UIWindowScene) else { return }
-        self.window = UIWindow(windowScene: windowScene)
-        self.window?.makeKeyAndVisible()
-        self.window?.rootViewController = UINavigationController(rootViewController: MainViewController())
+        let window = UIWindow(windowScene: scene as! UIWindowScene)
+
+        let navController = UINavigationController()
+        let rootVC = MainViewController()
+        navController.viewControllers = [rootVC]
+
+        window.rootViewController = navController
+        window.makeKeyAndVisible()
+        self.window = window
+        
+        if let (type, id) = PersistenceManager.shared.fetchLastScreen() {
+            if type == .calculator, let id = id {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    let calculatorVC = CalculatorViewController(id: id)
+                    navController.pushViewController(calculatorVC, animated: true)
+                }
+            }
+        }
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
@@ -34,9 +48,18 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to restart any tasks that were paused (or not yet started) when the scene was inactive.
     }
 
+    // 앱 종료 시에도 상태 저장
     func sceneWillResignActive(_ scene: UIScene) {
-        // Called when the scene will move from an active state to an inactive state.
-        // This may occur due to temporary interruptions (ex. an incoming phone call).
+        guard let rootNav = window?.rootViewController as? UINavigationController else { return }
+        Task {
+            if let topVC = rootNav.topViewController {
+                if topVC is MainViewController {
+                    try await PersistenceManager.shared.saveLastScreen(type: .list)
+                } else if let calculatorVC = topVC as? CalculatorViewController {
+                    try await PersistenceManager.shared.saveLastScreen(type: .calculator, currencyID: calculatorVC.id)
+                }
+            }
+        }
     }
 
     func sceneWillEnterForeground(_ scene: UIScene) {
@@ -49,7 +72,4 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
     }
-
-
 }
-

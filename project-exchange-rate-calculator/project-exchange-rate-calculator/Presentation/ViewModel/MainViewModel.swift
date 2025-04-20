@@ -24,12 +24,14 @@ final class MainViewModel: ViewModelProtocol {
         case fetchInfo
         case searchText(text: String)
         case bookmark(model: ExchangeRateModel)
+        case cellTouch(id: UUID?)
     }
     
     // View에 전달될 상태 데이터
     struct State{
         fileprivate(set) var actionSubject = PublishSubject<Action>()
         fileprivate(set) var filteredExchangeRates = BehaviorSubject<[ExchangeRateModel]>(value: [])
+        fileprivate(set) var selectedItem = PublishSubject<ExchangeRateModel>()
         
         fileprivate(set) var lastExchangeRates = [ExchangeRateModel]()
     }
@@ -46,6 +48,8 @@ final class MainViewModel: ViewModelProtocol {
                     owner.filteringExchangeRates(text: text)
                 case let .bookmark(model):
                     owner.bookmark(model: model)
+                case let .cellTouch(id):
+                    owner.saveLast(id: id)
                 }
             })
             .disposed(by: disposeBag)
@@ -115,6 +119,17 @@ final class MainViewModel: ViewModelProtocol {
         Task {
             try await PersistenceManager.shared.update(model: model)
             self.fetchPersistenceEntitys()
+        }
+    }
+    
+    // 앱 종료 후 시작 시점에 view를 불러오기 위한 item 저장
+    private func saveLast(id: UUID? = nil) {
+        Task {
+            if let id {
+                try await PersistenceManager.shared.saveLastScreen(type: .calculator, currencyID: id)
+            } else {
+                try await PersistenceManager.shared.saveLastScreen(type: .list)
+            }
         }
     }
 }

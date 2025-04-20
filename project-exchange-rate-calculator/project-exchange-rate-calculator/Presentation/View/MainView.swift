@@ -34,6 +34,7 @@ final class MainView:UIView{
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        backgroundColor = .customBackgroundColor
         configureSubView()
         configureLayout()
     }
@@ -43,7 +44,7 @@ final class MainView:UIView{
     }
     
     private func configureSubView(){
-        [rateTableView, searchBar, emptyLabel]
+        [searchBar, rateTableView, emptyLabel]
             .forEach{ addSubview($0) }
     }
     

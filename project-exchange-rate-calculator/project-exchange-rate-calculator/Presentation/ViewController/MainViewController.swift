@@ -24,7 +24,6 @@ final class MainViewController: UIViewController {
     // 초기 VC 설정
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .customBackgroundColor
         configureTableView()
         configureNavigation()
         bindViewModel()
@@ -65,8 +64,8 @@ final class MainViewController: UIViewController {
             .modelSelected(ExchangeRateModel.self)
             .bind(with: self) { owner, response in
                 let vc = CalculatorViewController(id: response.id)
-                owner.navigationItem.backBarButtonItem = UIBarButtonItem(title: "환율 정보", style: .plain, target: nil, action: nil)
                 owner.navigationController?.pushViewController(vc, animated: true)
+                owner.vm.action.onNext(.cellTouch(id: response.id))
             }
             .disposed(by: disposeBag)
         
