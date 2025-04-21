@@ -44,57 +44,7 @@ final class PersistenceManager {
         }
     }
     
-    // [Entity] -> [Model]
-    private func toEntitys(models: [ExchangeRateModel]) -> [ExchangeRate] {
-        models.map { model in
-            let entity = ExchangeRate(context: context)
-            entity.currency = model.currency
-            entity.country = model.country
-            entity.rate = model.rate
-            entity.isBookmark = model.isBookmark
-            entity.rateOfChange = model.rateOfChange
-            entity.id = model.id
-            return entity
-        }
-    }
     
-    // [Model] -> [Entity]
-    private func toModels(entitys: [ExchangeRate]) -> [ExchangeRateModel] {
-        entitys.map { entity in
-            let entity = ExchangeRateModel(
-                id: entity.id!,
-                currency: entity.currency ?? "",
-                country: entity.country ?? "",
-                rate: entity.rate,
-                isBookmark: entity.isBookmark,
-                rateOfChange: entity.rateOfChange)
-            return entity
-        }
-    }
-    
-    // Entity -> Model
-    private func toModel(entity: ExchangeRate?) -> ExchangeRateModel? {
-        guard let entity else { return nil }
-        return ExchangeRateModel(
-            id: entity.id!,
-            currency: entity.currency ?? "",
-            country: entity.country ?? "",
-            rate: entity.rate,
-            isBookmark: entity.isBookmark,
-            rateOfChange: entity.rateOfChange)
-    }
-    
-    // Model -> Entity
-    private func toEntity(model: ExchangeRateModel) -> ExchangeRate {
-        let entity = ExchangeRate(context: context)
-        entity.currency = model.currency
-        entity.country = model.country
-        entity.rate = model.rate
-        entity.isBookmark = model.isBookmark
-        entity.rateOfChange = model.rateOfChange
-        entity.id = model.id
-        return entity
-    }
 }
 
 // MARK: 환율 데이터 저장 및 불러오기
