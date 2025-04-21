@@ -49,15 +49,12 @@ final class CalculatorViewController: UIViewController {
         calculatorView.convertButton.rx.tap
             .observe(on: MainScheduler.instance)
             .withLatestFrom(calculatorView.amountTextField.rx.text.orEmpty)
-            .subscribe(with: self) { owner, text in
-                guard !text.isEmpty else {                                  //값이 비었을 경우
-                    return owner.showAlert(type: TextFieldCase.isEmpty)
-                }
-                guard let input = Double(text) else {                       //숫자가 아닐 경우
-                    return owner.showAlert(type: TextFieldCase.isNotDouble)
-                }
-                owner.vm.action.onNext(.calculate(input: input))
-            }
+            .subscribe(with: self, onNext: { owner, text in
+                owner.vm.action.onNext(.calculate(input: text))
+            }, onError: { owner, error in
+                guard let error = error as? TextFieldCase else { return }
+                owner.showAlert(type: error)
+            })
             .disposed(by: disposeBag)
         
         // MARK: 출력 VM -> VC -> View

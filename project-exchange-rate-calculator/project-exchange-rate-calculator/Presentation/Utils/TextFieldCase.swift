@@ -8,7 +8,7 @@
 import Foundation
 
 // MARK: 환율 계산 텍스트 필드값에 따른 에러 케이스
-enum TextFieldCase: String {
+enum TextFieldCase: String, Error {
     case isEmpty = "금액을 입력해주세요"
     case isNotDouble = "올바른 숫자를 입력해주세요"
 }

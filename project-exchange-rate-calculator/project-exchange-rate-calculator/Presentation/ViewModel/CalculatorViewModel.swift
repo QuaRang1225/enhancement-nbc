@@ -22,7 +22,7 @@ final class CalculatorViewModel: ViewModelProtocol {
     // 주입 받을 이벤트 타입
     enum Action{
         case fecthExchageRate(id: UUID)
-        case calculate(input: Double)
+        case calculate(input: String)
     }
     
     // View에 전달될 상태 데이터
@@ -57,14 +57,28 @@ final class CalculatorViewModel: ViewModelProtocol {
             .disposed(by: disposeBag)
     }
     
-    
     // 계산 결과 텍스트 생성
-    private func calculateRate(input: Double) {
-        guard let item = try? state.exchageRate.value() else { return }
+    private func calculateRate(input: String) {
+        
+        guard let item = try? state.exchageRate.value(),
+              let input = isValiedInput(input: input) else { return }
         
         let inputString = String(format: "$%.2f", input)
         let resultString = String(format: "%.2f", input * item.rate)
         let result = inputString + " → " + resultString + " " + item.currency
         state.calculatedRate.onNext(result)
+    }
+    
+    // 텍스트 필드 유효성 검증
+    private func isValiedInput(input: String) -> Double? {
+        guard !input.isEmpty else {                                  //값이 비었을 경우
+            state.calculatedRate.onError(TextFieldCase.isEmpty)
+            return nil
+        }
+        guard let input = Double(input) else {                       //숫자가 아닐 경우
+            state.calculatedRate.onError(TextFieldCase.isNotDouble)
+            return nil
+        }
+        return input
     }
 }

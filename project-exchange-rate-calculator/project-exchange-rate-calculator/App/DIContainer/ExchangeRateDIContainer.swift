@@ -7,25 +7,25 @@
 
 import Foundation
 
-final class ExchangeRateDIContainer {
-
-    // MARK: - Repository
-    private var makeExchangeRateRepository: ExchangeRateRepository {
-        DefaultExchangeRateRepository(api: makeNetworkService)
-    }
-
-    // MARK: - UseCase
-    private var makeExchangeRateUseCase: FetchExchangeRateUseCase {
-        DefaultFetchExchangeRateUseCase(repository: makeExchangeRateRepository)
-    }
-
-    // MARK: - ViewModel
-    private var makeMainViewModel: MainViewModel {
-        MainViewModel(useCase: makeExchangeRateUseCase)
-    }
-
-    // MARK: - ViewController
-    private var makeMainViewController: MainViewController {
-        MainViewController(viewModel: makeMainViewModel)
-    }
-}
+//final class ExchangeRateDIContainer {
+//
+//    // MARK: - Repository
+//    private var makeExchangeRateRepository: ExchangeRateRepository {
+//        DefaultExchangeRateRepository(api: makeNetworkService)
+//    }
+//
+//    // MARK: - UseCase
+//    private var makeExchangeRateUseCase: FetchExchangeRateUseCase {
+//        DefaultFetchExchangeRateUseCase(repository: makeExchangeRateRepository)
+//    }
+//
+//    // MARK: - ViewModel
+//    private var makeMainViewModel: MainViewModel {
+//        MainViewModel(useCase: makeExchangeRateUseCase)
+//    }
+//
+//    // MARK: - ViewController
+//    private var makeMainViewController: MainViewController {
+//        MainViewController(viewModel: makeMainViewModel)
+//    }
+//}
