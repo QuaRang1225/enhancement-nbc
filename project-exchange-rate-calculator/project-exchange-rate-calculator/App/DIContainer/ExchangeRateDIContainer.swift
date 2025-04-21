@@ -7,25 +7,44 @@
 
 import Foundation
 
-//final class ExchangeRateDIContainer {
-//
-//    // MARK: - Repository
-//    private var makeExchangeRateRepository: ExchangeRateRepository {
-//        DefaultExchangeRateRepository(api: makeNetworkService)
-//    }
-//
-//    // MARK: - UseCase
-//    private var makeExchangeRateUseCase: FetchExchangeRateUseCase {
-//        DefaultFetchExchangeRateUseCase(repository: makeExchangeRateRepository)
-//    }
-//
-//    // MARK: - ViewModel
-//    private var makeMainViewModel: MainViewModel {
-//        MainViewModel(useCase: makeExchangeRateUseCase)
-//    }
-//
-//    // MARK: - ViewController
-//    private var makeMainViewController: MainViewController {
-//        MainViewController(viewModel: makeMainViewModel)
-//    }
-//}
+final class ExchangeRateDIContainer {
+    
+    // MARK: - Repository
+    private var makeAPIExchangeRateRepository: ExchangeRateAPIRepository {
+        DefaultAPIExchangeRateRepository()
+    }
+
+    private var makeLocalExchangeRateRepository: ExchangeRatePersistentRepository {
+        DefaultExchangeRateRepository()
+    }
+    
+    private var makeLastScreenRepository: LastScreenPersistentRepository {
+        DefaultLastScreenRepository()
+    }
+    
+    // MARK: - UseCase
+    private var makeAPIExchangeRateUseCase: FetchAPIExchangeRateUseCase {
+        DefaultFetchAPIExchangeRateUseCase(repository: makeAPIExchangeRateRepository)
+    }
+
+    private var makeLocalExchangeRateUseCase: ExchangeRatePersistentUseCase {
+        DefaultExchangeRatePersistentUseCase(repository: makeLocalExchangeRateRepository)
+    }
+
+    var makeLastScreenUseCase: LastScreenPersistentUseCase {
+        DefaultLastScreenPersistentUseCase(repository: makeLastScreenRepository)
+    }
+
+    // MARK: - ViewModel
+    var makeMainViewModel: MainViewModel {
+        MainViewModel(
+            apiUseCase: makeAPIExchangeRateUseCase,
+            localUseCase: makeLocalExchangeRateUseCase,
+            lastScreenUseCase: makeLastScreenUseCase
+        )
+    }
+
+    var makeCalculateViewModel: CalculatorViewModel {
+        CalculatorViewModel(localUseCase: makeLocalExchangeRateUseCase)
+    }
+}

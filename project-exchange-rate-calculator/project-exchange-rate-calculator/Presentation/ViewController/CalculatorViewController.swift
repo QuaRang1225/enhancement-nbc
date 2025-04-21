@@ -15,11 +15,12 @@ final class CalculatorViewController: UIViewController {
     
     public let id: UUID
     public let calculatorView = CalculatorView()
-    private let vm = CalculatorViewModel()
+    private let vm: CalculatorViewModel
     private var disposeBag = DisposeBag()
     
-    init(id: UUID) {
+    init(id: UUID, DIContainer: ExchangeRateDIContainer) {
         self.id = id
+        self.vm = DIContainer.makeCalculateViewModel
         super.init(nibName: nil, bundle: nil)
     }
     

@@ -13,11 +13,7 @@ typealias LastScreenRepositorys = LastScreenPersistentRepository & BaseCoreDataR
 // MARK: 스크린 케이스 저장 및 불러오기
 final class DefaultLastScreenRepository: LastScreenRepositorys {
     
-    private let context: NSManagedObjectContext
-    
-    init(context: NSManagedObjectContext = CoreDataStack.shared.context) {
-        self.context = context
-    }
+    private let context = CoreDataStack.shared.context
     
     // 스크린 타입에 따라 해당 타입 자체를 저장, 저장한 이력이있다면 삭제 후 저장
     func saveLastScreen(type: LastScreenType, currencyID: UUID? = nil) async throws {

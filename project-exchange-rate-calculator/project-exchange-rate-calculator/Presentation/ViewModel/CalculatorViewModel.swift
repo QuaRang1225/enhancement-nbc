@@ -33,8 +33,12 @@ final class CalculatorViewModel: ViewModelProtocol {
         fileprivate(set) var calculatedRate = PublishSubject<String>()
     }
     
+    private let localUseCase: ExchangeRatePersistentUseCase
+    
     // 액션에 따라 구독할 이벤트 분기처리
-    init(){
+    init(localUseCase: ExchangeRatePersistentUseCase) {
+        self.localUseCase = localUseCase
+        
         state.actionSubject
             .subscribe(with: self) { owner, type in
                 switch type{
@@ -49,7 +53,7 @@ final class CalculatorViewModel: ViewModelProtocol {
     
     // Persistence 저장소에서 환율정보 fetch
     private func fetchPersistenceEntity(id: UUID) {
-        PersistenceManager.shared.fetch(id: id)
+        localUseCase.fetch(id: id)
             .subscribe(with: self) { owner, response in
                 guard let response else { return print("데이터를 찾을 수 없습니다.") }
                 owner.state.exchageRate.onNext(response)

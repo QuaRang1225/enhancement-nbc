@@ -12,9 +12,20 @@ import RxCocoa
 // MARK: 메인 컨트롤러
 final class MainViewController: UIViewController {
     
-    private let vm = MainViewModel()
+    private let vm: MainViewModel
     private let mainView = MainView()
     var disposeBag = DisposeBag()
+    private let DIContainer: ExchangeRateDIContainer
+    
+    init(DIContainer: ExchangeRateDIContainer) {
+        self.vm = DIContainer.makeMainViewModel
+        self.DIContainer = DIContainer
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // VC 뷰 설정
     override func loadView() {
@@ -63,7 +74,7 @@ final class MainViewController: UIViewController {
         mainView.rateTableView.rx
             .modelSelected(ExchangeRateModel.self)
             .bind(with: self) { owner, response in
-                let vc = CalculatorViewController(id: response.id)
+                let vc = CalculatorViewController(id: response.id, DIContainer: owner.DIContainer)
                 owner.navigationController?.pushViewController(vc, animated: true)
                 owner.vm.action.onNext(.cellTouch(id: response.id))
             }

@@ -36,8 +36,20 @@ final class MainViewModel: ViewModelProtocol {
         fileprivate(set) var lastExchangeRates = [ExchangeRateModel]()
     }
     
+    private let apiUseCase: FetchAPIExchangeRateUseCase
+    private let localUseCase: ExchangeRatePersistentUseCase
+    private let lastScreenUseCase: LastScreenPersistentUseCase
+    
     // 액션에 따라 구독할 이벤트 분기처리
-    init() {
+    init(
+        apiUseCase: FetchAPIExchangeRateUseCase,
+        localUseCase: ExchangeRatePersistentUseCase,
+        lastScreenUseCase: LastScreenPersistentUseCase
+    ) {
+        self.apiUseCase = apiUseCase
+        self.localUseCase = localUseCase
+        self.lastScreenUseCase = lastScreenUseCase
+        
         state.actionSubject
             .withUnretained(self)
             .subscribe(onNext: { owner, action in
@@ -57,7 +69,7 @@ final class MainViewModel: ViewModelProtocol {
     
     // CoreData DB 데이터 조회
     private func fetchPersistenceEntitys(){
-        PersistenceManager.shared.fetchAll()
+        localUseCase.fetchAll()
             .subscribe(with: self, onSuccess: { owner, list in
                 let changedDate = UserDefaultManager.shared.changedDate(key: .date, newDate: Date())
                 if list.isEmpty {
@@ -76,33 +88,42 @@ final class MainViewModel: ViewModelProtocol {
     
     // 네트워크 API fetch시 실행
     private func fetchExchangeRates(list: [ExchangeRateModel] = []) {
-        NetworkAPIManager.fetchRates()
+        apiUseCase.fetchRates()
             .subscribe(with: self, onSuccess: { owner, entitys in
                 Task{
-                    do {
-                        if !list.isEmpty {
-                            let newModel = zip(entitys, list).map { new, old in
-                                var item = new
-                                item.rateOfChange = new.rate - old.rate
-                                return item
-                            }
-                            try await PersistenceManager.shared.saveAll(entitys: newModel)
-                            owner.state.lastExchangeRates = newModel
-                            owner.state.filteredExchangeRates.onNext(newModel)
-                        } else {
-                            try await PersistenceManager.shared.saveAll(entitys: entitys)
-                            owner.state.lastExchangeRates = entitys
-                            owner.state.filteredExchangeRates.onNext(entitys)
-                        }
-                        UserDefaultManager.shared.setDate(key: .date, newDate: Date())
-                    } catch {
-                        owner.state.filteredExchangeRates.onError(error)
-                    }
+                    owner.calculateRateOfChage(list)
+                    UserDefaultManager.shared.setDate(key: .date, newDate: Date())
                 }
             }, onFailure: { owner, error in
                 owner.state.filteredExchangeRates.onError(error)
             })
             .disposed(by: disposeBag)
+    }
+    
+    // 최근 환율과의 차이 계산
+    private func calculateRateOfChage(_ newRates: [ExchangeRateModel]) {
+        Task {
+            do {
+                guard !newRates.isEmpty else {
+                    try await localUseCase.saveAll(models: newRates)
+                    state.lastExchangeRates = newRates
+                    state.filteredExchangeRates.onNext(newRates)
+                    return
+                }
+
+                let updatedRates = zip(newRates, state.lastExchangeRates).map { new, old in
+                    var item = new
+                    item.rateOfChange = new.rate - old.rate
+                    return item
+                }
+
+                try await localUseCase.saveAll(models: updatedRates)
+                state.lastExchangeRates = updatedRates
+                state.filteredExchangeRates.onNext(updatedRates)
+            } catch {
+                state.filteredExchangeRates.onError(error)
+            }
+        }
     }
     
     // 검색 텍스트 변경 시 실행
@@ -117,7 +138,7 @@ final class MainViewModel: ViewModelProtocol {
     // 즐겨 찾기 실행
     private func bookmark(model: ExchangeRateModel) {
         Task {
-            try await PersistenceManager.shared.update(model: model)
+            try await localUseCase.update(model: model)
             self.fetchPersistenceEntitys()
         }
     }
@@ -126,9 +147,9 @@ final class MainViewModel: ViewModelProtocol {
     private func saveLast(id: UUID? = nil) {
         Task {
             if let id {
-                try await PersistenceManager.shared.saveLastScreen(type: .calculator, currencyID: id)
+                try await lastScreenUseCase.save(type: .calculator, currencyID: id)
             } else {
-                try await PersistenceManager.shared.saveLastScreen(type: .list)
+                try await lastScreenUseCase.save(type: .list, currencyID: nil)
             }
         }
     }

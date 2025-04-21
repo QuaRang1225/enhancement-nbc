@@ -10,26 +10,26 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-
+    let DIContainer = ExchangeRateDIContainer()
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         let window = UIWindow(windowScene: scene as! UIWindowScene)
-
+        
         let navController = UINavigationController()
-        let rootVC = MainViewController()
+        let rootVC = MainViewController(DIContainer: DIContainer)
         navController.viewControllers = [rootVC]
 
         window.rootViewController = navController
         window.makeKeyAndVisible()
         self.window = window
         
-        if let (type, id) = PersistenceManager.shared.fetchLastScreen() {
+        if let (type, id) = DIContainer.makeLastScreenUseCase.fetch() {
             if type == .calculator, let id = id {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    let calculatorVC = CalculatorViewController(id: id)
+                    let calculatorVC = CalculatorViewController(id: id, DIContainer: self.DIContainer)
                     navController.pushViewController(calculatorVC, animated: true)
                 }
             }
@@ -54,9 +54,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         Task {
             if let topVC = rootNav.topViewController {
                 if topVC is MainViewController {
-                    try await PersistenceManager.shared.saveLastScreen(type: .list)
+                    try await DIContainer.makeLastScreenUseCase.save(type: .list, currencyID: nil)
                 } else if let calculatorVC = topVC as? CalculatorViewController {
-                    try await PersistenceManager.shared.saveLastScreen(type: .calculator, currencyID: calculatorVC.id)
+                    try await DIContainer.makeLastScreenUseCase.save(type: .list, currencyID: calculatorVC.id)
                 }
             }
         }

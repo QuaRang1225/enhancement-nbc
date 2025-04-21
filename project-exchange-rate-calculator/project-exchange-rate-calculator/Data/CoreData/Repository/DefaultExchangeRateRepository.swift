@@ -14,13 +14,8 @@ typealias ExchangeRateRepositorys = ExchangeRatePersistentRepository & BaseCoreD
 // MARK: 환율 데이터 저장 및 불러오기
 final class DefaultExchangeRateRepository: ExchangeRateRepositorys {
 
-    let context: NSManagedObjectContext
-    let mapper: ExchageRateMapper
-    
-    init(context: NSManagedObjectContext = CoreDataStack.shared.context) {
-        self.context = context
-        self.mapper = ExchageRateMapper(context: context)
-    }
+    private let context = CoreDataStack.shared.context
+    lazy var mapper = ExchageRateMapper(context: context)
     
     // 모든 객체 저장
     func saveAll(models: [ExchangeRateModel]) async throws {
