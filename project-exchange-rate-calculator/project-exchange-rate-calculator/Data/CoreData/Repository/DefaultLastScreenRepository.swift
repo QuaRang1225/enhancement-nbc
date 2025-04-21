@@ -8,7 +8,7 @@
 import Foundation
 import CoreData
 
-typealias LastScreenRepositorys = LastScreenRepository&BaseCoreDataRepository
+typealias LastScreenRepositorys = LastScreenPersistentRepository & BaseCoreDataRepository
 
 // MARK: 스크린 케이스 저장 및 불러오기
 final class DefaultLastScreenRepository: LastScreenRepositorys {

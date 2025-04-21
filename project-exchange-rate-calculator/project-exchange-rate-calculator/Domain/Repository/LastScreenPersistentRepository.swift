@@ -14,7 +14,7 @@ enum LastScreenType: String {
 }
 
 // MARK: 스크린 케이스 Repository
-protocol LastScreenRepository {
+protocol LastScreenPersistentRepository {
     func saveLastScreen(type: LastScreenType, currencyID: UUID?) async throws
     func fetchLastScreen() -> (LastScreenType, UUID?)?
 }

@@ -9,7 +9,7 @@ import Foundation
 import RxSwift
 import CoreData
 
-typealias ExchangeRateRepositorys = ExchangeRateRepository&BaseCoreDataRepository
+typealias ExchangeRateRepositorys = ExchangeRatePersistentRepository & BaseCoreDataRepository
 
 // MARK: 환율 데이터 저장 및 불러오기
 final class DefaultExchangeRateRepository: ExchangeRateRepositorys {

@@ -1,21 +1,20 @@
 //
-//  NetWorkAPIManager.swift
+//  DefaultRemoteExchangeRateRepository.swift
 //  project-exchange-rate-calculator
 //
-//  Created by 유영웅 on 4/14/25.
+//  Created by 유영웅 on 4/21/25.
 //
 
 import Foundation
 import RxSwift
-import CoreData
 
-//MARK: NetworkAPIManager - API CRUD
-final class NetworkAPIManager {
+// MARK: 네트워크 API Repository
+final class DefaultAPIExchangeRateRepository: ExchangeRateAPIRepository {
     
     // 환율 정보 fetch
-    static func fetchRates() -> Single<[ExchangeRateModel]> {
+    func fetchRates() -> Single<[ExchangeRateModel]> {
         return Single<[ExchangeRateModel]>.create { single in
-            guard let url = URL(string: "https://open.er-api.com/v6/latest/USD") else {
+            guard let url = NetworkEndpoint.url(.usd) else {
                 single(.failure(DataError.requestFailed))
                 return Disposables.create()
             }
@@ -31,7 +30,7 @@ final class NetworkAPIManager {
                     return
                 }
                 print("네트워크 요청 성공")
-                single(.success(result.toEntity()))
+                single(.success(result.toModel()))
             }
             
             task.resume()
@@ -39,5 +38,3 @@ final class NetworkAPIManager {
         }
     }
 }
-
-
