@@ -56,7 +56,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 if topVC is MainViewController {
                     try await DIContainer.makeLastScreenUseCase.save(type: .list, currencyID: nil)
                 } else if let calculatorVC = topVC as? CalculatorViewController {
-                    try await DIContainer.makeLastScreenUseCase.save(type: .list, currencyID: calculatorVC.id)
+                    try await DIContainer.makeLastScreenUseCase.save(type: .calculator, currencyID: calculatorVC.id)
                 }
             }
         }
