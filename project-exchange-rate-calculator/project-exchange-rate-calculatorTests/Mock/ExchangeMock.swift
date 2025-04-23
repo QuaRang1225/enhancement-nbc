@@ -195,3 +195,9 @@ extension Exchange{
         return try! JSONDecoder().decode(Exchange.self, from: json)
     }
 }
+
+extension ExchangeRateModel: @retroactive Equatable {
+    public static func == (lhs: ExchangeRateModel, rhs: ExchangeRateModel) -> Bool {
+        return lhs.id == rhs.id
+    }
+}

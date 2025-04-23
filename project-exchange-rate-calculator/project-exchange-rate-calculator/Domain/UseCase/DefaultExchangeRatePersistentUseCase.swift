@@ -19,6 +19,10 @@ final class DefaultExchangeRatePersistentUseCase: ExchangeRatePersistentUseCase 
     func saveAll(models: [ExchangeRateModel]) async throws {
         try await repository.saveAll(models: models)
     }
+    
+    func updateAll(models: [ExchangeRateModel]) async throws {
+        try await repository.updateAll(models: models)
+    }
 
     func fetchAll() -> Single<[ExchangeRateModel]> {
         return repository.fetchAll()

@@ -14,4 +14,5 @@ protocol ExchangeRatePersistentUseCase {
     func fetchAll() -> Single<[ExchangeRateModel]>
     func fetch(id: UUID) -> Single<ExchangeRateModel?>
     func update(model: ExchangeRateModel) async throws
+    func updateAll(models: [ExchangeRateModel]) async throws
 }

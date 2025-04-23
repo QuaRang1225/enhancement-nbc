@@ -27,6 +27,6 @@ final class CoreDataStack {
     
     // Core Data의 작업 공간(CRUD)
     var context: NSManagedObjectContext {
-        persistentContainer.viewContext
+        persistentContainer.newBackgroundContext()
     }
 }

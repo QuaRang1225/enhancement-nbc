@@ -23,6 +23,14 @@ final class DefaultExchangeRateRepository: ExchangeRateRepositorys {
         try await saveContext(context, "모든 객체 저장")
     }
     
+    // 모든 객체 업데이트
+    func updateAll(models: [ExchangeRateModel]) async throws {
+        for model in models {
+            try await update(model: model)
+        }
+        try await saveContext(context, "모든 객체 저장")
+    }
+    
     // fetchAll을 Single로 반환하기
     func fetchAll() -> Single<[ExchangeRateModel]> {
         return Single.create { [weak self] single in
