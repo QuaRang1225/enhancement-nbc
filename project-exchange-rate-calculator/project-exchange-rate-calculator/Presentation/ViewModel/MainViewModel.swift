@@ -33,6 +33,7 @@ final class MainViewModel: ViewModelProtocol {
         fileprivate(set) var filteredExchangeRates = BehaviorSubject<[ExchangeRateModel]>(value: [])
         fileprivate(set) var selectedItem = PublishSubject<ExchangeRateModel>()
         
+        fileprivate(set) var searchText = ""
         fileprivate(set) var lastExchangeRates = [ExchangeRateModel]()
     }
     
@@ -130,6 +131,8 @@ final class MainViewModel: ViewModelProtocol {
     // 검색 텍스트 변경 시 실행
     private func filteringExchangeRates(text: String){
         guard let list = try? state.filteredExchangeRates.value() else { return }
+        
+        state.searchText = text
         let responseList = text.isEmpty ?
         state.lastExchangeRates : list.filter {
             return $0.currency.contains(text.uppercased()) || $0.country.contains(text)
@@ -142,6 +145,7 @@ final class MainViewModel: ViewModelProtocol {
         Task {
             try await localUseCase.update(model: model)
             self.fetchPersistenceEntitys()
+            self.filteringExchangeRates(text: state.searchText)
         }
     }
     
