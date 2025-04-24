@@ -21,9 +21,7 @@
 - RxSwift의 State-Action구조로 ViewModel을 설계 했습니다.
 - 바인딩 시 이벤트에 따른 액션을 ViewModel로 방출하고 액션에 따른 이벤트를 처리해 Model을 업데이트하는 단방향 흐름을 구현했습니다.
 
-```swift
 
-```
 
 </div>
 </details>
@@ -41,9 +39,6 @@
 - UIView에 테이블뷰를 addSubView로 추가하면 iOS 시스템에서 스크롤이 가능한 객체를 인식해 네비게이션 바도 스크롤 타입에 맞게 모드가 변하는 문제로 예상했음
 - 결과적으로는 view에 addSubView를 할 때 검색바를 추가하고 테이블뷰를 추가하는 과정을 거쳐 해결함
 
-```swift
-
-```
 
 </div>
 </details>
@@ -58,9 +53,7 @@
 ### Level 3 - 필터링 기능 구현
 - 텍스트 입력을 감지해 액션을 방출하는 케이스를 추가했습니다.
 
-```swift
 
-```
 
 </div>
 </details>
@@ -73,9 +66,6 @@
 - 요구사항에 맞게 환율 계산기 버튼을 구현했습니다.
 - 각 cell의 데이터를 새로운 ViewController로 넘겨 초기화하는 방식을 사용했습니다.
 
-```swift
-
-```
 
 </div>
 </details>
@@ -88,23 +78,20 @@
 - 새로운 CalculateViewModel을 구현해 ViewController와 1:1 관계를 가지도록 설계했습니다.
 - 입력한 데이터로 계산을 진행하는 비즈니스 로직을 구현하고 MainViewModel과 동일하게 단방향 흐름을 지키도록 설계했습니다.
 
-```swift
-
-```
 
 </div>
 </details>
 
 
 <details>
-<summary>LEVEL 6</summary>
+<summary>LEVEL 06</summary>
 ### Level 6 - MVVM 패턴을 도입하여 View와 로직을 분리
 - 이미 MVVM 구조가 잘 정립되어 있어, 별도의 수정 없이 주석만 추가하여 각 역할을 명확히 표시했습니다.
 
 </details>
 
 <details>
-<summary>LEVEL 7</summary>
+<summary>LEVEL 07</summary>
 
 ### Level 7 - 즐겨찾기 기능 상단 고정
 - 북마크 버튼을 터치하면 이벤트가 발생하여 새로운 CoreData Entity를 저장하고, 최신 데이터를 다시 리스트업합니다.
@@ -119,7 +106,7 @@
 </details>
 
 <details>
-<summary>LEVEL 8</summary>
+<summary>LEVEL 08</summary>
 
 ### Level 8 - 상승 🔼 하락 🔽  여부 표시
 - UserDefaults를 사용해 마지막 업데이트 날짜를 저장하고, 날짜 변경을 감지하면 캐싱된 데이터와 새 데이터의 차이를 계산합니다.
@@ -130,7 +117,7 @@
 </details>
 
 <details>
-<summary>LEVEL 9</summary>
+<summary>LEVEL 09</summary>
 
 ### Level 9 - 다크모드 구현
 - 요구사항에 따른 색상 코드를 `Assets`에 등록했습니다.
@@ -163,7 +150,45 @@
 
 ### Level 12 -  Clean Architecture 적용
 - 클린 아키텍처 구조를 학습한 뒤 실제 프로젝트에 적용했습니다.
-- 전체 구조는 다음과 같습니다:
+- 전체 구조는 다음과 같습니다
+
+```
+project-exchange-rate-calculator/
+├── project-exchange-rate-calculator/
+│   ├── Assets.xcassets/
+│   │   └── ... (이미지 및 색상 리소스)
+│   ├── Base.lproj/
+│   │   └── LaunchScreen.storyboard
+│   ├── Core/
+│   │   ├── CoreData/
+│   │   │   ├── CoreDataStack.swift
+│   │   │   └── ... (코어데이터 관련 파일)
+│   │   ├── Extension/
+│   │   │   └── ... (확장 기능 파일)
+│   │   ├── Manager/
+│   │   │   └── UserDefaultManager.swift
+│   │   └── Network/
+│   │       └── ... (네트워크 관련 파일)
+│   ├── Domain/
+│   │   ├── Entity/
+│   │   │   └── ExchangeRateModel.swift
+│   │   ├── Repository/
+│   │   │   └── ExchangeRateRepository.swift
+│   │   └── UseCase/
+│   │       └── FetchAPIExchangeRateUseCase.swift
+│   ├── Presentation/
+│   │   ├── Main/
+│   │   │   ├── MainViewController.swift
+│   │   │   └── MainViewModel.swift
+│   │   └── ... (기타 프레젠테이션 계층 파일)
+│   ├── Resources/
+│   │   └── ... (리소스 파일)
+│   ├── Supporting Files/
+│   │   ├── Info.plist
+│   │   └── ... (지원 파일)
+│   └── project-exchange-rate-calculator.xcodeproj/
+│       └── ... (Xcode 프로젝트 파일)
+```
 
 </details>
 
