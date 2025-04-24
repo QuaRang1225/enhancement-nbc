@@ -85,6 +85,7 @@
 
 <details>
 <summary>LEVEL 06</summary>
+
 ### Level 6 - MVVM 패턴을 도입하여 View와 로직을 분리
 - 이미 MVVM 구조가 잘 정립되어 있어, 별도의 수정 없이 주석만 추가하여 각 역할을 명확히 표시했습니다.
 
