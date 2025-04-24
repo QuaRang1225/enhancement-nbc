@@ -144,7 +144,6 @@
 - Instruments의 `Profile > Leaks`를 통해 메모리 누수를 점검했고, 누수는 검출되지 않았습니다.
 - RxSwift의 구독 클로저 내부에서 `self` 접근 시 `[weak self]`를 사용하여 순환 참조를 방지했습니다.
 - CalcualterViewController가 push되었다 사라져도 메모리 leak은 발생하지 않았습니다.
-- 한번 init된 ViewController와 ViewModel은 SceneDelegate에서 DiContainer로 생성된 인스턴스이기 때문에 사라지지 않는 것으로 예상하고 있습니다.
 ![스크린샷 2025-04-24 오후 10 12 09](https://github.com/user-attachments/assets/b2640fc6-42eb-4050-8bfb-9af8642ba1c8)
 
 </details>
