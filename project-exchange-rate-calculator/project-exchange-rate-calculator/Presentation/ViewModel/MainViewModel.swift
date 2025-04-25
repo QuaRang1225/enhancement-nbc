@@ -110,12 +110,9 @@ final class MainViewModel: ViewModelProtocol {
                     return
                 }
 
-                let oldRateDict = Dictionary(uniqueKeysWithValues: oldRates.map { ($0.id, $0) })
-                let updatedRates = newRates.map { new in
+                let updatedRates = zip(oldRates, newRates).map { (old, new) in
                     var item = new
-                    if let old = oldRateDict[new.id] {
-                        item.rateOfChange = new.rate - old.rate
-                    }
+                    item.rateOfChange = new.rate - old.rate
                     return item
                 }
 
